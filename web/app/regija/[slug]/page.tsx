@@ -1,0 +1,103 @@
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import type { Metadata } from "next";
+import { Nav, Noga } from "@/components/Nav";
+import { getNapoved, TOCKE, kratekDan, datumKratko } from "@/lib/napoved";
+import { VRSTE, OZNAKE, barva, besediloNa, stopnja } from "@/lib/vrste";
+
+export const revalidate = 10800;
+export const generateStaticParams = () => TOCKE.map((t) => ({ slug: t.slug }));
+
+type P = { params: Promise<{ slug: string }> };
+
+export async function generateMetadata({ params }: P): Promise<Metadata> {
+  const { slug } = await params;
+  const t = TOCKE.find((x) => x.slug === slug);
+  return t ? { title: `Gobe ${t.ime} - napoved rasti | Gremo po gobe`, description: `Kdaj bodo rasle gobe na območju ${t.ime}? 7-dnevna napoved za jurčke, lisičke, marele in štorovke.` } : {};
+}
+
+export default async function Regija({ params }: P) {
+  const { slug } = await params;
+  const osnova = TOCKE.find((t) => t.slug === slug);
+  if (!osnova) notFound();
+  const napoved = await getNapoved();
+  const t = napoved?.tocke.find((x) => x.slug === slug);
+
+  // Najboljša kombinacija vrsta + dan v tem tednu
+  let naj = { vrsta: VRSTE[0], dan: 0, v: -1 };
+  if (t) for (const vr of VRSTE) t.indeks[vr.id].forEach((v, i) => { if (v > naj.v) naj = { vrsta: vr, dan: i, v }; });
+  const g = t?.gonila[0];
+  const maxDez = t ? Math.max(1, ...t.padavine14) : 1;
+
+  return (
+    <>
+      <Nav />
+      <main>
+        <section className="regija-glava">
+          <nav aria-label="Drobtinice" className="drobtinice"><Link href="/">Napoved</Link><span>/</span><span>{osnova.regija}</span></nav>
+          <div className="regija-vrh">
+            <div>
+              <h1>{osnova.ime}</h1>
+              <p>{osnova.regija}{t?.visina ? `, merilna točka na ${Math.round(t.visina)} m` : ""}</p>
+            </div>
+            {t && napoved && (
+              <div className="poudarek" style={{ background: naj.v >= 60 ? "#6B2A15" : "#1F3A2B" }}>
+                <span>Najboljše ta teden: {naj.vrsta.ime.toLowerCase()}, {kratekDan(napoved.dnevi[naj.dan]).toLowerCase()} {datumKratko(napoved.dnevi[naj.dan])}</span>
+                <div><strong>{naj.v}</strong><em>{OZNAKE[stopnja(naj.v)]}</em></div>
+              </div>
+            )}
+          </div>
+        </section>
+
+        {!t || !napoved ? (
+          <section className="prazno"><p>Vremenski podatki trenutno niso dosegljivi. Poskusi znova čez nekaj minut.</p></section>
+        ) : (
+          <>
+            <section className="odsek">
+              <h2 className="naslov">Napoved za 7 dni</h2>
+              <div className="tabela-napovedi" role="table" aria-label="Indeks rasti po vrstah in dnevih">
+                <div role="row" className="vrstica">
+                  <span role="columnheader" />
+                  {napoved.dnevi.map((d) => <span role="columnheader" key={d} className="glava-dan">{kratekDan(d)}<b>{datumKratko(d)}</b></span>)}
+                </div>
+                {VRSTE.map((vr) => (
+                  <div role="row" className="vrstica" key={vr.id}>
+                    <span role="rowheader" className="ime-vrste">{vr.ime}</span>
+                    {t.indeks[vr.id].map((v, i) => (
+                      <span role="cell" key={i} className="celica" style={{ background: barva(v), color: besediloNa(v) }}>{v}</span>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            <section className="odsek">
+              <h2 className="naslov">Zakaj takšna ocena</h2>
+              <div className="gonila">
+                <div className="gonilo">
+                  <h3>Padavine, zadnjih 14 dni</h3>
+                  <strong>{Math.round(t.padavine14.reduce((s, x) => s + x, 0))} <small>mm</small></strong>
+                  <div className="dez" aria-hidden="true">
+                    {t.padavine14.map((p, i) => <i key={i} style={{ height: Math.max(3, (p / maxDez) * 80), opacity: i <= 9 ? 1 : 0.45 }} />)}
+                  </div>
+                  <p>Temnejši stolpci so okno 5-14 dni nazaj, ki šteje največ: {Math.round(g!.dezMm)} mm.</p>
+                </div>
+                <div className="gonilo">
+                  <h3>Temperatura tal</h3>
+                  <strong>{g!.tempTal.toFixed(1).replace(".", ",")} <small>°C</small></strong>
+                  <p>Povprečje zadnjih 5 dni na globini 6 cm. Jurček ima rad 12-18 °C.</p>
+                </div>
+                <div className="gonilo">
+                  <h3>Vlaga tal</h3>
+                  <strong>{g!.vlaga.toFixed(2).replace(".", ",")} <small>m³/m³</small></strong>
+                  <p>Sloj 3-9 cm. Nad 0,30 so tla dobro namočena.</p>
+                </div>
+              </div>
+            </section>
+          </>
+        )}
+      </main>
+      <Noga />
+    </>
+  );
+}

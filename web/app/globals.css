@@ -22,8 +22,12 @@ h1, h2, h3 { margin: 0; }
 @keyframes korak { 25% { transform: rotate(-3deg); } 75% { transform: rotate(3deg); } }
 .noga-logo { height: 52px; width: auto; flex-basis: 100%; max-width: 200px; object-fit: contain; object-position: left; }
 
-.hero { display: grid; grid-template-columns: minmax(300px, 400px) 1fr; gap: 48px; padding: 28px var(--rob) 32px;
+.hero { display: grid; grid-template-columns: minmax(300px, 400px) 1fr; grid-template-rows: auto 1fr;
+  grid-template-areas: "levo karta" "top karta"; gap: 8px 48px; padding: 28px var(--rob) 32px;
   height: max(620px, calc(100svh - var(--nav-h))); }
+.hero-levo { grid-area: levo; }
+.hero .top { grid-area: top; align-self: start; }
+.hero .karta { grid-area: karta; }
 .hero-levo { overflow-y: auto; scrollbar-width: thin; padding-right: 4px; }
 .hero h1 { font-family: var(--serif); font-size: clamp(36px, 3.8vw, 54px); line-height: 1.02; letter-spacing: -0.025em; font-weight: 600; margin: 14px 0 16px; }
 .svez { display: flex; align-items: center; gap: 8px; margin: 0; font-size: 13px; color: var(--sivo); }
@@ -170,13 +174,24 @@ h1, h2, h3 { margin: 0; }
 .noga { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px 24px; flex-wrap: wrap; padding: 32px var(--rob); margin-top: 64px; border-top: 1px solid var(--crta); font-size: 13px; color: var(--sivo); }
 
 @media (max-width: 960px) {
-  .hero, .indeks-razlaga, .vodic-vrh { grid-template-columns: 1fr; gap: 32px; }
-  .hero { height: auto; }
+  .hero, .indeks-razlaga, .vodic-vrh { grid-template-columns: 1fr; gap: 24px; }
+  .hero { height: auto; grid-template-rows: auto auto auto; grid-template-areas: "levo" "karta" "top"; }
   .hero-levo { overflow: visible; }
   .karta-platno { container-type: normal; display: block; }
   .karta-okvir { width: 100%; }
   .karta-noga p { text-align: left; }
   .indeks-razlaga > div { grid-template-columns: 1fr; gap: 20px; }
+}
+@media (max-width: 720px) {
+  /* zemljevid je majhen: pokažemo le tri najboljše oznake in brez imen, da se ne prekrivajo */
+  .karta-okvir .oznaka:nth-of-type(n+4) { display: none; }
+  .karta-okvir .oznaka { font-size: 0; gap: 0; padding: 3px; transform: translate(-50%, -140%); }
+  .karta-okvir .oznaka .znacka.mala { font-size: 11px; min-width: 24px; height: 22px; }
+  .karta-glava { flex-direction: column; align-items: stretch; gap: 10px; }
+  .karta-glava h2 { font-size: 20px; }
+  .predvajaj { align-self: flex-start; }
+  .namig { font-size: 12px; padding: 6px 10px; }
+  .namig strong { font-size: 17px; }
 }
 @media (max-width: 560px) {
   .nav nav { display: none; }

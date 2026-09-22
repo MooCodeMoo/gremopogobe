@@ -149,16 +149,17 @@ export default function Raziskovalec({ napoved }: { napoved: Napoved }) {
             </div>
           </fieldset>
 
-          <div className="top">
-            <h2>Najboljše za izbrani dan</h2>
-            {top3.map((t) => (
-              <Link key={t.slug} href={`/regija/${t.slug}`} className={`top-vrstica${fokus === t.slug ? " aktivna" : ""}`} {...hover(t.slug)}>
-                <span className="top-ime">{t.ime}</span>
-                <span className="top-oznaka">{OZNAKE[stopnja(t.v)]}</span>
-                <span className="znacka" style={{ background: barva(t.v), color: besediloNa(t.v) }}><Stevilka v={t.v} /></span>
-              </Link>
-            ))}
-          </div>
+        </div>
+
+        <div className="top">
+          <h2>Najboljše za izbrani dan</h2>
+          {top3.map((t) => (
+            <Link key={t.slug} href={`/regija/${t.slug}`} className={`top-vrstica${fokus === t.slug ? " aktivna" : ""}`} {...hover(t.slug)}>
+              <span className="top-ime">{t.ime}</span>
+              <span className="top-oznaka">{OZNAKE[stopnja(t.v)]}</span>
+              <span className="znacka" style={{ background: barva(t.v), color: besediloNa(t.v) }}><Stevilka v={t.v} /></span>
+            </Link>
+          ))}
         </div>
 
         <div className="karta">

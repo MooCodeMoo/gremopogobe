@@ -108,6 +108,11 @@ h1, h2, h3 { margin: 0; }
 .gonilo p { margin: 0; font-size: 14px; line-height: 1.5; color: var(--sivo); }
 .dez { display: flex; align-items: flex-end; gap: 2px; height: 84px; }
 .dez i { flex: 1; background: #6E8FA6; border-radius: 3px; }
+.sestava { display: flex; height: 14px; border-radius: 7px; overflow: hidden; gap: 2px; }
+.sestava i { display: block; }
+.sestava-legenda { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 13px; color: var(--sivo); }
+.sestava-legenda li { display: flex; align-items: center; gap: 6px; }
+.sestava-legenda span { width: 10px; height: 10px; border-radius: 3px; }
 
 .vodic-vrh { display: grid; grid-template-columns: minmax(280px, 440px) 1fr; gap: 72px; padding: 56px var(--rob) 32px; }
 .vodic-vrh h1 { font-family: var(--serif); font-size: clamp(40px, 4.5vw, 58px); line-height: 1.02; letter-spacing: -0.025em; font-weight: 600; margin-bottom: 18px; }

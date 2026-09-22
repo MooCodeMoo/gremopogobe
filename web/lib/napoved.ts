@@ -2,6 +2,7 @@ import tocke from "@/data/tocke.json";
 import model from "@/data/model.json";
 import { VRSTE, type VrstaId } from "./vrste";
 import { gonila, indeks, type Gonila, type Vreme } from "./indeks";
+import { faktorGozda, gozdTocke } from "./gozd";
 
 export type Tocka = { slug: string; ime: string; regija: string; lat: number; lon: number };
 export const TOCKE = tocke as Tocka[];
@@ -13,7 +14,8 @@ export const OSVEZI_S = 3 * 60 * 60; // 3 ure
 
 export type TockaNapoved = Tocka & {
   visina: number | null;
-  indeks: Record<VrstaId, number[]>; // po en na dan napovedi
+  indeks: Record<VrstaId, number[]>; // po en na dan napovedi, z upoštevanim tipom gozda
+  indeksVreme: Record<VrstaId, number[]>; // samo vreme (za interpolacijo na zemljevidu)
   gonila: Gonila[]; // po en na dan napovedi
   padavine14: number[]; // vsi pretekli dnevi (PRETEKLI_DNI), za graf
 };
@@ -81,7 +83,12 @@ export async function getNapoved(): Promise<Napoved | null> {
       return {
         ...t,
         visina: v.visina,
-        indeks: Object.fromEntries(VRSTE.map((s) => [s.id, idx.map((i) => indeks(v, i, s.id))])) as Record<VrstaId, number[]>,
+        indeksVreme: Object.fromEntries(VRSTE.map((s) => [s.id, idx.map((i) => indeks(v, i, s.id))])) as Record<VrstaId, number[]>,
+        indeks: Object.fromEntries(VRSTE.map((s) => {
+          const g = gozdTocke(t.slug);
+          const f = faktorGozda(s.id, g?.gozd, g?.sestava);
+          return [s.id, idx.map((i) => Math.round(indeks(v, i, s.id) * f))];
+        })) as Record<VrstaId, number[]>,
         gonila: idx.map((i) => gonila(v, i)),
         padavine14: v.padavine.slice(0, danes),
       };

@@ -5,6 +5,7 @@ import geo from "@/data/slovenija.json";
 import { VRSTE, OZNAKE, LESTVICA, barva, besediloNa, stopnja, type VrstaId } from "@/lib/vrste";
 import type { Napoved } from "@/lib/napoved";
 import { DEZ_ZAMIK } from "@/lib/indeks";
+import { faktorPike } from "@/lib/gozd";
 
 const DN = ["Ned", "Pon", "Tor", "Sre", "Čet", "Pet", "Sob"];
 const dan = (iso: string) => DN[new Date(iso).getDay()];
@@ -33,10 +34,14 @@ export default function Raziskovalec({ napoved }: { napoved: Napoved }) {
   const [dIdx, setDIdx] = useState(privzetiDan);
 
   const tocke = useMemo(
-    () => napoved.tocke.map((t) => ({ ...t, ...projekcija(t.lon, t.lat), v: t.indeks[vrsta][dIdx] })),
+    () => napoved.tocke.map((t) => ({ ...t, ...projekcija(t.lon, t.lat), v: t.indeks[vrsta][dIdx], vv: t.indeksVreme[vrsta][dIdx] })),
     [napoved, vrsta, dIdx]
   );
-  const vrednostiPik = useMemo(() => idw(geo.dots, tocke), [tocke]);
+  // Vreme razmažemo med točkami, nato vsako piko utežimo s tipom gozda na njej
+  const vrednostiPik = useMemo(
+    () => idw(geo.dots, tocke.map((t) => ({ x: t.x, y: t.y, v: t.vv }))).map((v, i) => v * faktorPike(vrsta, i)),
+    [tocke, vrsta]
+  );
   const razvrsceno = [...tocke].sort((a, b) => b.v - a.v);
   const oznacene = razvrsceno.slice(0, 6);
   const imeVrste = VRSTE.find((v) => v.id === vrsta)!.ime;

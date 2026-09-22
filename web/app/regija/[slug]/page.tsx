@@ -6,6 +6,7 @@ import { getNapoved, TOCKE, kratekDan, datumKratko } from "@/lib/napoved";
 import { VRSTE, OZNAKE, barva, besediloNa, stopnja } from "@/lib/vrste";
 import { DEZ_ZAMIK } from "@/lib/indeks";
 import model from "@/data/model.json";
+import { SKUPINE, gozdTocke } from "@/lib/gozd";
 
 export const revalidate = 10800;
 export const generateStaticParams = () => TOCKE.map((t) => ({ slug: t.slug }));
@@ -29,6 +30,7 @@ export default async function Regija({ params }: P) {
   let naj = { vrsta: VRSTE[0], dan: 0, v: -1 };
   if (t) for (const vr of VRSTE) t.indeks[vr.id].forEach((v, i) => { if (v > naj.v) naj = { vrsta: vr, dan: i, v }; });
   const g = t?.gonila[0];
+  const gz = gozdTocke(slug);
   const maxDez = t ? Math.max(1, ...t.padavine14) : 1;
 
   return (
@@ -89,6 +91,18 @@ export default async function Regija({ params }: P) {
                   <strong>{g!.tempTal.toFixed(1).replace(".", ",")} <small>°C</small></strong>
                   <p>Povprečje zadnjih 5 dni na globini 6 cm. Jurček ima najraje {String(VRSTE[0].temp[1]).replace(".", ",")}-{String(VRSTE[0].temp[2]).replace(".", ",")} °C.</p>
                 </div>
+                {gz?.sestava && (
+                  <div className="gonilo">
+                    <h3>Gozd okoli merilne točke</h3>
+                    <strong>{Math.round(gz.gozd * 100)} <small>% gozda</small></strong>
+                    <div className="sestava" role="img" aria-label="Sestava gozda po drevesnih vrstah">
+                      {gz.sestava.map((d, i) => d > 0.01 && <i key={i} style={{ flexGrow: d, background: SKUPINE[i].barva }} />)}
+                    </div>
+                    <ul className="sestava-legenda">
+                      {gz.sestava.map((d, i) => d >= 0.05 && <li key={i}><span style={{ background: SKUPINE[i].barva }} />{SKUPINE[i].ime} {Math.round(d * 100)} %</li>)}
+                    </ul>
+                  </div>
+                )}
                 <div className="gonilo">
                   <h3>Vlaga tal</h3>
                   <strong>{g!.vlaga.toFixed(2).replace(".", ",")} <small>m³/m³</small></strong>

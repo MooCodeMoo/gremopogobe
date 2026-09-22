@@ -1,3 +1,5 @@
+import model from "@/data/model.json";
+
 export type VrstaId = "jurcek" | "lisicka" | "marela" | "storovka";
 
 export type Vrsta = {
@@ -9,12 +11,19 @@ export type Vrsta = {
   sezona: Partial<Record<number, number>>;
 };
 
-export const VRSTE: Vrsta[] = [
-  { id: "jurcek", ime: "Jurček", temp: [8, 12, 18, 23], sezona: { 6: 0.6, 7: 0.8, 8: 0.9, 9: 1, 10: 0.9, 11: 0.3 } },
-  { id: "lisicka", ime: "Lisička", temp: [10, 13, 20, 25], sezona: { 6: 0.8, 7: 1, 8: 1, 9: 0.9, 10: 0.6 } },
-  { id: "marela", ime: "Marela", temp: [10, 14, 21, 26], sezona: { 7: 0.7, 8: 1, 9: 1, 10: 0.7, 11: 0.2 } },
-  { id: "storovka", ime: "Štorovka", temp: [5, 9, 15, 19], sezona: { 9: 0.7, 10: 1, 11: 0.9, 12: 0.3 } },
-];
+const IMENA: Record<VrstaId, string> = { jurcek: "Jurček", lisicka: "Lisička", marela: "Marela", storovka: "Štorovka" };
+type ModelVrsta = { temp: number[]; sezona: Record<string, number> };
+
+// Parametri se berejo iz data/model.json (izhod kalibracija.py).
+export const VRSTE: Vrsta[] = (Object.keys(IMENA) as VrstaId[]).map((id) => {
+  const m = (model.vrste as Record<string, ModelVrsta>)[id];
+  return {
+    id,
+    ime: IMENA[id],
+    temp: m.temp as [number, number, number, number],
+    sezona: Object.fromEntries(Object.entries(m.sezona).map(([k, v]) => [Number(k), v])),
+  };
+});
 
 export const LESTVICA = ["#E6E0D1", "#DCC593", "#D69A4B", "#B85E2A", "#6B2A15"];
 export const OZNAKE = ["Slabo", "Skromno", "Srednje", "Dobro", "Odlično"];

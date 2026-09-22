@@ -1,9 +1,10 @@
+import model from "@/data/model.json";
 import { VRSTE, type VrstaId } from "./vrste";
 
-// Parametri modela - kalibriraj s povratnimi informacijami uporabnikov.
-export const DEZ_ZAMIK: [number, number] = [5, 14]; // dnevi nazaj, ko dež najbolj šteje
-const DEZ_MIN = 15, DEZ_OPT = 50; // mm v oknu zamika
-const VLAGA_MIN = 0.15, VLAGA_OPT = 0.3; // m³/m³, sloj 3-9 cm
+// Parametri modela iz data/model.json (izhod kalibracija.py).
+export const DEZ_ZAMIK = model.dez_zamik as [number, number]; // dnevi nazaj, ko dež najbolj šteje
+const DEZ_MIN = model.dez_min, DEZ_OPT = model.dez_opt; // mm v oknu zamika
+const VLAGA_MIN = model.vlaga_min, VLAGA_OPT = model.vlaga_opt; // m³/m³, sloj 3-9 cm
 const VROCINA_T = 27, VROCINA_DEZ = 5, VROCINA_KAZEN = 0.6;
 
 export type Vreme = {

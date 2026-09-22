@@ -20,7 +20,7 @@ export function Nav() {
       <Logo />
       <nav aria-label="Glavna navigacija">
         <Link href="/">Napoved</Link>
-        <Link href="/#regije">Regije</Link>
+        <Link href="/regije">Regije</Link>
         <Link href="/vodic">Vodič</Link>
         <Link href="/vodic#pravila">Pravila</Link>
       </nav>

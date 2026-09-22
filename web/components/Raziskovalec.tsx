@@ -225,16 +225,19 @@ export default function Raziskovalec({ napoved }: { napoved: Napoved }) {
       </section>
 
       <section className="odsek" id="regije">
-        <h2 className="naslov">Regije ta teden</h2>
+        <div className="odsek-glava">
+          <h2 className="naslov">Najboljše ta teden</h2>
+          <Link href="/regije">Vse regije ({napoved.tocke.length})</Link>
+        </div>
         <div className="mreza-regij">
-          {razvrsceno.map((t) => {
+          {[...tocke].sort((a, b) => Math.max(...b.indeks[vrsta]) - Math.max(...a.indeks[vrsta])).slice(0, 4).map((t) => {
             const vals = t.indeks[vrsta];
             const vrh = vals.indexOf(Math.max(...vals));
             return (
               <Link key={t.slug} href={`/regija/${t.slug}`} className={`kartica${fokus === t.slug ? " aktivna" : ""}`} {...hover(t.slug)}>
                 <div className="kartica-glava">
                   <div><strong>{t.ime}</strong><span>Vrh: {dan(napoved.dnevi[vrh])} {dat(napoved.dnevi[vrh])}</span></div>
-                  <span className="velika-st" style={{ color: stopnja(t.v) >= 3 ? "#8A3A1C" : undefined }}><Stevilka v={t.v} /></span>
+                  <span className="velika-st" style={{ color: stopnja(vals[vrh]) >= 3 ? "#8A3A1C" : undefined }}><Stevilka v={vals[vrh]} /></span>
                 </div>
                 <div className="stolpci" aria-hidden="true">
                   {vals.map((v, i) => (

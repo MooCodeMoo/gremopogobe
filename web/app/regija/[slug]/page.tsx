@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { Nav, Noga } from "@/components/Nav";
 import { getNapoved, TOCKE, kratekDan, datumKratko } from "@/lib/napoved";
 import { VRSTE, OZNAKE, barva, besediloNa, stopnja } from "@/lib/vrste";
+import { DEZ_ZAMIK } from "@/lib/indeks";
 
 export const revalidate = 10800;
 export const generateStaticParams = () => TOCKE.map((t) => ({ slug: t.slug }));
@@ -78,9 +79,9 @@ export default async function Regija({ params }: P) {
                   <h3>Padavine, zadnjih 14 dni</h3>
                   <strong>{Math.round(t.padavine14.reduce((s, x) => s + x, 0))} <small>mm</small></strong>
                   <div className="dez" aria-hidden="true">
-                    {t.padavine14.map((p, i) => <i key={i} style={{ height: Math.max(3, (p / maxDez) * 80), opacity: i <= 9 ? 1 : 0.45 }} />)}
+                    {t.padavine14.map((p, i) => <i key={i} style={{ height: Math.max(3, (p / maxDez) * 80), opacity: 14 - i >= DEZ_ZAMIK[0] && 14 - i <= DEZ_ZAMIK[1] ? 1 : 0.45 }} />)}
                   </div>
-                  <p>Temnejši stolpci so okno 5-14 dni nazaj, ki šteje največ: {Math.round(g!.dezMm)} mm.</p>
+                  <p>Najbolj šteje dež {DEZ_ZAMIK[0]}-{DEZ_ZAMIK[1]} dni nazaj: {Math.round(g!.dezMm)} mm.</p>
                 </div>
                 <div className="gonilo">
                   <h3>Temperatura tal</h3>

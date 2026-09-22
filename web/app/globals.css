@@ -1,8 +1,8 @@
 :root {
   --podlaga: #F3EFE6; --povrsina: #FBF9F4; --crnilo: #1D2118; --sivo: #5A5E51; --crta: #DDD6C6;
-  --gozd: #1F3A2B; --rja: #8A3A1C; --pesek: #EFE8D8;
+  --gozd: #0F3320; --rja: #8A3A1C; --pesek: #EFE8D8;
   --serif: "Fraunces", Georgia, serif; --sans: "Instrument Sans", system-ui, sans-serif;
-  --rob: clamp(20px, 4.5vw, 64px); --nav-h: 73px;
+  --rob: clamp(20px, 4.5vw, 64px); --nav-h: 87px;
 }
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--podlaga); color: var(--crnilo); font-family: var(--sans); -webkit-font-smoothing: antialiased; }
@@ -16,7 +16,11 @@ h1, h2, h3 { margin: 0; }
 .nav nav { display: flex; gap: clamp(16px, 3vw, 36px); flex-wrap: wrap; }
 .nav nav a { color: var(--crnilo); text-decoration: none; font-weight: 500; }
 .nav nav a:hover { color: var(--gozd); text-decoration: underline; }
-.logo { display: flex; align-items: center; gap: 10px; color: var(--crnilo); text-decoration: none; font-family: var(--serif); font-size: 23px; font-weight: 600; }
+.logo { display: flex; align-items: center; }
+.logo img { display: block; height: 46px; width: auto; transform-origin: 18% 90%; }
+.logo:hover img { animation: korak .6s ease-in-out; }
+@keyframes korak { 25% { transform: rotate(-3deg); } 75% { transform: rotate(3deg); } }
+.noga-logo { height: 52px; width: auto; flex-basis: 100%; max-width: 200px; object-fit: contain; object-position: left; }
 
 .hero { display: grid; grid-template-columns: minmax(300px, 400px) 1fr; gap: 48px; padding: 28px var(--rob) 32px;
   height: max(620px, calc(100svh - var(--nav-h))); }
@@ -44,7 +48,7 @@ h1, h2, h3 { margin: 0; }
 .karta { background: var(--povrsina); border: 1px solid var(--crta); border-radius: 28px; padding: 22px 24px 20px; display: flex; flex-direction: column; gap: 12px; min-width: 0; min-height: 0; }
 .karta-glava { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
 .predvajaj { display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px; border-radius: 999px; border: 1px solid var(--gozd); background: var(--gozd); color: #fff; font-size: 14px; font-weight: 600; white-space: nowrap; transition: background .2s, color .2s; }
-.predvajaj:hover { background: #12261b; }
+.predvajaj:hover { background: #08230F; }
 .predvajaj[aria-pressed="true"] { background: var(--povrsina); color: var(--gozd); }
 .karta-glava h2 { font-family: var(--serif); font-size: 26px; font-weight: 600; }
 .karta-glava p, .karta-noga p { margin: 4px 0 0; font-size: 14px; color: var(--sivo); }
@@ -163,7 +167,7 @@ h1, h2, h3 { margin: 0; }
 .prazno h1 { font-family: var(--serif); font-size: 40px; margin-bottom: 12px; }
 .prazno p { font-size: 17px; line-height: 1.55; color: var(--sivo); }
 
-.noga { display: flex; justify-content: space-between; gap: 24px; flex-wrap: wrap; padding: 32px var(--rob); margin-top: 64px; border-top: 1px solid var(--crta); font-size: 13px; color: var(--sivo); }
+.noga { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px 24px; flex-wrap: wrap; padding: 32px var(--rob); margin-top: 64px; border-top: 1px solid var(--crta); font-size: 13px; color: var(--sivo); }
 
 @media (max-width: 960px) {
   .hero, .indeks-razlaga, .vodic-vrh { grid-template-columns: 1fr; gap: 32px; }
@@ -183,6 +187,7 @@ h1, h2, h3 { margin: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .logo:hover img { animation: none; }
   .kpika { animation: none; transition: none; }
   .ping::before, .ping::after { animation: none; display: none; }
   .oznaka, .kartica, .stolpci i, .znacka, .top-vrstica { transition: none; }

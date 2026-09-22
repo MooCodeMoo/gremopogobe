@@ -45,7 +45,7 @@ export default async function Regija({ params }: P) {
               <p>{osnova.regija}{t?.visina ? `, merilna točka na ${Math.round(t.visina)} m` : ""}</p>
             </div>
             {t && napoved && (
-              <div className="poudarek" style={{ background: naj.v >= 60 ? "#6B2A15" : "#1F3A2B" }}>
+              <div className="poudarek" style={{ background: naj.v >= 60 ? "#6B2A15" : "#0F3320" }}>
                 <span>Najboljše ta teden: {naj.vrsta.ime.toLowerCase()}, {kratekDan(napoved.dnevi[naj.dan]).toLowerCase()} {datumKratko(napoved.dnevi[naj.dan])}</span>
                 <div><strong>{naj.v}</strong><em>{OZNAKE[stopnja(naj.v)]}</em></div>
               </div>

@@ -53,8 +53,21 @@ async function pridobiVreme(): Promise<(Vreme & { visina: number | null })[]> {
   });
   const base = process.env.OPEN_METEO_URL ?? "https://api.open-meteo.com/v1/forecast";
   const key = process.env.OPEN_METEO_API_KEY ? `&apikey=${process.env.OPEN_METEO_API_KEY}` : "";
-  const res = await fetch(`${base}?${q}${key}`, { next: { revalidate: OSVEZI_S } });
-  if (!res.ok) throw new Error(`Open-Meteo ${res.status}`);
+  // Do 3 poskusi z zamikom - Open-Meteo občasno vrne 429 (omejitev) ali 5xx
+  let res: Response | null = null;
+  let razlog = "";
+  for (let k = 0; k < 3; k++) {
+    try {
+      res = await fetch(`${base}?${q}${key}`, { next: { revalidate: OSVEZI_S } });
+      if (res.ok) break;
+      razlog = `${res.status} ${(await res.text()).slice(0, 200)}`;
+    } catch (e) {
+      razlog = String(e);
+    }
+    res = null;
+    await new Promise((r) => setTimeout(r, 1500 * (k + 1)));
+  }
+  if (!res) throw new Error(`Open-Meteo: ${razlog}`);
   const json = (await res.json()) as OMLokacija | OMLokacija[];
   const lok = Array.isArray(json) ? json : [json];
   return lok.map((l) => {
@@ -96,7 +109,10 @@ export async function getNapoved(): Promise<Napoved | null> {
     return { dnevi, posodobljeno: new Date().toISOString(), tocke };
   } catch (e) {
     console.error("Napoved ni na voljo:", e);
-    return null;
+    // Med buildom vrnemo prazno stanje, da deploy uspe. Med delovanjem (ISR) pa napako vržemo:
+    // Next.js tedaj obdrži zadnjo uspešno različico strani, namesto da bi jo zamenjal s prazno.
+    if (process.env.NEXT_PHASE === "phase-production-build") return null;
+    throw e;
   }
 }
 

@@ -106,6 +106,15 @@ export default function Raziskovalec({ napoved }: { napoved: Napoved }) {
     setFokus(t.slug);
   }
   const zapustiKarto = (e: PointerEvent<SVGSVGElement>) => { if (e.pointerType !== "touch") { setNamig(null); setFokus(null); } };
+
+  // Namig po dotiku sam izgine in izgine tudi ob drsenju strani
+  useEffect(() => {
+    if (!namig) return;
+    const skrij = () => { setNamig(null); setFokus(null); };
+    window.addEventListener("scroll", skrij, { passive: true });
+    const t = tipKazalca.current === "touch" ? setTimeout(skrij, 3000) : undefined;
+    return () => { window.removeEventListener("scroll", skrij); if (t) clearTimeout(t); };
+  }, [namig]);
   // Miška: klik odpre območje. Dotik: prvi dotik pokaže namig, drugi na isto območje ga odpre.
   const zadnjiDotik = useRef<string | null>(null);
   function klik() {
@@ -206,7 +215,10 @@ export default function Raziskovalec({ napoved }: { napoved: Napoved }) {
               ))}
 
               {namig && (
-                <div className="namig" style={pct(geo.dots[namig.i][0], geo.dots[namig.i][1])} role="status">
+                <div className="namig" style={{
+                  left: `${Math.min(80, Math.max(20, (geo.dots[namig.i][0] / geo.W) * 100))}%`,
+                  top: `${(geo.dots[namig.i][1] / geo.H) * 100}%`,
+                }} role="status">
                   <strong>{namig.v}</strong> {OZNAKE[stopnja(namig.v)].toLowerCase()}
                   <span>Najbližje: {namig.ime}</span>
                 </div>
@@ -220,7 +232,7 @@ export default function Raziskovalec({ napoved }: { napoved: Napoved }) {
                 <li key={c}><span style={{ background: c }} />{OZNAKE[i]}</li>
               ))}
             </ul>
-            <p>Utripajo tri najboljša območja. Klik na zemljevid odpre najbližje območje.</p>
+            <p>Utripajo tri najboljša območja. Klik ali dotik na zemljevidu odpre najbližje območje.</p>
           </div>
         </div>
       </section>

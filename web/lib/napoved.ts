@@ -1,11 +1,13 @@
 import tocke from "@/data/tocke.json";
+import model from "@/data/model.json";
 import { VRSTE, type VrstaId } from "./vrste";
 import { gonila, indeks, type Gonila, type Vreme } from "./indeks";
 
 export type Tocka = { slug: string; ime: string; regija: string; lat: number; lon: number };
 export const TOCKE = tocke as Tocka[];
 
-export const PRETEKLI_DNI = 14;
+// Toliko preteklih dni, da pokrijemo okno dežja iz modela (vsaj 14 za graf)
+export const PRETEKLI_DNI = Math.max(14, model.dez_zamik[1]);
 export const DNI_NAPOVEDI = 7;
 export const OSVEZI_S = 3 * 60 * 60; // 3 ure
 
@@ -81,7 +83,7 @@ export async function getNapoved(): Promise<Napoved | null> {
         visina: v.visina,
         indeks: Object.fromEntries(VRSTE.map((s) => [s.id, idx.map((i) => indeks(v, i, s.id))])) as Record<VrstaId, number[]>,
         gonila: idx.map((i) => gonila(v, i)),
-        padavine14: v.padavine.slice(0, danes),
+        padavine14: v.padavine.slice(danes - 14, danes),
       };
     });
     return { dnevi, posodobljeno: new Date().toISOString(), tocke };

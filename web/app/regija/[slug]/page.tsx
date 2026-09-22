@@ -5,6 +5,7 @@ import { Nav, Noga } from "@/components/Nav";
 import { getNapoved, TOCKE, kratekDan, datumKratko } from "@/lib/napoved";
 import { VRSTE, OZNAKE, barva, besediloNa, stopnja } from "@/lib/vrste";
 import { DEZ_ZAMIK } from "@/lib/indeks";
+import model from "@/data/model.json";
 
 export const revalidate = 10800;
 export const generateStaticParams = () => TOCKE.map((t) => ({ slug: t.slug }));
@@ -76,22 +77,22 @@ export default async function Regija({ params }: P) {
               <h2 className="naslov">Zakaj takšna ocena</h2>
               <div className="gonila">
                 <div className="gonilo">
-                  <h3>Padavine, zadnjih 14 dni</h3>
+                  <h3>Padavine, zadnjih {t.padavine14.length} dni</h3>
                   <strong>{Math.round(t.padavine14.reduce((s, x) => s + x, 0))} <small>mm</small></strong>
                   <div className="dez" aria-hidden="true">
-                    {t.padavine14.map((p, i) => <i key={i} style={{ height: Math.max(3, (p / maxDez) * 80), opacity: 14 - i >= DEZ_ZAMIK[0] && 14 - i <= DEZ_ZAMIK[1] ? 1 : 0.45 }} />)}
+                    {t.padavine14.map((p, i) => <i key={i} style={{ height: Math.max(3, (p / maxDez) * 80), opacity: t.padavine14.length - i >= DEZ_ZAMIK[0] && t.padavine14.length - i <= DEZ_ZAMIK[1] ? 1 : 0.45 }} />)}
                   </div>
-                  <p>Najbolj šteje dež {DEZ_ZAMIK[0]}-{DEZ_ZAMIK[1]} dni nazaj: {Math.round(g!.dezMm)} mm.</p>
+                  <p>Temnejši stolpci so dež {DEZ_ZAMIK[0]}-{DEZ_ZAMIK[1]} dni nazaj, ki šteje največ: {Math.round(g!.dezMm)} mm.</p>
                 </div>
                 <div className="gonilo">
                   <h3>Temperatura tal</h3>
                   <strong>{g!.tempTal.toFixed(1).replace(".", ",")} <small>°C</small></strong>
-                  <p>Povprečje zadnjih 5 dni na globini 6 cm. Jurček ima rad 12-18 °C.</p>
+                  <p>Povprečje zadnjih 5 dni na globini 6 cm. Jurček ima najraje {String(VRSTE[0].temp[1]).replace(".", ",")}-{String(VRSTE[0].temp[2]).replace(".", ",")} °C.</p>
                 </div>
                 <div className="gonilo">
                   <h3>Vlaga tal</h3>
                   <strong>{g!.vlaga.toFixed(2).replace(".", ",")} <small>m³/m³</small></strong>
-                  <p>Sloj 3-9 cm. Nad 0,30 so tla dobro namočena.</p>
+                  <p>Sloj 3-9 cm. Pri najdbah je bila vlaga običajno okoli {String(model.vlaga_opt).replace(".", ",")} ali več.</p>
                 </div>
               </div>
             </section>

@@ -15,7 +15,7 @@ export type TockaNapoved = Tocka & {
   visina: number | null;
   indeks: Record<VrstaId, number[]>; // po en na dan napovedi
   gonila: Gonila[]; // po en na dan napovedi
-  padavine14: number[]; // pretekli dnevi, za graf
+  padavine14: number[]; // vsi pretekli dnevi (PRETEKLI_DNI), za graf
 };
 export type Napoved = { dnevi: string[]; posodobljeno: string; tocke: TockaNapoved[] };
 
@@ -83,7 +83,7 @@ export async function getNapoved(): Promise<Napoved | null> {
         visina: v.visina,
         indeks: Object.fromEntries(VRSTE.map((s) => [s.id, idx.map((i) => indeks(v, i, s.id))])) as Record<VrstaId, number[]>,
         gonila: idx.map((i) => gonila(v, i)),
-        padavine14: v.padavine.slice(danes - 14, danes),
+        padavine14: v.padavine.slice(0, danes),
       };
     });
     return { dnevi, posodobljeno: new Date().toISOString(), tocke };

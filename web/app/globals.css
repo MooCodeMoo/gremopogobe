@@ -106,7 +106,7 @@ h1, h2, h3 { margin: 0; }
 .gonilo strong { font-family: var(--serif); font-size: 40px; font-weight: 600; line-height: 1; }
 .gonilo small { font-family: var(--sans); font-size: 16px; font-weight: 400; color: var(--sivo); }
 .gonilo p { margin: 0; font-size: 14px; line-height: 1.5; color: var(--sivo); }
-.dez { display: flex; align-items: flex-end; gap: 4px; height: 84px; }
+.dez { display: flex; align-items: flex-end; gap: 2px; height: 84px; }
 .dez i { flex: 1; background: #6E8FA6; border-radius: 3px; }
 
 .vodic-vrh { display: grid; grid-template-columns: minmax(280px, 440px) 1fr; gap: 72px; padding: 56px var(--rob) 32px; }

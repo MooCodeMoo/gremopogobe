@@ -1,7 +1,7 @@
 :root {
   --podlaga: #F3EFE6; --povrsina: #FBF9F4; --crnilo: #1D2118; --sivo: #5A5E51; --crta: #DDD6C6;
   --gozd: #0F3320; --rja: #8A3A1C; --pesek: #EFE8D8;
-  --serif: "Fraunces", Georgia, serif; --sans: "Instrument Sans", system-ui, sans-serif;
+  --serif: "Fraunces Variable", Georgia, serif; --sans: "Instrument Sans Variable", system-ui, sans-serif;
   --rob: clamp(20px, 4.5vw, 64px); --nav-h: 87px;
 }
 * { box-sizing: border-box; }
@@ -215,3 +215,42 @@ a.seznam-vrstica:hover { background: #EFE9DC; }
 .desno { text-align: right; }
 .seznam-vrh { display: flex; justify-content: flex-end; align-items: center; gap: 8px; font-size: 14px; color: var(--sivo); }
 .seznam-skupina { padding: 18px 8px 6px; font-family: var(--serif); font-size: 20px; font-weight: 600; border-bottom: 1px solid var(--crta); }
+
+/* SEO nadnaslov v H1 */
+.hero h1 .nadnaslov { display: block; font-family: var(--sans); font-size: 13px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--rja); margin-bottom: 10px; }
+.noga-povezave { display: flex; flex-wrap: wrap; gap: 8px 20px; flex-basis: 100%; }
+.noga-povezave a { color: var(--crnilo); text-decoration: none; font-weight: 500; }
+.noga-povezave a:hover { text-decoration: underline; }
+
+/* Vrste */
+.mreza-vrst { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
+.vrsta-kartica { gap: 8px; }
+.vrsta-kartica strong { font-family: var(--serif); font-size: 28px; }
+.vrsta-kartica em { color: var(--sivo); }
+.vrsta-kartica p { margin: 4px 0 0; font-size: 15px; line-height: 1.5; color: var(--sivo); }
+.vrsta-kartica .vec { margin-top: auto; font-weight: 600; color: var(--gozd); }
+.vrsta-vrh { padding: 40px var(--rob) 8px; }
+.vrsta-vrh h1 { font-family: var(--serif); font-size: clamp(44px, 5.5vw, 72px); letter-spacing: -0.03em; line-height: 1; font-weight: 600; margin: 0 0 10px; }
+.vrsta-vrh h1 em { display: block; font-size: 0.34em; font-weight: 400; letter-spacing: 0; color: var(--sivo); margin-top: 10px; }
+.druga-imena { margin: 0 0 16px; color: var(--sivo); }
+.uvod.siroko { max-width: 70ch; }
+.vrsta-mreza { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 48px; align-items: start; }
+.vrsta-besedilo { max-width: 72ch; }
+.vrsta-besedilo h2 { font-family: var(--serif); font-size: 28px; font-weight: 600; margin: 32px 0 10px; }
+.vrsta-besedilo h2:first-child { margin-top: 0; }
+.vrsta-besedilo > p { font-size: 17px; line-height: 1.65; margin: 0 0 12px; }
+.sezona { display: grid; grid-template-columns: repeat(12, 1fr); gap: 4px; margin: 16px 0 8px; }
+.sezona div { display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 12px; color: var(--sivo); }
+.sezona i { width: 100%; height: 28px; border-radius: 6px; }
+.opomba { font-size: 14px; color: var(--sivo); line-height: 1.5; }
+.seznam-tock { margin: 0; padding-left: 20px; font-size: 17px; line-height: 1.65; }
+.dvojnice { display: grid; gap: 12px; margin-bottom: 16px; }
+.dvojnica { padding: 18px 20px; border-radius: 16px; background: var(--povrsina); border: 1px solid var(--crta); }
+.dvojnica.nevarna { background: #F8E6DA; border-color: #E6C7AE; }
+.dvojnica p { margin: 6px 0 0; line-height: 1.55; }
+.dvojnica em { color: var(--sivo); }
+.oznaka-nevarnosti { float: right; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--sivo); }
+.dvojnica.nevarna .oznaka-nevarnosti { color: #8A3A1C; }
+.vrsta-stran { display: grid; gap: 16px; position: sticky; top: 24px; }
+.povezava { display: block; font-weight: 600; padding: 6px 0; }
+@media (max-width: 960px) { .vrsta-mreza { grid-template-columns: 1fr; } .vrsta-stran { position: static; } }

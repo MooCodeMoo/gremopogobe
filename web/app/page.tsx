@@ -1,10 +1,18 @@
 import Link from "next/link";
 import Raziskovalec from "@/components/Raziskovalec";
 import { Nav, Noga } from "@/components/Nav";
+import type { Metadata } from "next";
 import { getNapoved } from "@/lib/napoved";
+import { JsonLd, URL_STRANI } from "@/lib/seo";
 import { DEZ_ZAMIK } from "@/lib/indeks";
 
 export const revalidate = 10800; // ISR: stran se osveži vsake 3 ure
+
+export const metadata: Metadata = {
+  title: "Gobarska napoved - kje rastejo gobe ta teden | Gremo po gobe",
+  description: "Kje rastejo gobe ta vikend? Tedenska napoved rasti jurčkov, lisičk, marel in štorovk za 30 gozdnih območij po Sloveniji, posodobljena večkrat na dan.",
+  alternates: { canonical: "/" },
+};
 
 const PRAVILA = [
   ["2 kg", "Na osebo na dan", "Za lastne potrebe. Nekaterih vrst ne smeš nabirati sploh."],
@@ -18,6 +26,7 @@ export default async function Domov() {
   return (
     <>
       <Nav />
+      <JsonLd data={{ "@context": "https://schema.org", "@type": "WebSite", name: "Gremo po gobe", alternateName: "gremopogobe.si", url: URL_STRANI, inLanguage: "sl-SI", description: "Gobarska napoved rasti gob za Slovenijo." }} />
       <main>
         {napoved ? (
           <Raziskovalec napoved={napoved} />

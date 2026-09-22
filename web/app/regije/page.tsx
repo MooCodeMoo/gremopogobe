@@ -8,6 +8,7 @@ export const revalidate = 10800;
 export const metadata: Metadata = {
   title: "Gobja napoved po regijah | Gremo po gobe",
   description: "7-dnevna napoved rasti jurčkov, lisičk, marel in štorovk za 30 gozdnih območij po Sloveniji.",
+  alternates: { canonical: "/regije" },
 };
 
 export default async function Regije() {

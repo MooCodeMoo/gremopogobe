@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import { Nav, Noga } from "@/components/Nav";
+import { JsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Pravila nabiranja gob in sezonski koledar | Gremo po gobe",
   description: "Koliko gob smeš nabrati, kakšne so kazni in kdaj raste katera vrsta v Sloveniji.",
+  alternates: { canonical: "/vodic" },
 };
 
 const MESECI = ["Jan", "Feb", "Mar", "Apr", "Maj", "Jun", "Jul", "Avg", "Sep", "Okt", "Nov", "Dec"];
@@ -27,6 +29,15 @@ export default function Vodic() {
   return (
     <>
       <Nav />
+      <JsonLd data={{
+        "@context": "https://schema.org", "@type": "FAQPage",
+        mainEntity: [
+          ["Koliko gob lahko naberem na dan?", "Za lastne potrebe največ 2 kg gob na osebo na dan. Nabiranje nekaterih vrst je prepovedano."],
+          ["V kaj lahko nabiram gobe?", "Gobe odrežemo z nožem in jih nosimo v zračni posodi, na primer v pleteni košari. Plastične vrečke niso dovoljene."],
+          ["Kakšne so kazni za nedovoljeno nabiranje gob?", "Po uredbi o varstvu samoniklih gliv od 250 do 2.500 € za posameznike in od 400 do 4.000 € za pravne osebe in s.p."],
+          ["Koliko vrst gob raste v Sloveniji?", "V Sloveniji raste okoli 3000 vrst gob, od tega približno 200 strupenih."],
+        ].map(([q, a]) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: a } })),
+      }} />
       <main>
         <section className="vodic-vrh">
           <div>

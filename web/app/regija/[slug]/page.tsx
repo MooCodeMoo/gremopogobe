@@ -6,6 +6,7 @@ import { getNapoved, TOCKE, kratekDan, datumKratko } from "@/lib/napoved";
 import { VRSTE, OZNAKE, barva, besediloNa, stopnja } from "@/lib/vrste";
 import { DEZ_ZAMIK } from "@/lib/indeks";
 import model from "@/data/model.json";
+import { JsonLd, drobtinice } from "@/lib/seo";
 import { SKUPINE, gozdTocke } from "@/lib/gozd";
 
 export const revalidate = 10800;
@@ -16,7 +17,7 @@ type P = { params: Promise<{ slug: string }> };
 export async function generateMetadata({ params }: P): Promise<Metadata> {
   const { slug } = await params;
   const t = TOCKE.find((x) => x.slug === slug);
-  return t ? { title: `Gobe ${t.ime} - napoved rasti | Gremo po gobe`, description: `Kdaj bodo rasle gobe na območju ${t.ime}? 7-dnevna napoved za jurčke, lisičke, marele in štorovke.` } : {};
+  return t ? { title: `Gobe ${t.ime} - napoved rasti | Gremo po gobe`, description: `Kdaj bodo rasle gobe na območju ${t.ime} (${t.regija})? 7-dnevna napoved za jurčke, lisičke, marele in štorovke, sestava gozda in vremenske razmere.`, alternates: { canonical: `/regija/${t.slug}` } } : {};
 }
 
 export default async function Regija({ params }: P) {
@@ -36,9 +37,10 @@ export default async function Regija({ params }: P) {
   return (
     <>
       <Nav />
+      <JsonLd data={drobtinice([["Napoved", "/"], ["Regije", "/regije"], [osnova.ime, `/regija/${osnova.slug}`]])} />
       <main>
         <section className="regija-glava">
-          <nav aria-label="Drobtinice" className="drobtinice"><Link href="/">Napoved</Link><span>/</span><span>{osnova.regija}</span></nav>
+          <nav aria-label="Drobtinice" className="drobtinice"><Link href="/">Napoved</Link><span>/</span><Link href="/regije">Regije</Link><span>/</span><span>{osnova.regija}</span></nav>
           <div className="regija-vrh">
             <div>
               <h1>{osnova.ime}</h1>

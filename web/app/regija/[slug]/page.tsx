@@ -8,6 +8,7 @@ import { DEZ_ZAMIK } from "@/lib/indeks";
 import model from "@/data/model.json";
 import { JsonLd, drobtinice } from "@/lib/seo";
 import { SKUPINE, gozdTocke } from "@/lib/gozd";
+import { opisRegije } from "@/lib/opisi-regij";
 import Najdbe from "@/components/Najdbe";
 import Spremljaj from "@/components/Spremljaj";
 import Prijava from "@/components/Prijava";
@@ -20,7 +21,15 @@ type P = { params: Promise<{ slug: string }> };
 export async function generateMetadata({ params }: P): Promise<Metadata> {
   const { slug } = await params;
   const t = TOCKE.find((x) => x.slug === slug);
-  return t ? { title: `Gobe ${t.ime} - napoved rasti | Gremo po gobe`, description: `Kdaj bodo rasle gobe na območju ${t.ime} (${t.regija})? 7-dnevna napoved za jurčke, lisičke, marele in štorovke, sestava gozda in vremenske razmere.`, alternates: { canonical: `/regija/${t.slug}` } } : {};
+  if (!t) return {};
+  const opis = opisRegije(t.slug);
+  return {
+    title: `Gobe ${t.ime} - napoved rasti | Gremo po gobe`,
+    description: opis
+      ? `${opis.split(". ")[0]}. 7-dnevna napoved rasti za jurčke, lisičke, marele in štorovke.`
+      : `Kdaj bodo rasle gobe na območju ${t.ime} (${t.regija})? 7-dnevna napoved za jurčke, lisičke, marele in štorovke.`,
+    alternates: { canonical: `/regija/${t.slug}` },
+  };
 }
 
 export default async function Regija({ params }: P) {
@@ -35,6 +44,10 @@ export default async function Regija({ params }: P) {
   if (t) for (const vr of VRSTE) t.indeks[vr.id].forEach((v, i) => { if (v > naj.v) naj = { vrsta: vr, dan: i, v }; });
   const g = t?.gonila[0];
   const gz = gozdTocke(slug);
+  const opis = opisRegije(slug);
+  const prevladujoca = gz?.sestava
+    ? SKUPINE[gz.sestava.indexOf(Math.max(...gz.sestava))].ime.toLowerCase()
+    : null;
   const maxDez = t ? Math.max(1, ...t.padavine14) : 1;
 
   return (
@@ -88,6 +101,22 @@ export default async function Regija({ params }: P) {
             <section className="odsek">
               <Prijava privzetoObmocje={osnova.slug} ime={osnova.ime} />
             </section>
+
+            {opis && (
+              <section className="odsek odsek-opis">
+                <div className="opis-regije">
+                  <h2>O območju</h2>
+                  <p>{opis}</p>
+                  {gz && prevladujoca && (
+                    <p className="opomba">
+                      Po sestojni karti Zavoda za gozdove je v okolici merilne točke {Math.round(gz.gozd * 100)} % površine gozd,
+                      v njem pa prevladuje {prevladujoca}
+                      {gz.sestava && ` (${Math.round(Math.max(...gz.sestava) * 100)} % lesne zaloge)`}.
+                    </p>
+                  )}
+                </div>
+              </section>
+            )}
 
             <section className="odsek">
               <h2 className="naslov">Zakaj takšna ocena</h2>

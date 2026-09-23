@@ -347,3 +347,9 @@ a.seznam-vrstica:hover { background: #EFE9DC; }
 .najdbe-okvir svg { display: block; width: 100%; height: 100%; }
 .najdbe-vrstica { grid-template-columns: minmax(150px, 2fr) repeat(3, minmax(80px, 1fr)); min-width: 460px; }
 .najdbe-vrstica .num { font-variant-numeric: tabular-nums; font-weight: 600; }
+
+/* Opis območja */
+.odsek-opis { padding-bottom: 24px; }
+.opis-regije { max-width: 70ch; }
+.opis-regije h2 { font-family: var(--serif); font-size: 22px; font-weight: 600; margin-bottom: 8px; }
+.opis-regije p { margin: 0 0 8px; font-size: 15px; line-height: 1.7; }

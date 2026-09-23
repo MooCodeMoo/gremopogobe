@@ -33,8 +33,12 @@ export const vsePrijave = () => kv.smembers("prijave");
 
 /** Pošlje eno ali več sporočil prek Resend. Vrne število uspešno oddanih. */
 export async function posljiPosto(sporocila: { to: string; subject: string; html: string; headers?: Record<string, string> }[]) {
-  const kljuc = process.env.RESEND_API_KEY;
+  const kljuc = process.env.RESEND_API_KEY?.trim();
   if (!kljuc) throw new Error("RESEND_API_KEY ni nastavljen");
+  // V glavo smejo samo znaki ASCII; šumnik v ključu bi sicer sesul zahtevo z nejasno napako
+  if (!/^[\x21-\x7e]+$/.test(kljuc)) {
+    throw new Error("RESEND_API_KEY vsebuje nedovoljene znake (presledek ali šumnik). Prekopiraj ključ iz Resenda še enkrat.");
+  }
   let poslano = 0;
   for (let i = 0; i < sporocila.length; i += 100) {
     const kos = sporocila.slice(i, i + 100).map((s) => ({ from: POSILJATELJ, ...s }));

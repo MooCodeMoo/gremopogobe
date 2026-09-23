@@ -4,7 +4,8 @@ import type { Metadata } from "next";
 import { Nav, Noga } from "@/components/Nav";
 import { getNapoved, TOCKE, kratekDan, datumKratko } from "@/lib/napoved";
 import { VRSTE, OZNAKE, barva, besediloNa, stopnja } from "@/lib/vrste";
-import { DEZ_ZAMIK } from "@/lib/indeks";
+import { DEZ_ZAMIK, EKV_DNI } from "@/lib/indeks";
+import modelRaw from "@/data/model.json";
 import model from "@/data/model.json";
 import { JsonLd, drobtinice } from "@/lib/seo";
 import { SKUPINE, gozdTocke } from "@/lib/gozd";
@@ -49,6 +50,12 @@ export default async function Regija({ params }: P) {
     ? SKUPINE[gz.sestava.indexOf(Math.max(...gz.sestava))].ime.toLowerCase()
     : null;
   const maxDez = t ? Math.max(1, ...t.padavine14) : 1;
+  const jedro = (modelRaw as { dez_kernel?: { vrh: number; sirina: number; dolzina: number } }).dez_kernel;
+  // prosojnost stolpca pove, koliko ta dan šteje v modelu
+  const utez = (zamik: number) =>
+    jedro
+      ? 0.25 + 0.75 * Math.exp(-((zamik - jedro.vrh) ** 2) / (2 * jedro.sirina ** 2))
+      : zamik >= DEZ_ZAMIK[0] && zamik <= DEZ_ZAMIK[1] ? 1 : 0.45;
 
   return (
     <>
@@ -125,9 +132,9 @@ export default async function Regija({ params }: P) {
                   <h3>Padavine, zadnjih {t.padavine14.length} dni</h3>
                   <strong>{Math.round(t.padavine14.reduce((s, x) => s + x, 0))} <small>mm</small></strong>
                   <div className="dez" aria-hidden="true">
-                    {t.padavine14.map((p, i) => <i key={i} style={{ height: Math.max(3, (p / maxDez) * 80), opacity: t.padavine14.length - i >= DEZ_ZAMIK[0] && t.padavine14.length - i <= DEZ_ZAMIK[1] ? 1 : 0.45 }} />)}
+                    {t.padavine14.map((p, i) => <i key={i} style={{ height: Math.max(3, (p / maxDez) * 80), opacity: utez(t.padavine14.length - i) }} />)}
                   </div>
-                  <p>Temnejši stolpci so dež {DEZ_ZAMIK[0]}-{DEZ_ZAMIK[1]} dni nazaj, ki šteje največ: {Math.round(g!.dezMm)} mm.</p>
+                  <p>{jedro ? `Temnejši stolpci štejejo v modelu več; najbolj šteje dež okoli ${jedro.vrh} dni nazaj. Tehtano to ustreza ${Math.round(g!.dezMm)} mm v ${EKV_DNI} dneh.` : `Temnejši stolpci so dež ${DEZ_ZAMIK[0]}-${DEZ_ZAMIK[1]} dni nazaj, ki šteje največ: ${Math.round(g!.dezMm)} mm.`}</p>
                 </div>
                 <div className="gonilo">
                   <h3>Temperatura tal</h3>

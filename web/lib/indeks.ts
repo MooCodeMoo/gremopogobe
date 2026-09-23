@@ -28,10 +28,33 @@ function trapez(t: number, [lo, o1, o2, hi]: [number, number, number, number]) {
   return 1;
 }
 
+// Zglajeno okno: dež posameznega dne šteje po zvonasti uteži, namesto da bi
+// nenadoma izpadel iz okvira. jedro = {vrh, sirina, dolzina} iz model.json.
+type Jedro = { vrh: number; sirina: number; dolzina: number };
+const JEDRO: Jedro | null = (model as { dez_kernel?: Jedro }).dez_kernel ?? null;
+export const EKV_DNI = 19; // utežen dež pretvorimo v primerljivo vsoto mm
+
+export const dolzinaOkna = JEDRO ? JEDRO.dolzina : DEZ_ZAMIK[1];
+
+function tehtanDez(padavine: number[], i: number) {
+  if (!JEDRO) {
+    const [a, b] = DEZ_ZAMIK;
+    return vsota(padavine.slice(Math.max(0, i - b), Math.max(0, i - a + 1)));
+  }
+  let vsotaUtezi = 0, vsotaDeza = 0;
+  for (let zamik = 1; zamik <= JEDRO.dolzina; zamik++) {
+    const j = i - zamik;
+    if (j < 0) continue;
+    const w = Math.exp(-((zamik - JEDRO.vrh) ** 2) / (2 * JEDRO.sirina ** 2));
+    vsotaUtezi += w;
+    vsotaDeza += w * padavine[j];
+  }
+  return vsotaUtezi > 0 ? (vsotaDeza / vsotaUtezi) * EKV_DNI : 0;
+}
+
 export function gonila(v: Vreme, i: number): Gonila {
-  const [a, b] = DEZ_ZAMIK;
   return {
-    dezMm: vsota(v.padavine.slice(Math.max(0, i - b), Math.max(0, i - a + 1))),
+    dezMm: tehtanDez(v.padavine, i),
     tempTal: povp(v.tempTal.slice(Math.max(0, i - 4), i + 1)),
     vlaga: v.vlagaTal[i],
   };

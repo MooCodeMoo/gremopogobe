@@ -138,16 +138,37 @@ def vreme_leto(vir, lat, lon, leto):
     return out
 
 
-def gonila(w, datum, zamik):
+EKV_DNI = 19  # utežen dež pretvorimo v primerljivo vsoto mm
+
+
+def tehtan_dez(padavine, i, jedro):
+    """jedro = (vrh, sirina, dolzina) ali None za trdo okno."""
+    if jedro is None:
+        return None
+    vrh, sirina, dolzina = jedro
+    su = sd = 0.0
+    for zamik in range(1, dolzina + 1):
+        j = i - zamik
+        if j < 0:
+            continue
+        w = math.exp(-((zamik - vrh) ** 2) / (2 * sirina ** 2))
+        su += w
+        sd += w * padavine[j]
+    return (sd / su) * EKV_DNI if su else 0.0
+
+
+def gonila(w, datum, zamik, jedro=None):
     try:
         i = w["datum"].index(datum)
     except ValueError:
         return None
     a, b = zamik
-    if i < b or w["temp_tal"][i] is None or w["vlaga_tal"][i] is None:
+    potreben = jedro[2] if jedro else b
+    if i < potreben or w["temp_tal"][i] is None or w["vlaga_tal"][i] is None:
         return None
     okno = [x for x in w["temp_tal"][i - 4:i + 1] if x is not None]
-    return {"dez": sum(w["padavine"][i - b:i - a + 1]), "temp": sum(okno) / len(okno), "vlaga": w["vlaga_tal"][i],
+    dez = tehtan_dez(w["padavine"], i, jedro) if jedro else sum(w["padavine"][i - b:i - a + 1])
+    return {"dez": dez, "temp": sum(okno) / len(okno), "vlaga": w["vlaga_tal"][i],
             "tmax5": max(w["tmax"][i - 4:i + 1]), "dez5": sum(w["padavine"][i - 4:i + 1]), "mesec": int(datum[5:7]), "leto": int(datum[:4])}
 
 
@@ -243,19 +264,20 @@ def main():
                     if abs((d - d0).days) > 10: break
                 surovi[vr].append((w, d.isoformat(), False))
 
-    def vzorci_za(zamik):
+    def vzorci_za(zamik, jedro=None):
         out = {}
         for vr, lst in surovi.items():
             pos, neg = [], []
             for w, d, je in lst:
-                g = gonila(w, d, zamik)
+                g = gonila(w, d, zamik, jedro)
                 if g: (pos if je else neg).append(g)
             out[vr] = {"pos": pos, "neg": neg}
         return out
 
-    def fit(pos_po_vrstah, zamik):
+    def fit(pos_po_vrstah, zamik, jedro=None):
         vse = [g for l in pos_po_vrstah.values() for g in l]
         p = {"dez_zamik": list(zamik),
+             **({"dez_kernel": {"vrh": jedro[0], "sirina": jedro[1], "dolzina": jedro[2]}} if jedro else {}),
              "dez_min": round(kvantil([g["dez"] for g in vse], .15), 1),
              "dez_opt": round(kvantil([g["dez"] for g in vse], .55), 1),
              "vlaga_min": round(kvantil([g["vlaga"] for g in vse], .10), 3),
@@ -277,12 +299,12 @@ def main():
                                                         if c >= max(2, 0.03 * len(pos))}}
         return p
 
-    def navzkrizno(vz, zamik):
+    def navzkrizno(vz, zamik, jedro=None):
         """Vsako leto enkrat izpustimo, model nastavimo na ostalih in ocenimo na izpuščenem. Vrne zbrane ocene."""
         leta = sorted({g["leto"] for v in vz.values() for g in v["pos"]})
         ocene = {vr: {"pos_st": [], "neg_st": [], "pos_nv": [], "neg_nv": []} for vr in VRSTE}
         for le in leta:
-            p = fit({vr: [g for g in v["pos"] if g["leto"] != le] for vr, v in vz.items()}, zamik)
+            p = fit({vr: [g for g in v["pos"] if g["leto"] != le] for vr, v in vz.items()}, zamik, jedro)
             st = dict(STARI, dez_zamik=list(zamik))
             for vr, v in vz.items():
                 for g in v["pos"]:
@@ -291,35 +313,49 @@ def main():
                     if g["leto"] == le: ocene[vr]["neg_st"].append(indeks(g, st, vr)); ocene[vr]["neg_nv"].append(indeks(g, p, vr))
         return {vr: (auc(o["pos_st"], o["neg_st"]), auc(o["pos_nv"], o["neg_nv"]), len(o["pos_nv"])) for vr, o in ocene.items()}
 
-    ZAMIKI = [(3, 10), (5, 14), (7, 21), (10, 28)]
-    print("\nIščem najboljši zamik dežja (navzkrižno preverjanje po letih)...")
-    rezultati = {}
-    for z in ZAMIKI:
-        r = navzkrizno(vzorci_za(z), z)
+    def oceni(zamik, jedro=None):
+        vz = vzorci_za(zamik, jedro)
+        r = navzkrizno(vz, zamik, jedro)
         n_vs = sum(x[2] for x in r.values())
         povp = sum(x[1] * x[2] for x in r.values() if x[1] == x[1]) / max(1, n_vs)
-        rezultati[z] = (povp, r)
-        print(f"  dež {z[0]:>2}-{z[1]:<2} dni nazaj: povprečni AUC {povp:.3f}")
-    zamik = max(rezultati, key=lambda z: rezultati[z][0])
-    vzorci = vzorci_za(zamik)
-    r = rezultati[zamik][1]
+        return povp, r, vz
+
+    ZAMIKI = [(3, 10), (5, 14), (7, 21), (10, 28)]
+    print("\nIščem najboljše okno dežja (navzkrižno preverjanje po letih)...")
+    najboljse = None
+    for z in ZAMIKI:
+        povp, r, vz = oceni(z)
+        print(f"  trdo okno {z[0]:>2}-{z[1]:<2} dni: povprečni AUC {povp:.3f}")
+        if not najboljse or povp > najboljse[0]:
+            najboljse = (povp, r, vz, z, None)
+
+    print("  ---")
+    for vrh in (8, 12, 16, 20, 24):
+        for sirina in (4, 7, 10):
+            jedro = (vrh, sirina, min(45, vrh + 3 * sirina))
+            povp, r, vz = oceni(najboljse[3], jedro)
+            print(f"  zglajeno, vrh {vrh:>2} dni, širina {sirina:>2}: povprečni AUC {povp:.3f}")
+            if povp > najboljse[0]:
+                najboljse = (povp, r, vz, najboljse[3], jedro)
+
+    _, r, vzorci, zamik, jedro = najboljse
     if sum(len(v["pos"]) for v in vzorci.values()) < 30:
         print("\nPremalo najdb z vremenom za kalibracijo.")
         return
-    nov = fit({vr: v["pos"] for vr, v in vzorci.items()}, zamik)
+    nov = fit({vr: v["pos"] for vr, v in vzorci.items()}, zamik, jedro)
     nov["meta"] = {"vir": args.vir, "od_leta": od_leta, "sirse": bool(args.sirse), "ustvarjeno": date.today().isoformat(),
                    "n": {vr: len(v["pos"]) for vr, v in vzorci.items()},
                    "auc_cv": {vr: {"staro": round(x[0], 3), "novo": round(x[1], 3)} for vr, x in r.items()}}
 
     print("\n" + "=" * 78)
-    print(f"Najboljši zamik: dež {zamik[0]}-{zamik[1]} dni nazaj. Navzkrižno preverjanje po letih:")
+    print("Najboljše okno: " + (f"zglajeno z vrhom {jedro[0]} dni in širino {jedro[1]}" if jedro else f"trdo {zamik[0]}-{zamik[1]} dni") + ". Navzkrižno preverjanje po letih:")
     print(f"{'vrsta':<10}{'najdb':>7}   {'temp tal: staro -> novo':<36}{'AUC staro':>10}{'novo':>7}")
     for vr in VRSTE:
         a_st, a_nv, n = r[vr]
         if len(vzorci[vr]["pos"]) < 15:
             print(f"{vr:<10}{n:>7}   premalo najdb - ostane ročna nastavitev"); continue
         print(f"{vr:<10}{n:>7}   {str(STARI['vrste'][vr]['temp']):<17}-> {str(nov['vrste'][vr]['temp']):<17}{a_st:>10.2f}{a_nv:>7.2f}")
-    print(f"\nDež {zamik[0]}-{zamik[1]} dni: {STARI['dez_min']}-{STARI['dez_opt']} mm -> {nov['dez_min']}-{nov['dez_opt']} mm")
+    print(f"\nPrag dežja: {STARI['dez_min']}-{STARI['dez_opt']} mm -> {nov['dez_min']}-{nov['dez_opt']} mm" + (f" (tehtano, ekvivalent {EKV_DNI} dni)" if jedro else ""))
     print(f"Vlaga tal:    {STARI['vlaga_min']}-{STARI['vlaga_opt']} -> {nov['vlaga_min']}-{nov['vlaga_opt']} m³/m³")
     print("\nAUC: 0,5 = kot met kovanca, 0,7 = uporabno, 0,8+ = dobro. 'staro' = ročni parametri z najboljšim zamikom.")
     for vr in VRSTE:

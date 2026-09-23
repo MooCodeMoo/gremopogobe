@@ -5,7 +5,7 @@ import { useEffect, useMemo, useRef, useState, type PointerEvent } from "react";
 import geo from "@/data/slovenija.json";
 import { VRSTE, OZNAKE, LESTVICA, barva, besediloNa, stopnja, type VrstaId } from "@/lib/vrste";
 import type { Napoved } from "@/lib/napoved";
-import { DEZ_ZAMIK } from "@/lib/indeks";
+import { dolzinaOkna } from "@/lib/indeks";
 import { faktorPike } from "@/lib/gozd";
 import MojaObmocja from "./MojaObmocja";
 import NajdbeHitro from "./NajdbeHitro";
@@ -138,7 +138,7 @@ export default function Raziskovalec({ napoved }: { napoved: Napoved }) {
         <div className="hero-levo">
           <p className="svez"><span className="pika" aria-hidden="true" />Posodobljeno {new Date(napoved.posodobljeno).toLocaleString("sl-SI", { timeZone: "Europe/Ljubljana", day: "numeric", month: "numeric", hour: "2-digit", minute: "2-digit" })}</p>
           <h1><span className="nadnaslov">Gobarska napoved za Slovenijo</span>Kje bo ta vikend polna košara?</h1>
-          <p className="uvod">Indeks rasti za {napoved.tocke.length} gozdnih območij iz padavin zadnjih {DEZ_ZAMIK[1]} dni, temperature in vlage tal ter sestave gozda.</p>
+          <p className="uvod">Indeks rasti za {napoved.tocke.length} gozdnih območij iz padavin zadnjih {dolzinaOkna} dni, temperature in vlage tal ter sestave gozda.</p>
 
           <fieldset className="skupina">
             <legend>Vrsta</legend>

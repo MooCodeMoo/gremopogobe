@@ -6,7 +6,8 @@ import { getNapoved } from "@/lib/napoved";
 import { JsonLd, URL_STRANI } from "@/lib/seo";
 import Prijava from "@/components/Prijava";
 import Obvestila from "@/components/Obvestila";
-import { DEZ_ZAMIK } from "@/lib/indeks";
+import { DEZ_ZAMIK, dolzinaOkna } from "@/lib/indeks";
+import modelRaw from "@/data/model.json";
 
 export const revalidate = 10800; // ISR: stran se osveži vsake 3 ure
 
@@ -42,7 +43,7 @@ export default async function Domov() {
         <section className="indeks-razlaga">
           <h2>Gobe ne rastejo po koledarju, ampak po vremenu.</h2>
           <div>
-            <article><h3>Dež z zamikom</h3><p>Šteje dež {DEZ_ZAMIK[0]}-{DEZ_ZAMIK[1]} dni nazaj. Po izdatnem dežju se micelij najprej razraste, klobuki pa se pokažejo z zamikom.</p></article>
+            <article><h3>Dež z zamikom</h3><p>{(modelRaw as { dez_kernel?: { vrh: number } }).dez_kernel ? `Najbolj šteje dež okoli ${(modelRaw as { dez_kernel?: { vrh: number } }).dez_kernel!.vrh} dni nazaj, bližnji dnevi manj. Po izdatnem dežju se micelij najprej razraste, klobuki pa se pokažejo z zamikom.` : `Šteje dež ${DEZ_ZAMIK[0]}-${DEZ_ZAMIK[1]} dni nazaj. Po izdatnem dežju se micelij najprej razraste, klobuki pa se pokažejo z zamikom.`}</p></article>
             <article><h3>Temperatura tal</h3><p>Vsaka vrsta ima svoje okno. Jurček ima rad hladnejša tla, marela prenese toplejše travnike.</p></article>
             <article><h3>Vlaga tal</h3><p>Brez vlage tudi dober dež izhlapi. Vroči, suhi dnevi indeks hitro spustijo.</p></article>
           </div>

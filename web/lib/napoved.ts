@@ -1,14 +1,14 @@
 import tocke from "@/data/tocke.json";
 import model from "@/data/model.json";
 import { VRSTE, type VrstaId } from "./vrste";
-import { gonila, indeks, type Gonila, type Vreme } from "./indeks";
+import { dolzinaOkna, gonila, indeks, type Gonila, type Vreme } from "./indeks";
 import { faktorGozda, gozdTocke } from "./gozd";
 
 export type Tocka = { slug: string; ime: string; regija: string; lat: number; lon: number };
 export const TOCKE = tocke as Tocka[];
 
 // Toliko preteklih dni, da pokrijemo okno dežja iz modela (vsaj 14 za graf)
-export const PRETEKLI_DNI = Math.max(14, model.dez_zamik[1]);
+export const PRETEKLI_DNI = Math.min(92, Math.max(14, dolzinaOkna)); // Open-Meteo dovoli največ 92 preteklih dni
 export const DNI_NAPOVEDI = 7;
 export const OSVEZI_S = 3 * 60 * 60; // 3 ure
 
@@ -17,7 +17,7 @@ export type TockaNapoved = Tocka & {
   indeks: Record<VrstaId, number[]>; // po en na dan napovedi, z upoštevanim tipom gozda
   indeksVreme: Record<VrstaId, number[]>; // samo vreme (za interpolacijo na zemljevidu)
   gonila: Gonila[]; // po en na dan napovedi
-  padavine14: number[]; // vsi pretekli dnevi (PRETEKLI_DNI), za graf
+  padavine14: number[]; // zadnjih 28 preteklih dni, za graf
 };
 export type Napoved = { dnevi: string[]; posodobljeno: string; tocke: TockaNapoved[] };
 
@@ -88,8 +88,12 @@ async function pridobiVreme(): Promise<(Vreme & { visina: number | null })[]> {
 export async function getNapoved(): Promise<Napoved | null> {
   try {
     const vreme = await pridobiVreme();
-    const danes = PRETEKLI_DNI;
+    // Današnji dan poiščemo po datumu, ne po številu dni, ker vir lahko vrne drugačen razpon
+    const danasnji = new Date().toISOString().slice(0, 10);
+    const najden = vreme[0].datum.indexOf(danasnji);
+    const danes = najden >= 0 ? najden : PRETEKLI_DNI;
     const dnevi = vreme[0].datum.slice(danes);
+    if (dnevi.length === 0) throw new Error("Vir ni vrnil napovedi za naprej");
     const tocke = TOCKE.map((t, j) => {
       const v = vreme[j];
       const idx = dnevi.map((_, k) => danes + k);
@@ -103,7 +107,7 @@ export async function getNapoved(): Promise<Napoved | null> {
           return [s.id, idx.map((i) => Math.round(indeks(v, i, s.id) * f))];
         })) as Record<VrstaId, number[]>,
         gonila: idx.map((i) => gonila(v, i)),
-        padavine14: v.padavine.slice(0, danes),
+        padavine14: v.padavine.slice(Math.max(0, danes - 28), danes),
       };
     });
     return { dnevi, posodobljeno: new Date().toISOString(), tocke };

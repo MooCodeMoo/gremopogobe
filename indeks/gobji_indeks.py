@@ -18,6 +18,7 @@ from pathlib import Path
 
 API = "https://api.open-meteo.com/v1/forecast"
 PAST_DAYS, FORECAST_DAYS = 14, 7
+JEDRO = None
 
 # Temperaturno okno tal [min, opt_od, opt_do, max] v °C in sezonski faktor po mesecih.
 VRSTE = {
@@ -38,10 +39,11 @@ _mf = Path(__file__).parent / "model.json"
 if _mf.exists():
     _m = json.loads(_mf.read_text(encoding="utf-8"))
     DEZ_ZAMIK = tuple(_m["dez_zamik"]); DEZ_MIN, DEZ_OPT = _m["dez_min"], _m["dez_opt"]
+    JEDRO = _m.get("dez_kernel")
     VLAGA_MIN, VLAGA_OPT = _m["vlaga_min"], _m["vlaga_opt"]
     for _k, _v in _m["vrste"].items():
         VRSTE[_k]["temp"] = tuple(_v["temp"]); VRSTE[_k]["sezona"] = {int(a): b for a, b in _v["sezona"].items()}
-PAST_DAYS = max(PAST_DAYS, DEZ_ZAMIK[1])
+PAST_DAYS = max(PAST_DAYS, JEDRO["dolzina"] if JEDRO else DEZ_ZAMIK[1])
 
 
 def clamp(x, a=0.0, b=1.0):
@@ -58,11 +60,25 @@ def trapez(t, lo, o1, o2, hi):
     return 1.0
 
 
+EKV_DNI = 19
+
+
 def indeks_dan(d, i, vrsta):
     """d = dnevni podatki ene točke, i = indeks dneva v seznamu."""
     v = VRSTE[vrsta]
     a, b = DEZ_ZAMIK
-    dez = sum(d["padavine"][max(0, i - b): max(0, i - a + 1)])
+    if JEDRO:
+        su = sd = 0.0
+        for zamik in range(1, JEDRO["dolzina"] + 1):
+            j = i - zamik
+            if j < 0:
+                continue
+            w = math.exp(-((zamik - JEDRO["vrh"]) ** 2) / (2 * JEDRO["sirina"] ** 2))
+            su += w
+            sd += w * d["padavine"][j]
+        dez = (sd / su) * EKV_DNI if su else 0.0
+    else:
+        dez = sum(d["padavine"][max(0, i - b): max(0, i - a + 1)])
     s_dez = clamp((dez - DEZ_MIN) / (DEZ_OPT - DEZ_MIN))
     s_vlaga = clamp((d["vlaga_tal"][i] - VLAGA_MIN) / (VLAGA_OPT - VLAGA_MIN))
     okno = d["temp_tal"][max(0, i - 4): i + 1]

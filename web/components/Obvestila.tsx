@@ -21,6 +21,7 @@ export default function Obvestila() {
   const [delam, setDelam] = useState(false);
   const [naZaslonu, setNaZaslonu] = useState(true);
   const [telefon, setTelefon] = useState(false);
+  const [odprteNastavitve, setOdprteNastavitve] = useState(false);
 
   useEffect(() => {
     const jePodprto = "serviceWorker" in navigator && "PushManager" in window && Boolean(JAVNI_KLJUC);
@@ -75,7 +76,6 @@ export default function Obvestila() {
 
   if (!podprto) return null;
 
-  const [odprteNastavitve, setOdprteNastavitve] = useState(false);
   const opisNastavitev = `${prag === 55 ? "srednje" : prag === 70 ? "dobro" : "odlično"} ali bolje${vrste.length ? `, ${vrste.length === 1 ? "samo " : ""}${vrste.map((id) => VRSTE.find((v) => v.id === id)!.ime.toLowerCase()).join(", ")}` : ", vse vrste"}`;
 
   return (

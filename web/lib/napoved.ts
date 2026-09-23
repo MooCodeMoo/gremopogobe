@@ -3,6 +3,7 @@ import model from "@/data/model.json";
 import { VRSTE, type VrstaId } from "./vrste";
 import { dolzinaOkna, gonila, indeks, type Gonila, type Vreme } from "./indeks";
 import { faktorGozda, gozdTocke } from "./gozd";
+import { kv, kvNaVoljo } from "./kv";
 
 export type Tocka = { slug: string; ime: string; regija: string; lat: number; lon: number };
 export const TOCKE = tocke as Tocka[];
@@ -19,7 +20,9 @@ export type TockaNapoved = Tocka & {
   gonila: Gonila[]; // po en na dan napovedi
   padavine14: number[]; // zadnjih 28 preteklih dni, za graf
 };
-export type Napoved = { dnevi: string[]; posodobljeno: string; tocke: TockaNapoved[] };
+export type Napoved = { dnevi: string[]; posodobljeno: string; tocke: TockaNapoved[]; zastarelo?: boolean };
+
+const KLJUC_ZADNJA = "napoved:zadnja";
 
 type OMLokacija = {
   elevation?: number;
@@ -110,13 +113,33 @@ export async function getNapoved(): Promise<Napoved | null> {
         padavine14: v.padavine.slice(Math.max(0, danes - 28), danes),
       };
     });
-    return { dnevi, posodobljeno: new Date().toISOString(), tocke };
+    const napoved: Napoved = { dnevi, posodobljeno: new Date().toISOString(), tocke };
+    // Zadnjo uspešno napoved shranimo, da jo lahko postrežemo ob izpadu vira
+    if (kvNaVoljo) {
+      kv.set(KLJUC_ZADNJA, JSON.stringify(napoved)).catch((e) => console.error("Napovedi ni bilo mogoče shraniti:", e));
+    }
+    return napoved;
   } catch (e) {
     console.error("Napoved ni na voljo:", e);
-    // Med buildom vrnemo prazno stanje, da deploy uspe. Med delovanjem (ISR) pa napako vržemo:
-    // Next.js tedaj obdrži zadnjo uspešno različico strani, namesto da bi jo zamenjal s prazno.
-    if (process.env.NEXT_PHASE === "phase-production-build") return null;
-    throw e;
+    const zadnja = await zadnjaShranjena();
+    if (zadnja) return { ...zadnja, zastarelo: true };
+    return null;
+  }
+}
+
+/** Zadnja uspešno pridobljena napoved iz shrambe; uporabimo jo, ko vir ne odgovori. */
+async function zadnjaShranjena(): Promise<Napoved | null> {
+  if (!kvNaVoljo) return null;
+  try {
+    const v = await kv.get(KLJUC_ZADNJA);
+    if (!v) return null;
+    const n = JSON.parse(v) as Napoved;
+    // starejše od treh dni ne kažemo več
+    if (Date.now() - new Date(n.posodobljeno).getTime() > 3 * 86400000) return null;
+    return n;
+  } catch (e) {
+    console.error("Shranjene napovedi ni bilo mogoče prebrati:", e);
+    return null;
   }
 }
 

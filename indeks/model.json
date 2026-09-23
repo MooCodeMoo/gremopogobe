@@ -3,20 +3,25 @@
   10,
   28
  ],
- "dez_min": 41.4,
- "dez_opt": 94.6,
+ "dez_kernel": {
+  "vrh": 16,
+  "sirina": 10,
+  "dolzina": 45
+ },
+ "dez_min": 48.7,
+ "dez_opt": 96.2,
  "vlaga_min": 0.206,
- "vlaga_opt": 0.282,
+ "vlaga_opt": 0.28,
  "vrste": {
   "jurcek": {
    "temp": [
     7.1,
-    11.5,
+    11.3,
     19.1,
-    21.3
+    21.4
    ],
    "sezona": {
-    "6": 0.82,
+    "6": 0.57,
     "7": 0.51,
     "8": 1.0,
     "9": 0.94,
@@ -26,13 +31,13 @@
   },
   "lisicka": {
    "temp": [
-    4.6,
-    12.1,
-    19.3,
+    4.2,
+    11.9,
+    19.4,
     22.0
    ],
    "sezona": {
-    "6": 0.67,
+    "6": 0.43,
     "7": 1.0,
     "8": 0.92,
     "9": 0.43,
@@ -48,7 +53,6 @@
     20.5
    ],
    "sezona": {
-    "6": 0.23,
     "7": 0.28,
     "8": 0.61,
     "9": 0.72,
@@ -74,29 +78,29 @@
   "vir": "hf",
   "od_leta": 2022,
   "sirse": true,
-  "ustvarjeno": "2026-09-22",
+  "ustvarjeno": "2026-09-23",
   "n": {
-   "jurcek": 286,
-   "lisicka": 228,
-   "marela": 298,
+   "jurcek": 264,
+   "lisicka": 207,
+   "marela": 292,
    "storovka": 88
   },
   "auc_cv": {
    "jurcek": {
-    "staro": 0.732,
-    "novo": 0.709
+    "staro": 0.734,
+    "novo": 0.731
    },
    "lisicka": {
     "staro": 0.68,
-    "novo": 0.664
+    "novo": 0.677
    },
    "marela": {
-    "staro": 0.624,
-    "novo": 0.724
+    "staro": 0.599,
+    "novo": 0.727
    },
    "storovka": {
-    "staro": 0.892,
-    "novo": 0.88
+    "staro": 0.89,
+    "novo": 0.871
    }
   }
  }

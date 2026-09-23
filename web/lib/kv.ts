@@ -34,6 +34,26 @@ export const kv = {
   async zapisi(kljuc: string, vrednost: string, najvec: number) {
     return poslji([["LPUSH", kljuc, vrednost], ["LTRIM", kljuc, 0, najvec - 1]]);
   },
+  async get(kljuc: string) {
+    const [r] = await poslji([["GET", kljuc]]);
+    return r as string | null;
+  },
+  async set(kljuc: string, vrednost: string) {
+    await poslji([["SET", kljuc, vrednost]]);
+  },
+  async del(kljuci: string[]) {
+    if (kljuci.length) await poslji([["DEL", ...kljuci]]);
+  },
+  async sadd(kljuc: string, clan: string) {
+    await poslji([["SADD", kljuc, clan]]);
+  },
+  async srem(kljuc: string, clan: string) {
+    await poslji([["SREM", kljuc, clan]]);
+  },
+  async smembers(kljuc: string) {
+    const [r] = await poslji([["SMEMBERS", kljuc]]);
+    return (r as string[]) ?? [];
+  },
   async seznam(kljuc: string, koliko: number) {
     const [r] = await poslji([["LRANGE", kljuc, 0, koliko - 1]]);
     return (r as string[]) ?? [];

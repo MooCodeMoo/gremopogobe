@@ -294,3 +294,20 @@ a.seznam-vrstica:hover { background: #EFE9DC; }
 .najdbe-hvala { margin: 0; font-weight: 600; color: var(--gozd); min-height: 48px; display: flex; align-items: center; }
 .najdbe-opomba { margin: 0; font-size: 13px; color: var(--sivo); line-height: 1.5; }
 @media (max-width: 860px) { .najdbe { grid-template-columns: 1fr; gap: 20px; padding: 22px; } }
+
+/* Spremljanje območja in prijava na bilten */
+.spremljaj { display: inline-flex; align-items: center; gap: 8px; margin-top: 14px; height: 40px; padding: 0 16px; border-radius: 999px; border: 1px solid var(--crta); background: var(--povrsina); color: var(--crnilo); font-size: 14px; font-weight: 600; transition: border-color .2s, background .2s; }
+.spremljaj:hover { border-color: var(--gozd); }
+.spremljaj.aktivno { background: var(--gozd); border-color: var(--gozd); color: #fff; }
+.moja-obmocja .kartica-glava span:not(.znacka) { font-size: 13px; color: var(--sivo); }
+.prijava { display: grid; grid-template-columns: minmax(0, 1fr) minmax(300px, 420px); gap: 32px; align-items: center; padding: 28px 32px; border-radius: 24px; background: var(--gozd); color: #EDE7DA; }
+.prijava h2 { font-family: var(--serif); font-size: 24px; font-weight: 600; margin-bottom: 6px; color: #fff; }
+.prijava p { margin: 0; line-height: 1.55; color: #C9D6C9; }
+.prijava-vnos { display: grid; grid-template-columns: 1fr auto; gap: 10px; }
+.prijava-vnos input[type="email"] { height: 48px; padding: 0 16px; border-radius: 999px; border: 1px solid #4A6353; background: #F8F6F0; color: var(--crnilo); font: inherit; }
+.prijava-vnos button { height: 48px; padding: 0 22px; border-radius: 999px; border: 0; background: #E3B97A; color: #2A1B0C; font-size: 15px; font-weight: 700; }
+.prijava-vnos button:disabled { opacity: .55; }
+.prijava-izbira { grid-column: 1 / -1; display: flex; align-items: center; gap: 8px; font-size: 13px; color: #C9D6C9; }
+.prijava-hvala { font-weight: 600; color: #fff; }
+.prijava .najdbe-opomba { grid-column: 1 / -1; color: #E9C6AE; }
+@media (max-width: 860px) { .prijava { grid-template-columns: 1fr; gap: 18px; padding: 22px; } .prijava-vnos { grid-template-columns: 1fr; } }

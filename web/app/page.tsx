@@ -4,6 +4,7 @@ import { Nav, Noga } from "@/components/Nav";
 import type { Metadata } from "next";
 import { getNapoved } from "@/lib/napoved";
 import { JsonLd, URL_STRANI } from "@/lib/seo";
+import Prijava from "@/components/Prijava";
 import { DEZ_ZAMIK } from "@/lib/indeks";
 
 export const revalidate = 10800; // ISR: stran se osveži vsake 3 ure
@@ -56,6 +57,9 @@ export default async function Domov() {
               <div key={a} className="pravilo"><strong>{a}</strong><span>{b}</span><p>{c}</p></div>
             ))}
           </div>
+        </section>
+        <section className="odsek">
+          <Prijava />
         </section>
       </main>
       <Noga />

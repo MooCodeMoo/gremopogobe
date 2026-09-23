@@ -7,6 +7,7 @@ import { VRSTE, OZNAKE, LESTVICA, barva, besediloNa, stopnja, type VrstaId } fro
 import type { Napoved } from "@/lib/napoved";
 import { DEZ_ZAMIK } from "@/lib/indeks";
 import { faktorPike } from "@/lib/gozd";
+import MojaObmocja from "./MojaObmocja";
 
 const DN = ["Ned", "Pon", "Tor", "Sre", "Čet", "Pet", "Sob"];
 const dan = (iso: string) => DN[new Date(iso).getDay()];
@@ -236,6 +237,8 @@ export default function Raziskovalec({ napoved }: { napoved: Napoved }) {
           </div>
         </div>
       </section>
+
+      <MojaObmocja tocke={napoved.tocke} vrsta={vrsta} dIdx={dIdx} />
 
       <section className="odsek" id="regije">
         <div className="odsek-glava">

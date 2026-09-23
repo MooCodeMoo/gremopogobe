@@ -2,6 +2,8 @@
 import { useEffect, useState } from "react";
 import { VRSTE, type VrstaId } from "@/lib/vrste";
 
+const TOZILNIK: Record<VrstaId, string> = { jurcek: "jurčka", lisicka: "lisičko", marela: "marelo", storovka: "štorovko" };
+
 type Stat = { dni: number; skupaj: { da: number; ne: number }; po_vrstah: Record<string, { da: number; ne: number }> };
 
 export default function Najdbe({ slug, ime }: { slug: string; ime: string }) {
@@ -58,8 +60,10 @@ export default function Najdbe({ slug, ime }: { slug: string; ime: string }) {
         {stanje === "napaka" && <p className="najdbe-opomba">Odgovora ni bilo mogoče shraniti. Poskusi kasneje.</p>}
         {skupaj > 0 ? (
           <p className="najdbe-opomba">
-            Zadnjih {stat!.dni} dni: {skupaj} {skupaj === 1 ? "odgovor" : skupaj === 2 ? "odgovora" : "odgovorov"} za{" "}
-            {VRSTE.find((x) => x.id === vrsta)!.ime.toLowerCase()}, {Math.round(((v?.da ?? 0) / skupaj) * 100)} % jih je gobe našlo.
+            Zadnjih {stat!.dni} dni: {skupaj} {skupaj === 1 ? "odgovor" : skupaj === 2 ? "odgovora" : skupaj <= 4 ? "odgovori" : "odgovorov"} za {TOZILNIK[vrsta]}
+            {skupaj === 1
+              ? (v?.da ? ", gobe je našel." : ", gob ni našel.")
+              : `, ${Math.round(((v?.da ?? 0) / skupaj) * 100)} % jih je gobe našlo.`}
           </p>
         ) : (
           <p className="najdbe-opomba">Za to vrsto še ni odgovorov v zadnjem tednu. Bodi prvi.</p>

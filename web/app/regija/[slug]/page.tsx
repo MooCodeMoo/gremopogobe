@@ -9,6 +9,8 @@ import model from "@/data/model.json";
 import { JsonLd, drobtinice } from "@/lib/seo";
 import { SKUPINE, gozdTocke } from "@/lib/gozd";
 import Najdbe from "@/components/Najdbe";
+import Spremljaj from "@/components/Spremljaj";
+import Prijava from "@/components/Prijava";
 
 export const revalidate = 10800;
 export const generateStaticParams = () => TOCKE.map((t) => ({ slug: t.slug }));
@@ -46,6 +48,7 @@ export default async function Regija({ params }: P) {
             <div>
               <h1>{osnova.ime}</h1>
               <p>{osnova.regija}{t?.visina ? `, merilna točka na ${Math.round(t.visina)} m` : ""}</p>
+              <Spremljaj slug={osnova.slug} />
             </div>
             {t && napoved && (
               <div className="poudarek" style={{ background: naj.v >= 60 ? "#6B2A15" : "#0F3320" }}>
@@ -80,6 +83,10 @@ export default async function Regija({ params }: P) {
 
             <section className="odsek odsek-najdbe">
               <Najdbe slug={osnova.slug} ime={osnova.ime} />
+            </section>
+
+            <section className="odsek">
+              <Prijava privzetoObmocje={osnova.slug} ime={osnova.ime} />
             </section>
 
             <section className="odsek">

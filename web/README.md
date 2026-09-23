@@ -24,6 +24,19 @@ Okoljske spremenljivke (neobvezno):
 - `app/regija/[slug]` - 30 statičnih strani regij (SEO: "gobe Pohorje" ...).
 - `app/vodic` - pravila in sezonski koledar.
 
+## E-poštni bilten (četrtek zjutraj)
+
+1. Resend: ustvari račun, dodaj domeno gremopogobe.si in vpiši prikazane DNS zapise (SPF, DKIM, DMARC) v Vercel DNS.
+2. V Vercelu nastavi spremenljivke:
+   - `RESEND_API_KEY` - ključ iz Resenda
+   - `POSILJATELJ` - npr. `Gremo po gobe <napoved@gremopogobe.si>`
+   - `CRON_SECRET` - poljubno geslo; Vercel ga sam pošlje cron zahtevi
+3. `vercel.json` sproži `/api/cron/bilten` vsak četrtek ob 5:00 UTC (7:00 po naše).
+   Ročno ga lahko poženeš z: `curl -H "Authorization: Bearer <CRON_SECRET>" https://gremopogobe.si/api/cron/bilten`
+
+Naročniki so v isti Redis bazi. Prijava zahteva potrditev prek e-pošte (dvojna privolitev),
+odjava deluje z enim klikom tudi prek glave List-Unsubscribe.
+
 ## Pomembno
 - Brezplačni Open-Meteo API je samo za nekomercialno rabo. Ko stran monetiziraš
   (affiliate, oglasi), potrebuješ njihov plačljiv API paket.

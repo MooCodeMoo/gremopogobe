@@ -8,6 +8,7 @@ import { DEZ_ZAMIK } from "@/lib/indeks";
 import model from "@/data/model.json";
 import { JsonLd, drobtinice } from "@/lib/seo";
 import { SKUPINE, gozdTocke } from "@/lib/gozd";
+import Najdbe from "@/components/Najdbe";
 
 export const revalidate = 10800;
 export const generateStaticParams = () => TOCKE.map((t) => ({ slug: t.slug }));
@@ -75,6 +76,10 @@ export default async function Regija({ params }: P) {
                   </div>
                 ))}
               </div>
+            </section>
+
+            <section className="odsek odsek-najdbe">
+              <Najdbe slug={osnova.slug} ime={osnova.ime} />
             </section>
 
             <section className="odsek">

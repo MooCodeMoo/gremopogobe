@@ -19,6 +19,7 @@ export function Nav() {
         <Link href="/najdbe">Najdbe</Link>
         <Link href="/vrste">Vrste</Link>
         <Link href="/vodic">Vodič</Link>
+        <Link href="/drustva">Društva</Link>
       </nav>
     </header>
   );
@@ -36,6 +37,7 @@ export function Noga() {
         <Link href="/vrste/marela">Marele</Link>
         <Link href="/vrste/storovka">Štorovke</Link>
         <Link href="/vodic">Pravila nabiranja</Link>
+        <Link href="/drustva">Gobarska društva</Link>
       </nav>
       <span>gremopogobe.si. Vremenski podatki: <a href="https://open-meteo.com/">Open-Meteo.com</a> (CC BY 4.0)</span>
       <span>Indeks je ocena razmer, ne zagotovilo najdbe in ne pomoč pri določanju užitnosti.</span>

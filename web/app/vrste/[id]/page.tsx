@@ -78,7 +78,7 @@ export default async function VrstaStran({ params }: P) {
                 </div>
               ))}
             </div>
-            <p className="opozorilo">Ta stran ni določevalni ključ. Gobe, ki je ne poznaš zanesljivo, ne jej - pokaži jo determinatorju v gobarskem društvu.</p>
+            <p className="opozorilo">Ta stran ni določevalni ključ. Gobe, ki je ne poznaš zanesljivo, ne jej - pokaži jo determinatorju v <Link href="/drustva">gobarskem društvu</Link>.</p>
 
             <h2>Nasvet</h2>
             <p>{o.nasvet}</p>

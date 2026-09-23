@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Nav, Noga } from "@/components/Nav";
 import { JsonLd } from "@/lib/seo";
 
@@ -43,7 +44,7 @@ export default function Vodic() {
           <div>
             <h1>Kaj moraš vedeti, preden greš v gozd</h1>
             <p className="uvod">V Sloveniji raste okoli 3000 vrst gob, od tega približno 200 strupenih. Nabiraj samo tisto, kar zanesljivo poznaš.</p>
-            <p className="opozorilo">Ta stran ni pomoč pri določanju užitnosti. Za določanje obišči gobarsko razstavo ali determinatorja v najbližjem gobarskem društvu.</p>
+            <p className="opozorilo">Ta stran ni pomoč pri določanju užitnosti. Za določanje obišči gobarsko razstavo ali determinatorja v najbližjem <Link href="/drustva">gobarskem društvu</Link>.</p>
           </div>
           <div id="pravila">
             <h2 className="naslov">Pravila</h2>

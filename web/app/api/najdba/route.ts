@@ -6,9 +6,36 @@ import { VRSTE } from "@/lib/vrste";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const DNI = 7;
+const DNI = 14;
 const dan = (zamik = 0) => new Date(Date.now() - zamik * 86400000).toISOString().slice(0, 10);
 const kljuc = (slug: string, vrsta: string, d: string, izid: "da" | "ne") => `n:${slug}:${vrsta}:${d}:${izid}`;
+
+async function zemljevid() {
+  const dnevi = Array.from({ length: DNI }, (_, i) => dan(i));
+  const pari: { slug: string; vrsta: string; kljuci: string[] }[] = [];
+  const vsi: string[] = [];
+  for (const t of TOCKE) {
+    for (const v of VRSTE) {
+      const kljuci = dnevi.flatMap((d) => [kljuc(t.slug, v.id, d, "da"), kljuc(t.slug, v.id, d, "ne")]);
+      pari.push({ slug: t.slug, vrsta: v.id, kljuci });
+      vsi.push(...kljuci);
+    }
+  }
+  // MGET po kosih, da zahteva ne postane prevelika
+  const vrednosti = new Map<string, number>();
+  for (let i = 0; i < vsi.length; i += 800) {
+    const kos = vsi.slice(i, i + 800);
+    const del = await kv.mget(kos);
+    kos.forEach((k, j) => vrednosti.set(k, Number(del[j] ?? 0)));
+  }
+  const regije: Record<string, Record<string, { da: number; ne: number }>> = {};
+  for (const { slug, vrsta, kljuci } of pari) {
+    let da = 0, ne = 0;
+    kljuci.forEach((k, i) => (i % 2 === 0 ? (da += vrednosti.get(k) ?? 0) : (ne += vrednosti.get(k) ?? 0)));
+    if (da || ne) (regije[slug] ??= {})[vrsta] = { da, ne };
+  }
+  return { dni: DNI, regije };
+}
 
 async function statistika(slug: string) {
   const dnevi = Array.from({ length: DNI }, (_, i) => dan(i));
@@ -27,11 +54,31 @@ async function statistika(slug: string) {
 
 export async function GET(req: Request) {
   const u = new URL(req.url);
+  if (u.searchParams.get("diag") === "1") {
+    // Diagnostika: pokaže, katere spremenljivke so nastavljene, in preizkusi povezavo. Brez skrivnosti.
+    const imena = ["KV_REST_API_URL", "KV_REST_API_TOKEN", "UPSTASH_REDIS_REST_URL", "UPSTASH_REDIS_REST_TOKEN", "KV_URL", "REDIS_URL"];
+    const nastavljene = Object.fromEntries(imena.map((n) => [n, Boolean(process.env[n])]));
+    let povezava = "ni poskusa";
+    if (kvNaVoljo) {
+      try {
+        await kv.ukazi([["PING"]]);
+        povezava = "deluje";
+      } catch (e) {
+        povezava = String(e);
+      }
+    }
+    return NextResponse.json({ kvNaVoljo, nastavljene, povezava });
+  }
   if (u.searchParams.get("izvoz") === "1") {
     const kljucIzvoza = process.env.NAJDBE_IZVOZ_KLJUC;
     if (!kljucIzvoza || u.searchParams.get("kljuc") !== kljucIzvoza) return NextResponse.json({ napaka: "ni dovoljeno" }, { status: 401 });
     const vrstice = await kv.seznam("zapisi", 5000);
     return NextResponse.json({ zapisi: vrstice.map((v) => JSON.parse(v)) });
+  }
+  if (u.searchParams.get("zemljevid") === "1") {
+    if (!kvNaVoljo) return NextResponse.json({ dni: DNI, regije: {} });
+    try { return NextResponse.json(await zemljevid()); }
+    catch { return NextResponse.json({ napaka: "shramba ni dosegljiva" }, { status: 503 }); }
   }
   const slug = u.searchParams.get("slug") ?? "";
   if (!TOCKE.some((t) => t.slug === slug)) return NextResponse.json({ napaka: "neznano območje" }, { status: 400 });

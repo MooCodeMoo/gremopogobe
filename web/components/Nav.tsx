@@ -16,6 +16,7 @@ export function Nav() {
       <nav aria-label="Glavna navigacija">
         <Link href="/">Napoved</Link>
         <Link href="/regije">Regije</Link>
+        <Link href="/najdbe">Najdbe</Link>
         <Link href="/vrste">Vrste</Link>
         <Link href="/vodic">Vodič</Link>
       </nav>
@@ -29,6 +30,7 @@ export function Noga() {
       <Image src="/brand/logo-slogan.png" alt="gremo po gobe - več kot nabiranje." width={1400} height={383} sizes="220px" className="noga-logo" />
       <nav className="noga-povezave" aria-label="Povezave v nogi">
         <Link href="/regije">Vse regije</Link>
+        <Link href="/najdbe">Zemljevid najdb</Link>
         <Link href="/vrste/jurcek">Jurčki</Link>
         <Link href="/vrste/lisicka">Lisičke</Link>
         <Link href="/vrste/marela">Marele</Link>

@@ -34,7 +34,7 @@ export default function NajdbeHitro({ tocke }: { tocke: TockaNapoved[] }) {
     <section className="hitra-najdba">
       <div>
         <h2>Si bil v gozdu?</h2>
-        <p>Povej, ali si gobe našel. Odgovori izboljšujejo napoved za vse, beležimo pa samo območje, vrsto in dan.</p>
+        <p>Povej, ali si gobe našel. Odgovori izboljšujejo napoved za vse, beležimo pa samo območje, vrsto in dan. <a href="/najdbe">Poglej zemljevid najdb</a></p>
       </div>
       <div className="hitra-vnos">
         <label className="sr" htmlFor="hitra-obmocje">Območje</label>

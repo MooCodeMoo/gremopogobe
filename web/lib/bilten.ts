@@ -2,6 +2,8 @@ import { getNapoved, kratekDan, datumKratko, type Napoved } from "./napoved";
 import { VRSTE, OZNAKE, barva, besediloNa, stopnja } from "./vrste";
 import { URL_STRANI } from "./seo";
 
+const PRAG_OMEMBE = 40; // vrste s slabšo najboljšo oceno v bilten ne gredo
+
 const esc = (s: string) => s.replace(/[<>&]/g, (c) => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;" })[c]!);
 
 /** Sestavi HTML biltena za izbrana območja (prazno = vsa). */
@@ -12,7 +14,7 @@ export function biltenHtml(napoved: Napoved, obmocja: string[], odjavaUrl: strin
       .map((t) => { const vals = t.indeks[v.id]; const m = Math.max(...vals); return { t, m, dan: vals.indexOf(m) }; })
       .sort((a, b) => b.m - a.m)
       .slice(0, 3);
-    if (!naj.length || naj[0].m === 0) return "";
+    if (!naj.length || naj[0].m < PRAG_OMEMBE) return "";
     const postavke = naj.map(({ t, m, dan }) => `
       <tr>
         <td style="padding:8px 0;border-bottom:1px solid #DDD6C6;">
@@ -29,6 +31,11 @@ export function biltenHtml(napoved: Napoved, obmocja: string[], odjavaUrl: strin
   }).join("");
 
   const obdobje = `${datumKratko(napoved.dnevi[0])} - ${datumKratko(napoved.dnevi[napoved.dnevi.length - 1])}`;
+  // Naslov se prilagodi: če je najboljši dan v soboto ali nedeljo, govorimo o vikendu
+  let najDan = 0, najVrednost = 0;
+  for (const t of izbrane) for (const v of VRSTE) t.indeks[v.id].forEach((x, i) => { if (x > najVrednost) { najVrednost = x; najDan = i; } });
+  const dnevVTednu = new Date(napoved.dnevi[najDan]).getDay();
+  const naslov = dnevVTednu === 6 || dnevVTednu === 0 ? "Kje bo ta vikend polna košara?" : "Kje bo te dni polna košara?";
   const najboljsa = VRSTE.map((v) => {
     const naj = izbrane.map((t) => Math.max(...t.indeks[v.id])).sort((a, b) => b - a)[0] ?? 0;
     return { ime: v.ime, naj };
@@ -41,9 +48,9 @@ export function biltenHtml(napoved: Napoved, obmocja: string[], odjavaUrl: strin
   <div style="max-width:560px;margin:0 auto;padding:28px 20px;">
     <a href="${URL_STRANI}" style="display:inline-block;margin-bottom:18px;"><img src="${URL_STRANI}/brand/logo.png" alt="gremo po gobe" width="150" style="display:block;border:0;"></a>
     <p style="margin:0 0 6px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#8A3A1C;font-weight:700;">Gobarska napoved ${obdobje}</p>
-    <h1 style="font-size:26px;margin:0 0 4px;">Kje bo ta vikend polna košara?</h1>
+    <h1 style="font-size:26px;margin:0 0 4px;">${naslov}</h1>
     <p style="margin:0 0 8px;color:#5A5E51;font-size:14px;">${obmocja.length ? "Za tvoja izbrana območja." : "Za vsa območja v Sloveniji."}</p>
-    ${vrstice || '<p style="color:#5A5E51;">Ta teden ni obetavnih razmer za nobeno od vrst.</p>'}
+    ${vrstice || `<p style="color:#5A5E51;line-height:1.55;">Ta teden razmere niso obetavne: najvišja ocena je ${najVrednost}/100. Ko se stvari obrnejo, ti spet pišemo.</p>`}
     <p style="margin:28px 0 0;"><a href="${URL_STRANI}" style="display:inline-block;padding:12px 20px;border-radius:999px;background:#0F3320;color:#fff;text-decoration:none;font-weight:600;">Odpri zemljevid</a></p>
     <p style="margin:28px 0 0;color:#5A5E51;font-size:12px;line-height:1.5;">
       Indeks je ocena razmer, ne zagotovilo najdbe in ne pomoč pri določanju užitnosti.<br>

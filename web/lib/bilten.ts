@@ -29,8 +29,17 @@ export function biltenHtml(napoved: Napoved, obmocja: string[], odjavaUrl: strin
   }).join("");
 
   const obdobje = `${datumKratko(napoved.dnevi[0])} - ${datumKratko(napoved.dnevi[napoved.dnevi.length - 1])}`;
+  const najboljsa = VRSTE.map((v) => {
+    const naj = izbrane.map((t) => Math.max(...t.indeks[v.id])).sort((a, b) => b - a)[0] ?? 0;
+    return { ime: v.ime, naj };
+  }).sort((a, b) => b.naj - a.naj)[0];
+  const predogled = najboljsa && najboljsa.naj > 0
+    ? `Najboljše razmere ta teden ima ${najboljsa.ime.toLowerCase()} (${najboljsa.naj}/100).`
+    : "Ta teden razmere niso obetavne.";
   return `<!doctype html><html lang="sl"><body style="margin:0;background:#F3EFE6;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#1D2118;">
+  <div style="display:none;max-height:0;overflow:hidden;opacity:0;">${esc(predogled)}</div>
   <div style="max-width:560px;margin:0 auto;padding:28px 20px;">
+    <a href="${URL_STRANI}" style="display:inline-block;margin-bottom:18px;"><img src="${URL_STRANI}/brand/logo.png" alt="gremo po gobe" width="150" style="display:block;border:0;"></a>
     <p style="margin:0 0 6px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#8A3A1C;font-weight:700;">Gobarska napoved ${obdobje}</p>
     <h1 style="font-size:26px;margin:0 0 4px;">Kje bo ta vikend polna košara?</h1>
     <p style="margin:0 0 8px;color:#5A5E51;font-size:14px;">${obmocja.length ? "Za tvoja izbrana območja." : "Za vsa območja v Sloveniji."}</p>

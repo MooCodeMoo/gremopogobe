@@ -41,7 +41,8 @@ export async function posljiPosto(sporocila: { to: string; subject: string; html
   }
   let poslano = 0;
   for (let i = 0; i < sporocila.length; i += 100) {
-    const kos = sporocila.slice(i, i + 100).map((s) => ({ from: POSILJATELJ, ...s }));
+    const odgovorNa = process.env.ODGOVOR_NA?.trim();
+    const kos = sporocila.slice(i, i + 100).map((s) => ({ from: POSILJATELJ, ...(odgovorNa ? { reply_to: odgovorNa } : {}), ...s }));
     const res = await fetch(`${process.env.RESEND_URL ?? "https://api.resend.com"}/emails/batch`, {
       method: "POST",
       headers: { Authorization: `Bearer ${kljuc}`, "Content-Type": "application/json" },

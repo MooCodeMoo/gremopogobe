@@ -31,6 +31,7 @@ Okoljske spremenljivke (neobvezno):
    - `RESEND_API_KEY` - ključ iz Resenda
    - `POSILJATELJ` - npr. `Gremo po gobe <napoved@gremopogobe.si>`
    - `CRON_SECRET` - poljubno geslo; Vercel ga sam pošlje cron zahtevi
+   - `ODGOVOR_NA` (neobvezno) - naslov, kamor gredo odgovori uporabnikov
 3. `vercel.json` sproži `/api/cron/bilten` vsak četrtek ob 5:00 UTC (7:00 po naše).
    Ročno ga lahko poženeš z: `curl -H "Authorization: Bearer <CRON_SECRET>" https://gremopogobe.si/api/cron/bilten`
 

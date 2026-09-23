@@ -32,6 +32,7 @@ export async function POST(req: Request) {
     to: email,
     subject: "Potrdi prijavo na gobarsko napoved",
     html: `<div style="font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;max-width:520px;color:#1D2118;">
+      <a href="${URL_STRANI}" style="display:inline-block;margin-bottom:14px;"><img src="${URL_STRANI}/brand/logo.png" alt="gremo po gobe" width="150" style="display:block;border:0;"></a>
       <h1 style="font-size:22px;">Še en klik</h1>
       <p style="line-height:1.55;">Potrdi, da želiš ob četrtkih prejemati gobarsko napoved za${obmocja.length ? " svoja izbrana območja" : " vso Slovenijo"}.</p>
       <p><a href="${potrdi}" style="display:inline-block;padding:12px 20px;border-radius:999px;background:#0F3320;color:#fff;text-decoration:none;font-weight:600;">Potrdi prijavo</a></p>

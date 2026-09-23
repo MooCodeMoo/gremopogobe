@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import { getNapoved } from "@/lib/napoved";
 import { JsonLd, URL_STRANI } from "@/lib/seo";
 import Prijava from "@/components/Prijava";
+import Obvestila from "@/components/Obvestila";
 import { DEZ_ZAMIK } from "@/lib/indeks";
 
 export const revalidate = 10800; // ISR: stran se osveži vsake 3 ure
@@ -58,8 +59,9 @@ export default async function Domov() {
             ))}
           </div>
         </section>
-        <section className="odsek">
+        <section className="odsek prijava-obvestila">
           <Prijava />
+          <Obvestila />
         </section>
       </main>
       <Noga />

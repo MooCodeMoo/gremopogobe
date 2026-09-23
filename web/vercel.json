@@ -1,3 +1,6 @@
 {
-  "crons": [{ "path": "/api/cron/bilten", "schedule": "0 5 * * 4" }]
+  "crons": [
+    { "path": "/api/cron/bilten", "schedule": "0 5 * * 4" },
+    { "path": "/api/cron/obvestila", "schedule": "0 6 * * *" }
+  ]
 }

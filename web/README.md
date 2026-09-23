@@ -38,6 +38,20 @@ Okoljske spremenljivke (neobvezno):
 Naročniki so v isti Redis bazi. Prijava zahteva potrditev prek e-pošte (dvojna privolitev),
 odjava deluje z enim klikom tudi prek glave List-Unsubscribe.
 
+## Potisna obvestila
+
+1. Ustvari ključa VAPID (enkrat): `npx web-push generate-vapid-keys`
+2. V Vercel dodaj spremenljivke:
+   - `NEXT_PUBLIC_VAPID_PUBLIC_KEY` - javni ključ (vidi ga brskalnik)
+   - `VAPID_PRIVATE_KEY` - zasebni ključ
+   - `VAPID_KONTAKT` (neobvezno) - `mailto:info@gremopogobe.si`
+3. Cron `/api/cron/obvestila` teče vsak dan ob 6:00 UTC in obvesti tistega,
+   pri katerem je indeks za njegova območja v naslednjih 3 dneh presegel izbrano mejo.
+   Za isto območje in vrsto obvesti največ enkrat na 5 dni.
+4. Na iPhonu obvestila delujejo samo, če je stran dodana na začetni zaslon.
+
+Ročni preizkus: `curl -H "Authorization: Bearer <CRON_SECRET>" https://gremopogobe.si/api/cron/obvestila`
+
 ## Pomembno
 - Brezplačni Open-Meteo API je samo za nekomercialno rabo. Ko stran monetiziraš
   (affiliate, oglasi), potrebuješ njihov plačljiv API paket.

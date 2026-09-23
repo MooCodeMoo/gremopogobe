@@ -1,5 +1,5 @@
 // Servisni delavec: zadnja napoved ostane vidna tudi brez signala.
-const RAZLICICA = "gpg-v1";
+const RAZLICICA = "gpg-v2";
 const OSNOVA = ["/", "/regije", "/vrste", "/vodic", "/brez-povezave", "/brand/logo.png", "/icons/ikona-192.png"];
 
 self.addEventListener("install", (e) => {
@@ -38,5 +38,30 @@ self.addEventListener("fetch", (e) => {
       }
       return r;
     }))
+  );
+});
+
+// Potisna obvestila
+self.addEventListener("push", (e) => {
+  let p = { title: "Gremo po gobe", body: "Razmere za gobe so se izboljšale.", url: "/" };
+  try { p = { ...p, ...e.data.json() }; } catch { /* prazno sporočilo */ }
+  e.waitUntil(self.registration.showNotification(p.title, {
+    body: p.body,
+    icon: "/icons/ikona-192.png",
+    badge: "/icons/ikona-192.png",
+    data: { url: p.url },
+    tag: "napoved",
+  }));
+});
+
+self.addEventListener("notificationclick", (e) => {
+  e.notification.close();
+  const cilj = new URL(e.notification.data?.url || "/", self.location.origin).href;
+  e.waitUntil(
+    self.clients.matchAll({ type: "window", includeUncontrolled: true }).then((okna) => {
+      const odprto = okna.find((o) => o.url.startsWith(self.location.origin));
+      if (odprto) { odprto.navigate(cilj); return odprto.focus(); }
+      return self.clients.openWindow(cilj);
+    })
   );
 });

@@ -12,7 +12,7 @@ export async function GET(req: Request) {
   const dovoljenje = req.headers.get("authorization");
   if (skrivnost && dovoljenje !== `Bearer ${skrivnost}`) return NextResponse.json({ napaka: "ni dovoljeno" }, { status: 401 });
 
-  const napoved = await napovedZaBilten();
+  const napoved = await napovedZaBilten().catch(() => null);
   if (!napoved) return NextResponse.json({ napaka: "napoved ni na voljo" }, { status: 503 });
 
   const ids = await vsePrijave();

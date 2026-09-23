@@ -22,8 +22,8 @@ export default function Prijava({ privzetoObmocje, ime }: { privzetoObmocje?: st
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, obmocja }),
       });
-      const o = await r.json();
-      if (!r.ok) { setStanje("napaka"); setSporocilo(o.napaka ?? "Prijava ni uspela."); }
+      const o = await r.json().catch(() => ({}) as { napaka?: string; podrobnosti?: string });
+      if (!r.ok) { setStanje("napaka"); setSporocilo([o.napaka ?? `Prijava ni uspela (${r.status}).`, o.podrobnosti].filter(Boolean).join(" ")); }
       else setStanje(o.stanje === "posodobljeno" ? "posodobljeno" : "poslano");
     } catch {
       setStanje("napaka"); setSporocilo("Prijava ni uspela. Poskusi kasneje.");

@@ -27,7 +27,8 @@ export async function POST(req: Request) {
   }
 
   const potrdi = `${URL_STRANI}/api/prijava/potrdi?id=${id}&t=${zeton}`;
-  await posljiPosto([{
+  try {
+    await posljiPosto([{
     to: email,
     subject: "Potrdi prijavo na gobarsko napoved",
     html: `<div style="font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;max-width:520px;color:#1D2118;">
@@ -36,6 +37,14 @@ export async function POST(req: Request) {
       <p><a href="${potrdi}" style="display:inline-block;padding:12px 20px;border-radius:999px;background:#0F3320;color:#fff;text-decoration:none;font-weight:600;">Potrdi prijavo</a></p>
       <p style="color:#5A5E51;font-size:13px;line-height:1.5;">Če se nisi prijavil ti, sporočilo preprosto izbriši - brez potrditve ti ne bomo pisali.</p>
     </div>`,
-  }]);
+    }]);
+  } catch (e) {
+    console.error("Pošiljanje potrditve ni uspelo:", e);
+    const podrobnosti = String(e).slice(0, 160);
+    return NextResponse.json(
+      { napaka: "Potrditvenega sporočila ni bilo mogoče poslati.", podrobnosti },
+      { status: 502 }
+    );
+  }
   return NextResponse.json({ stanje: "potrditev-poslana" });
 }

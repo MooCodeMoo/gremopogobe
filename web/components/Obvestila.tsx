@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { track } from "@vercel/analytics";
 import { VRSTE, type VrstaId } from "@/lib/vrste";
 import { mojaObmocja } from "@/lib/moja";
 
@@ -50,6 +51,7 @@ export default function Obvestila() {
       });
       if (!r.ok) { setStanje("Naročnine ni bilo mogoče shraniti."); setDelam(false); return; }
       setVklopljeno(true);
+      track("obvestila_vklop", { prag, vrst: vrste.length });
       setStanje("Vklopljeno. Obvestilo dobiš, ko se razmere odprejo.");
     } catch {
       setStanje("Obvestil ni bilo mogoče vklopiti.");
@@ -66,7 +68,7 @@ export default function Obvestila() {
         await fetch("/api/obvestila", { method: "DELETE", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ endpoint: s.endpoint }) });
         await s.unsubscribe();
       }
-      setVklopljeno(false); setStanje("Obvestila so izklopljena.");
+      setVklopljeno(false); track("obvestila_izklop"); setStanje("Obvestila so izklopljena.");
     } catch { setStanje("Izklop ni uspel."); }
     setDelam(false);
   }

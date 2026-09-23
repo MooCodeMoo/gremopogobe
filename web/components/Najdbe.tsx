@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { track } from "@vercel/analytics";
 import { VRSTE, type VrstaId } from "@/lib/vrste";
 
 const TOZILNIK: Record<VrstaId, string> = { jurcek: "jurčka", lisicka: "lisičko", marela: "marelo", storovka: "štorovko" };
@@ -26,7 +27,7 @@ export default function Najdbe({ slug, ime }: { slug: string; ime: string }) {
       });
       if (r.status === 429) setStanje("ze");
       else if (!r.ok) setStanje("napaka");
-      else { setStat(await r.json()); setStanje("poslano"); }
+      else { setStat(await r.json()); setStanje("poslano"); track("najdba", { vrsta, najdeno, kje: "regija" }); }
     } catch {
       setStanje("napaka");
     }

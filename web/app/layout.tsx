@@ -3,6 +3,7 @@ import "@fontsource-variable/fraunces/opsz.css";
 import "@fontsource-variable/instrument-sans";
 import "./globals.css";
 import PWA from "@/components/PWA";
+import { Analytics } from "@vercel/analytics/react";
 
 export const metadata: Metadata = {
   title: "Gremo po gobe - gobarska napoved za Slovenijo",
@@ -32,7 +33,7 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="sl">
-      <body>{children}<PWA /></body>
+      <body>{children}<PWA /><Analytics /></body>
     </html>
   );
 }

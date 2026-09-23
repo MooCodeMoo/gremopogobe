@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { track } from "@vercel/analytics";
 import { mojaObmocja } from "@/lib/moja";
 
 export default function Prijava({ privzetoObmocje, ime }: { privzetoObmocje?: string; ime?: string }) {
@@ -24,7 +25,7 @@ export default function Prijava({ privzetoObmocje, ime }: { privzetoObmocje?: st
       });
       const o = await r.json().catch(() => ({}) as { napaka?: string; podrobnosti?: string });
       if (!r.ok) { setStanje("napaka"); setSporocilo([o.napaka ?? `Prijava ni uspela (${r.status}).`, o.podrobnosti].filter(Boolean).join(" ")); }
-      else setStanje(o.stanje === "posodobljeno" ? "posodobljeno" : "poslano");
+      else { setStanje(o.stanje === "posodobljeno" ? "posodobljeno" : "poslano"); track("prijava_bilten", { obmocij: obmocja.length }); }
     } catch {
       setStanje("napaka"); setSporocilo("Prijava ni uspela. Poskusi kasneje.");
     }

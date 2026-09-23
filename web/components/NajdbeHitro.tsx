@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { track } from "@vercel/analytics";
 import { VRSTE, type VrstaId } from "@/lib/vrste";
 import { mojaObmocja } from "@/lib/moja";
 import type { TockaNapoved } from "@/lib/napoved";
@@ -24,6 +25,7 @@ export default function NajdbeHitro({ tocke }: { tocke: TockaNapoved[] }) {
         body: JSON.stringify({ slug, vrsta, najdeno }),
       });
       setStanje(r.status === 429 ? "ze" : r.ok ? "poslano" : "napaka");
+      if (r.ok) track("najdba", { vrsta, najdeno, kje: "domaca" });
     } catch { setStanje("napaka"); }
     setPosiljam(false);
   }

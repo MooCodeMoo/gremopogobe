@@ -19,6 +19,7 @@ export default function Obvestila() {
   const [stanje, setStanje] = useState("");
   const [delam, setDelam] = useState(false);
   const [naZaslonu, setNaZaslonu] = useState(true);
+  const [telefon, setTelefon] = useState(false);
 
   useEffect(() => {
     const jePodprto = "serviceWorker" in navigator && "PushManager" in window && Boolean(JAVNI_KLJUC);
@@ -27,6 +28,7 @@ export default function Obvestila() {
     const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
     const samostojno = window.matchMedia("(display-mode: standalone)").matches || (navigator as { standalone?: boolean }).standalone === true;
     setNaZaslonu(!iOS || samostojno);
+    setTelefon(/Android|iPad|iPhone|iPod/.test(navigator.userAgent));
     if (!jePodprto) return;
     navigator.serviceWorker.ready
       .then((r) => r.pushManager.getSubscription())
@@ -38,7 +40,7 @@ export default function Obvestila() {
     setDelam(true); setStanje("");
     try {
       const dovoljenje = await Notification.requestPermission();
-      if (dovoljenje !== "granted") { setStanje("Obvestila so v brskalniku zavrnjena. Vklopiš jih lahko v nastavitvah strani."); setDelam(false); return; }
+      if (dovoljenje !== "granted") { setStanje("Obvestila so v tem brskalniku zavrnjena. Vklopiš jih v nastavitvah strani, pri naslovu levo od povezave."); setDelam(false); return; }
       const reg = await navigator.serviceWorker.ready;
       const naroc = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: vBinarno(JAVNI_KLJUC) });
       const s = naroc.toJSON() as { endpoint?: string; keys?: { p256dh: string; auth: string } };
@@ -71,36 +73,52 @@ export default function Obvestila() {
 
   if (!podprto) return null;
 
+  const [odprteNastavitve, setOdprteNastavitve] = useState(false);
+  const opisNastavitev = `${prag === 55 ? "srednje" : prag === 70 ? "dobro" : "odlično"} ali bolje${vrste.length ? `, ${vrste.length === 1 ? "samo " : ""}${vrste.map((id) => VRSTE.find((v) => v.id === id)!.ime.toLowerCase()).join(", ")}` : ", vse vrste"}`;
+
   return (
     <section className="obvestila">
       <div>
         <h2>Obvesti me, ko raste</h2>
-        <p>{naZaslonu
-          ? "Obvestilo na telefon, ko indeks za tvoja območja preseže izbrano mejo. Največ eno obvestilo na območje in vrsto na pet dni."
-          : "Na iPhonu obvestila delujejo šele, ko stran dodaš na začetni zaslon: gumb za deljenje v Safariju, nato Dodaj na začetni zaslon."}</p>
+        <p>{!naZaslonu
+          ? "Na iPhonu obvestila delujejo šele, ko stran dodaš na začetni zaslon: gumb za deljenje v Safariju, nato Dodaj na začetni zaslon."
+          : vklopljeno
+            ? `Obveščamo te, ko se razmere odprejo: ${opisNastavitev}.`
+            : telefon
+              ? "Eno obvestilo na telefon, ko se razmere za tvoja območja odprejo. Nič drugega."
+              : "Eno obvestilo v tem brskalniku, ko se razmere za tvoja območja odprejo. Nič drugega."}</p>
       </div>
+
       <div className="obvestila-vnos">
-        {!vklopljeno && (
-          <>
-            <label>Meja
-              <select value={prag} onChange={(e) => setPrag(Number(e.target.value))}>
-                <option value={55}>55 - srednje ali bolje</option>
-                <option value={70}>70 - dobro ali bolje</option>
-                <option value={80}>80 - odlično</option>
-              </select>
-            </label>
-            <div className="obvestila-vrste">
-              {VRSTE.map((v) => (
-                <button key={v.id} type="button" aria-pressed={vrste.includes(v.id)}
-                  onClick={() => setVrste((p) => (p.includes(v.id) ? p.filter((x) => x !== v.id) : [...p, v.id]))}>{v.ime}</button>
-              ))}
-            </div>
-            <p className="najdbe-opomba">{vrste.length ? "" : "Brez izbire dobiš obvestila za vse vrste."} {mojaObmocja().length ? `Velja za tvoja območja (${mojaObmocja().length}).` : "Velja za vso Slovenijo - območja izbereš z gumbom Spremljaj."}</p>
-          </>
-        )}
         <button type="button" className={vklopljeno ? "gumb-ne" : "gumb-da"} disabled={delam || !naZaslonu} onClick={vklopljeno ? izklopi : vklopi}>
           {vklopljeno ? "Izklopi obvestila" : "Vklopi obvestila"}
         </button>
+
+        {!vklopljeno && naZaslonu && (
+          <>
+            <button type="button" className="povezava-gumb" aria-expanded={odprteNastavitve} onClick={() => setOdprteNastavitve((x) => !x)}>
+              {odprteNastavitve ? "Skrij nastavitve" : `Nastavitve: ${opisNastavitev}`}
+            </button>
+            {odprteNastavitve && (
+              <div className="obvestila-nastavitve">
+                <label>Obvesti pri
+                  <select value={prag} onChange={(e) => setPrag(Number(e.target.value))}>
+                    <option value={55}>srednje ali bolje</option>
+                    <option value={70}>dobro ali bolje</option>
+                    <option value={80}>odlično</option>
+                  </select>
+                </label>
+                <div className="obvestila-vrste">
+                  {VRSTE.map((v) => (
+                    <button key={v.id} type="button" aria-pressed={vrste.includes(v.id)}
+                      onClick={() => setVrste((p) => (p.includes(v.id) ? p.filter((x) => x !== v.id) : [...p, v.id]))}>{v.ime}</button>
+                  ))}
+                </div>
+                <p className="najdbe-opomba">{mojaObmocja().length ? `Velja za tvoja območja (${mojaObmocja().length}).` : "Velja za vso Slovenijo - posamezna območja izbereš z gumbom Spremljaj."}</p>
+              </div>
+            )}
+          </>
+        )}
         {stanje && <p className="najdbe-opomba">{stanje}</p>}
       </div>
     </section>

@@ -353,3 +353,7 @@ a.seznam-vrstica:hover { background: #EFE9DC; }
 .opis-regije { max-width: 70ch; }
 .opis-regije h2 { font-family: var(--serif); font-size: 22px; font-weight: 600; margin-bottom: 8px; }
 .opis-regije p { margin: 0 0 8px; font-size: 15px; line-height: 1.7; }
+
+.povezava-gumb { align-self: flex-start; padding: 0; border: 0; background: none; color: var(--sivo); font-size: 13px; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+.povezava-gumb:hover { color: var(--gozd); }
+.obvestila-nastavitve { display: flex; flex-direction: column; gap: 10px; padding-top: 4px; }

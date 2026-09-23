@@ -8,6 +8,7 @@ import type { Napoved } from "@/lib/napoved";
 import { DEZ_ZAMIK } from "@/lib/indeks";
 import { faktorPike } from "@/lib/gozd";
 import MojaObmocja from "./MojaObmocja";
+import NajdbeHitro from "./NajdbeHitro";
 
 const DN = ["Ned", "Pon", "Tor", "Sre", "Čet", "Pet", "Sob"];
 const dan = (iso: string) => DN[new Date(iso).getDay()];
@@ -237,6 +238,8 @@ export default function Raziskovalec({ napoved }: { napoved: Napoved }) {
           </div>
         </div>
       </section>
+
+      <section className="odsek odsek-hitra"><NajdbeHitro tocke={napoved.tocke} /></section>
 
       <MojaObmocja tocke={napoved.tocke} vrsta={vrsta} dIdx={dIdx} />
 

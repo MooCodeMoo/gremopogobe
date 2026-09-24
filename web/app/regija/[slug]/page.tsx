@@ -10,6 +10,7 @@ import model from "@/data/model.json";
 import { JsonLd, drobtinice } from "@/lib/seo";
 import { SKUPINE, gozdTocke } from "@/lib/gozd";
 import { opisRegije } from "@/lib/opisi-regij";
+import { VISINSKA_OKNA } from "@/lib/visina";
 import Najdbe from "@/components/Najdbe";
 import Spremljaj from "@/components/Spremljaj";
 import Prijava from "@/components/Prijava";
@@ -139,7 +140,7 @@ export default async function Regija({ params }: P) {
                 <div className="gonilo">
                   <h3>Temperatura tal</h3>
                   <strong>{g!.tempTal.toFixed(1).replace(".", ",")} <small>°C</small></strong>
-                  <p>Povprečje zadnjih 5 dni na globini 6 cm. Jurček ima najraje {String(VRSTE[0].temp[1]).replace(".", ",")}-{String(VRSTE[0].temp[2]).replace(".", ",")} °C.</p>
+                  <p>{t.visina != null && t.visina > VISINSKA_OKNA.marela[2] ? `Merilna točka je na ${Math.round(t.visina)} m; na tej višini marela skoraj ne raste, zato je njena ocena znižana. ` : ""}Povprečje zadnjih 5 dni na globini 6 cm. Jurček ima najraje {String(VRSTE[0].temp[1]).replace(".", ",")}-{String(VRSTE[0].temp[2]).replace(".", ",")} °C.</p>
                 </div>
                 {gz?.sestava && (
                   <div className="gonilo">

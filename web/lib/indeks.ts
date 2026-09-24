@@ -6,6 +6,9 @@ export const DEZ_ZAMIK = model.dez_zamik as [number, number]; // dnevi nazaj, ko
 const DEZ_MIN = model.dez_min, DEZ_OPT = model.dez_opt; // mm v oknu zamika
 const VLAGA_MIN = model.vlaga_min, VLAGA_OPT = model.vlaga_opt; // m³/m³, sloj 3-9 cm
 const VROCINA_T = 27, VROCINA_DEZ = 5, VROCINA_KAZEN = 0.6;
+// Previdnostni faktor: model je optimističen, ker najdbe v GBIF pomenijo "nekdo je
+// nekaj našel", ne "košara je bila polna". Vrednost pod 1 zniža vse ocene.
+const PREVIDNOST = (model as { previdnost?: number }).previdnost ?? 0.9;
 
 export type Vreme = {
   datum: string[]; // ISO dnevi, najprej pretekli, nato napoved
@@ -70,5 +73,5 @@ export function indeks(v: Vreme, i: number, vrstaId: VrstaId): number {
   const zadnji = (a: number[]) => a.slice(Math.max(0, i - 4), i + 1);
   const kazen =
     Math.max(...zadnji(v.tmax)) > VROCINA_T && vsota(zadnji(v.padavine)) < VROCINA_DEZ ? VROCINA_KAZEN : 1;
-  return Math.round(100 * sSez * sTemp * (0.6 * sDez + 0.4 * sVlaga) * kazen);
+  return Math.round(100 * PREVIDNOST * sSez * sTemp * (0.6 * sDez + 0.4 * sVlaga) * kazen);
 }

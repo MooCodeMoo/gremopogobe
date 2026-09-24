@@ -7,6 +7,7 @@ import { VRSTE, OZNAKE, LESTVICA, barva, besediloNa, stopnja, type VrstaId } fro
 import type { Napoved } from "@/lib/napoved";
 import { dolzinaOkna } from "@/lib/indeks";
 import { faktorPike } from "@/lib/gozd";
+import { faktorVisinePike } from "@/lib/visina";
 import MojaObmocja from "./MojaObmocja";
 import NajdbeHitro from "./NajdbeHitro";
 
@@ -79,7 +80,7 @@ export default function Raziskovalec({ napoved }: { napoved: Napoved }) {
   );
   // Vreme razmažemo med točkami, nato vsako piko utežimo s tipom gozda na njej
   const vrednostiPik = useMemo(
-    () => idw(geo.dots, tocke.map((t) => ({ x: t.x, y: t.y, v: t.vv }))).map((v, i) => v * faktorPike(vrsta, i)),
+    () => idw(geo.dots, tocke.map((t) => ({ x: t.x, y: t.y, v: t.vv }))).map((v, i) => v * faktorPike(vrsta, i) * faktorVisinePike(vrsta, i)),
     [tocke, vrsta]
   );
   const razvrsceno = [...tocke].sort((a, b) => b.v - a.v);

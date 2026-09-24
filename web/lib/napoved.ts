@@ -3,6 +3,7 @@ import model from "@/data/model.json";
 import { VRSTE, type VrstaId } from "./vrste";
 import { dolzinaOkna, gonila, indeks, type Gonila, type Vreme } from "./indeks";
 import { faktorGozda, gozdTocke } from "./gozd";
+import { faktorVisine } from "./visina";
 import { kv, kvNaVoljo } from "./kv";
 
 export type Tocka = { slug: string; ime: string; regija: string; lat: number; lon: number };
@@ -106,7 +107,7 @@ export async function getNapoved(): Promise<Napoved | null> {
         indeksVreme: Object.fromEntries(VRSTE.map((s) => [s.id, idx.map((i) => indeks(v, i, s.id))])) as Record<VrstaId, number[]>,
         indeks: Object.fromEntries(VRSTE.map((s) => {
           const g = gozdTocke(t.slug);
-          const f = faktorGozda(s.id, g?.gozd, g?.sestava);
+          const f = faktorGozda(s.id, g?.gozd, g?.sestava) * faktorVisine(s.id, v.visina);
           return [s.id, idx.map((i) => Math.round(indeks(v, i, s.id) * f))];
         })) as Record<VrstaId, number[]>,
         gonila: idx.map((i) => gonila(v, i)),

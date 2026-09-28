@@ -23,11 +23,20 @@ export default function Najdbe({ slug, ime }: { slug: string; ime: string }) {
   const [predogled, setPredogled] = useState<string | null>(null);
   const [opomba, setOpomba] = useState("");
   const [namig, setNamig] = useState<string | null>(null);
+  const [slikeMogoce, setSlikeMogoce] = useState<boolean | null>(null); // null = še ne vemo
   const vhod = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     fetch(`/api/najdba?slug=${slug}`).then((r) => (r.ok ? r.json() : null)).then(setStat).catch(() => {});
   }, [slug]);
+
+  // Ali strežnik sploh sprejema fotografije (shramba nastavljena)? Če ne, možnosti ne kažemo.
+  useEffect(() => {
+    fetch(`/api/najdba/zeton?slug=${slug}&vrsta=${vrsta}`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((o) => setSlikeMogoce(o ? Boolean(o.nastavljeno) : false))
+      .catch(() => setSlikeMogoce(false));
+  }, [slug, vrsta]);
 
   useEffect(() => () => { if (predogled) URL.revokeObjectURL(predogled); }, [predogled]);
 
@@ -61,6 +70,13 @@ export default function Najdbe({ slug, ime }: { slug: string; ime: string }) {
       if (slika) {
         // Najprej pomanjšamo (1600 px, JPEG), nato gre fotografija naravnost v shrambo, mimo
         // naše strežniške funkcije, ki ima omejitev velikosti zahteve.
+        const pred = await fetch(`/api/najdba/zeton?slug=${slug}&vrsta=${vrsta}`).then((r) => r.json()).catch(() => null);
+        if (pred && pred.ok === false) {
+          setPosiljam(false);
+          if (String(pred.napaka).includes("že odgovoril")) { setStanje("ze"); return; }
+          setStanje("napaka"); setSporocilo(`Fotografije ni bilo mogoče naložiti: ${pred.napaka}.`);
+          return;
+        }
         let zaNalaganje: File = slika;
         try {
           zaNalaganje = await pomanjsaj(slika);
@@ -71,7 +87,7 @@ export default function Najdbe({ slug, ime }: { slug: string; ime: string }) {
             return;
           }
         }
-        const nalozeno = await upload(`najdbe/${slug}/${vrsta}`, zaNalaganje, { access: "public", handleUploadUrl: "/api/najdba/zeton" });
+        const nalozeno = await upload(`najdbe/${slug}/${vrsta}.jpg`, zaNalaganje, { access: "public", handleUploadUrl: "/api/najdba/zeton" });
         slikaUrl = nalozeno.url;
       }
       const r = await fetch("/api/najdba", {
@@ -84,8 +100,9 @@ export default function Najdbe({ slug, ime }: { slug: string; ime: string }) {
         setStat(await r.json()); setStanje("poslano");
         track("najdba", { vrsta, najdeno, kje: "regija", sSliko: Boolean(slika) });
       }
-    } catch {
-      setStanje("napaka"); setSporocilo("Odgovora ni bilo mogoče shraniti. Poskusi kasneje.");
+    } catch (e) {
+      const podrobnost = e instanceof Error ? e.message.replace(/^Vercel Blob:\s*/, "").slice(0, 140) : "";
+      setStanje("napaka"); setSporocilo(`Odgovora ni bilo mogoče shraniti.${podrobnost ? ` (${podrobnost})` : " Poskusi kasneje."}`);
     }
     setPosiljam(false);
   }
@@ -109,6 +126,7 @@ export default function Najdbe({ slug, ime }: { slug: string; ime: string }) {
           <p className="najdbe-hvala">Hvala, zabeleženo.</p>
         ) : (
           <>
+            {slikeMogoce && (
             <div className="najdbe-slika">
               <input ref={vhod} type="file" accept="image/*" capture="environment" onChange={izberiSliko} id={`slika-${slug}`} className="sr" />
               {predogled ? (
@@ -128,6 +146,7 @@ export default function Najdbe({ slug, ime }: { slug: string; ime: string }) {
                 <input type="text" value={opomba} onChange={(e) => setOpomba(e.target.value.slice(0, 140))} placeholder="Opomba, npr. pod bukvijo ob poti (neobvezno, javno vidno)" className="najdbe-opomba-vnos" maxLength={140} />
               )}
             </div>
+            )}
             <div className="najdbe-gumbi">
               <button type="button" className="gumb-da" disabled={posiljam} onClick={() => poslji(true)}>Našel sem</button>
               <button type="button" className="gumb-ne" disabled={posiljam} onClick={() => poslji(false)}>Nisem našel</button>

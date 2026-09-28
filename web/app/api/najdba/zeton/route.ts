@@ -9,7 +9,7 @@ export const runtime = "nodejs";
 // Fotografija gre naravnost iz brskalnika v shrambo, mimo te funkcije - Vercel ima za
 // strežniške funkcije trdo omejitev velikosti zahteve (~4.5 MB), ki bi jo prava telefonska
 // fotografija zlahka presegla. Ta pot le izda kratkotrajen žeton in preveri pot/velikost/tip.
-const NAJVECJA_SLIKA = 20 * 1024 * 1024;
+const NAJVECJA_SLIKA = 6 * 1024 * 1024; // brskalnik jo pred nalaganjem pomanjša na ~0,5 MB
 
 export async function POST(req: Request) {
   if (!blobNaVoljo) return NextResponse.json({ napaka: "nalaganje fotografij trenutno ni na voljo" }, { status: 503 });

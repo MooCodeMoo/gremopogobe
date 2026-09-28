@@ -70,7 +70,7 @@ Lokacija iz EXIF podatkov slike (če jo telefon zapiše) se uporabi samo v brska
 ("fotografija je bila posneta bliže X") - na strežnik se nikoli ne pošlje. Shranita se le
 izbrano območje in neobvezna kratka opomba, ki jo vpiše uporabnik in je javno vidna na /najdbe.
 
-Slike so omejene na 20 MB in morajo biti tipa image/jpeg, png, webp, heic ali heif. Ni
+Brskalnik fotografijo pred nalaganjem pomanjša na 1600 px (JPEG, običajno 300-600 KB) in s tem odstrani tudi EXIF podatke. Strežnik sprejme največ 6 MB in tipe image/jpeg, png, webp, heic ali heif. Ni
 samodejnega pregleda vsebine - občasno preveri galerijo na /najdbe. Neprimerno sliko izbrišeš
 v Vercel → Storage → Blob → poišči datoteko v mapi najdbe/<območje>/ → Delete.
 

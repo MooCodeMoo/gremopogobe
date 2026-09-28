@@ -24,7 +24,7 @@ export default function SlikeNajdb() {
         {fotke.map((f, i) => (
           <Link key={i} href={`/regija/${f.slug}`} className="galerija-kartica">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={f.url} alt={`${IME_VRSTE[f.vrsta] ?? f.vrsta}, ${f.ime}`} loading="lazy" />
+            <img src={f.url} alt={`${IME_VRSTE[f.vrsta] ?? f.vrsta}, ${f.ime}`} loading="lazy" decoding="async" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
             <div className="galerija-info">
               <strong>{f.ime}</strong>
               <span>{IME_VRSTE[f.vrsta] ?? f.vrsta}{f.najdeno ? "" : " - ni najdena"}</span>

@@ -5,9 +5,11 @@ import { VRSTE, type VrstaId } from "@/lib/vrste";
 import { TOCKE } from "@/lib/napoved";
 import { gpsIzSlike, najblizjaTocka } from "@/lib/exif";
 import { upload } from "@vercel/blob/client";
+import { pomanjsaj } from "@/lib/slika";
 
 const TOZILNIK: Record<VrstaId, string> = { jurcek: "jurčka", lisicka: "lisičko", marela: "marelo", storovka: "štorovko" };
-const NAJVECJA_SLIKA = 20 * 1024 * 1024; // enako kot v app/api/najdba/zeton
+const NAJVECJA_IZVIRNA = 40 * 1024 * 1024; // izvirnik pred pomanjšanjem
+const NAJVECJA_ZA_NALAGANJE = 6 * 1024 * 1024; // enako kot v app/api/najdba/zeton
 
 type Stat = { dni: number; skupaj: { da: number; ne: number }; po_vrstah: Record<string, { da: number; ne: number }> };
 
@@ -33,7 +35,7 @@ export default function Najdbe({ slug, ime }: { slug: string; ime: string }) {
     const f = e.target.files?.[0];
     setNamig(null);
     if (!f) { setSlika(null); setPredogled(null); return; }
-    if (f.size > NAJVECJA_SLIKA) { setStanje("napaka"); setSporocilo("Fotografija je prevelika (največ 20 MB)."); return; }
+    if (f.size > NAJVECJA_IZVIRNA) { setStanje("napaka"); setSporocilo("Fotografija je prevelika."); return; }
     setStanje("");
     setSlika(f);
     setPredogled((prej) => { if (prej) URL.revokeObjectURL(prej); return URL.createObjectURL(f); });
@@ -57,9 +59,19 @@ export default function Najdbe({ slug, ime }: { slug: string; ime: string }) {
     try {
       let slikaUrl: string | undefined;
       if (slika) {
-        // Fotografija gre naravnost v shrambo, mimo naše strežniške funkcije - ta ima
-        // omejitev velikosti zahteve, prava telefonska fotografija bi jo zlahka presegla.
-        const nalozeno = await upload(`najdbe/${slug}/${vrsta}`, slika, { access: "public", handleUploadUrl: "/api/najdba/zeton" });
+        // Najprej pomanjšamo (1600 px, JPEG), nato gre fotografija naravnost v shrambo, mimo
+        // naše strežniške funkcije, ki ima omejitev velikosti zahteve.
+        let zaNalaganje: File = slika;
+        try {
+          zaNalaganje = await pomanjsaj(slika);
+        } catch {
+          // Format, ki ga brskalnik ne zna prebrati (npr. HEIC v Chromu): izvirnik naložimo le, če je dovolj majhen
+          if (slika.size > NAJVECJA_ZA_NALAGANJE) {
+            setStanje("napaka"); setSporocilo("Te fotografije ni mogoče obdelati. Poskusi z JPEG."); setPosiljam(false);
+            return;
+          }
+        }
+        const nalozeno = await upload(`najdbe/${slug}/${vrsta}`, zaNalaganje, { access: "public", handleUploadUrl: "/api/najdba/zeton" });
         slikaUrl = nalozeno.url;
       }
       const r = await fetch("/api/najdba", {
@@ -100,8 +112,9 @@ export default function Najdbe({ slug, ime }: { slug: string; ime: string }) {
             <div className="najdbe-slika">
               <input ref={vhod} type="file" accept="image/*" capture="environment" onChange={izberiSliko} id={`slika-${slug}`} className="sr" />
               {predogled ? (
-                <div className="najdbe-predogled">
-                  <img src={predogled} alt="" />
+                <div className="najdbe-predogled" style={{ width: 96, height: 96, position: "relative", overflow: "hidden", borderRadius: 14 }}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={predogled} alt="Predogled fotografije" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
                   <button type="button" onClick={odstraniSliko} aria-label="Odstrani fotografijo">×</button>
                 </div>
               ) : (

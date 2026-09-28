@@ -32,6 +32,7 @@ h1, h2, h3 { margin: 0; }
 .hero h1 { font-family: var(--serif); font-size: clamp(29px, 3.1vw, 46px); line-height: 1.02; letter-spacing: -0.025em; font-weight: 600; margin: 14px 0 16px; }
 .svez { display: flex; align-items: center; gap: 8px; margin: 0; font-size: 13px; color: var(--sivo); }
 .pika { width: 8px; height: 8px; border-radius: 50%; background: #3C8A55; }
+.pika.stara { background: #C08A3E; }
 .uvod { font-size: 15px; line-height: 1.55; color: var(--sivo); margin: 0 0 20px; max-width: 46ch; }
 .skupina { border: 0; padding: 0; margin: 0 0 18px; }
 .skupina legend, .top h2 { font-size: 13px; font-weight: 600; color: var(--sivo); margin-bottom: 10px; padding: 0; font-family: var(--sans); }
@@ -366,3 +367,30 @@ a.seznam-vrstica:hover { background: #EFE9DC; }
 .drustvo-ime { font-weight: 600; }
 .drustvo-kraj { color: var(--sivo); font-size: 13px; }
 .drustvo-leto { margin-left: auto; color: var(--sivo); font-size: 12px; }
+
+/* 404 */
+.stran-404 { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
+.stevilka-404 { font-family: var(--serif); font-size: 96px; font-weight: 600; line-height: 1; color: var(--rja); opacity: .35; }
+.stran-404 h1 { margin-top: -6px; }
+.povezave-404 { display: flex; flex-wrap: wrap; gap: 10px 20px; margin-top: 8px; }
+.povezave-404 a { font-weight: 600; }
+
+/* Fotografija ob poročilu */
+.najdbe-slika { display: flex; flex-direction: column; gap: 8px; }
+.najdbe-dodaj-sliko { display: inline-flex; align-items: center; gap: 8px; align-self: flex-start; height: 42px; padding: 0 16px; border-radius: 999px; border: 1px dashed #C9BFA9; background: var(--podlaga); color: var(--sivo); font-size: 13px; font-weight: 600; cursor: pointer; transition: border-color .2s, color .2s; }
+.najdbe-dodaj-sliko:hover { border-color: var(--gozd); color: var(--gozd); }
+.najdbe-predogled { position: relative; width: 96px; height: 96px; border-radius: 14px; overflow: hidden; align-self: flex-start; }
+.najdbe-predogled img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.najdbe-predogled button { position: absolute; top: 4px; right: 4px; width: 22px; height: 22px; border-radius: 50%; border: 0; background: rgba(20,15,5,.65); color: #fff; font-size: 15px; line-height: 1; display: flex; align-items: center; justify-content: center; }
+.najdbe-opomba-vnos { height: 40px; padding: 0 14px; border-radius: 12px; border: 1px solid #C9BFA9; background: var(--podlaga); color: var(--crnilo); font: inherit; font-size: 13px; }
+
+/* Galerija najdb */
+.galerija-najdb { margin-top: 8px; }
+.galerija-mreza { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
+.galerija-kartica { position: relative; aspect-ratio: 1; border-radius: 16px; overflow: hidden; text-decoration: none; display: block; }
+.galerija-kartica img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .3s ease; }
+.galerija-kartica:hover img { transform: scale(1.04); }
+.galerija-info { position: absolute; inset: auto 0 0 0; padding: 24px 12px 10px; background: linear-gradient(to top, rgba(15,20,10,.85), transparent); color: #fff; display: flex; flex-direction: column; gap: 1px; }
+.galerija-info strong { font-size: 14px; }
+.galerija-info span { font-size: 12px; opacity: .85; }
+.galerija-info em { font-size: 11px; font-style: normal; opacity: .75; }

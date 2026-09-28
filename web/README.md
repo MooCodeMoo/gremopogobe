@@ -52,6 +52,28 @@ odjava deluje z enim klikom tudi prek glave List-Unsubscribe.
 
 Ročni preizkus: `curl -H "Authorization: Bearer <CRON_SECRET>" https://gremopogobe.si/api/cron/obvestila`
 
+## Fotografije ob poročilih
+
+Uporablja Vercel Blob za shranjevanje slik. Fotografija gre naravnost iz brskalnika v
+shrambo (app/api/najdba/zeton izda kratkotrajen žeton), mimo strežniške funkcije, ki
+ima za telo zahteve trdo omejitev okoli 4,5 MB - prava telefonska fotografija bi jo
+zlahka presegla.
+
+1. Vercel → projekt → zavihek **Storage** → **Create Database** → **Blob**.
+2. Poveži z okoljema Production in Preview - spremenljivka `BLOB_READ_WRITE_TOKEN` se doda sama.
+3. Redeploy, da jo build dobi.
+
+Brez tega gumba za najdbe delujejo naprej (besedilo, brez fotografije), le nalaganje slike
+vrne "trenutno ni na voljo".
+
+Lokacija iz EXIF podatkov slike (če jo telefon zapiše) se uporabi samo v brskalniku za nasvet
+("fotografija je bila posneta bliže X") - na strežnik se nikoli ne pošlje. Shranita se le
+izbrano območje in neobvezna kratka opomba, ki jo vpiše uporabnik in je javno vidna na /najdbe.
+
+Slike so omejene na 20 MB in morajo biti tipa image/jpeg, png, webp, heic ali heif. Ni
+samodejnega pregleda vsebine - občasno preveri galerijo na /najdbe. Neprimerno sliko izbrišeš
+v Vercel → Storage → Blob → poišči datoteko v mapi najdbe/<območje>/ → Delete.
+
 ## Pomembno
 - Brezplačni Open-Meteo API je samo za nekomercialno rabo. Ko stran monetiziraš
   (affiliate, oglasi), potrebuješ njihov plačljiv API paket.

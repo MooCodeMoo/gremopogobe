@@ -69,6 +69,17 @@ export async function GET(req: Request) {
     }
     return NextResponse.json({ kvNaVoljo, nastavljene, povezava });
   }
+  if (u.searchParams.get("slike") === "1") {
+    if (!kvNaVoljo) return NextResponse.json({ fotke: [] });
+    try {
+      const n = Math.min(60, Number(u.searchParams.get("n")) || 24);
+      const vrstice = await kv.seznam("fotke", n);
+      const fotke = vrstice.map((v) => JSON.parse(v)).map((f) => ({ ...f, ime: TOCKE.find((t) => t.slug === f.slug)?.ime ?? f.slug }));
+      return NextResponse.json({ fotke });
+    } catch {
+      return NextResponse.json({ napaka: "shramba ni dosegljiva" }, { status: 503 });
+    }
+  }
   if (u.searchParams.get("izvoz") === "1") {
     const kljucIzvoza = process.env.NAJDBE_IZVOZ_KLJUC;
     if (!kljucIzvoza || u.searchParams.get("kljuc") !== kljucIzvoza) return NextResponse.json({ napaka: "ni dovoljeno" }, { status: 401 });
@@ -92,13 +103,21 @@ export async function GET(req: Request) {
 
 export async function POST(req: Request) {
   if (!kvNaVoljo) return NextResponse.json({ napaka: "shramba ni nastavljena" }, { status: 503 });
-  let telo: { slug?: string; vrsta?: string; najdeno?: boolean };
+
+  let telo: { slug?: string; vrsta?: string; najdeno?: boolean; opomba?: string; slikaUrl?: string };
   try {
     telo = await req.json();
   } catch {
     return NextResponse.json({ napaka: "napačna zahteva" }, { status: 400 });
   }
   const { slug, vrsta, najdeno } = telo;
+  const opomba = telo.opomba?.trim().slice(0, 140) || undefined;
+  // Fotografija je bila naložena neposredno prek /api/najdba/zeton; tu preverimo le, da
+  // URL res kaže v naš prostor v shrambi (ime območja mora ustrezati) in ne na karkoli drugega.
+  const slikaUrl = telo.slikaUrl && /^https:\/\/[a-z0-9-]+\.public\.blob\.vercel-storage\.com\/najdbe\/[a-z0-9-]+\//.test(telo.slikaUrl) && telo.slikaUrl.includes(`/najdbe/${slug}/`)
+    ? telo.slikaUrl
+    : undefined;
+
   if (!TOCKE.some((t) => t.slug === slug) || !VRSTE.some((v) => v.id === vrsta) || typeof najdeno !== "boolean") {
     return NextResponse.json({ napaka: "napačna zahteva" }, { status: 400 });
   }
@@ -111,6 +130,9 @@ export async function POST(req: Request) {
     }
     await kv.incr([kljuc(slug!, vrsta!, d, najdeno ? "da" : "ne")]);
     await kv.zapisi("zapisi", JSON.stringify({ slug, vrsta, najdeno, datum: d, ts: Date.now() }), 20000);
+    if (slikaUrl) {
+      await kv.zapisi("fotke", JSON.stringify({ slug, vrsta, najdeno, opomba: opomba ?? null, url: slikaUrl, datum: d, ts: Date.now() }), 300);
+    }
     return NextResponse.json(await statistika(slug!));
   } catch {
     return NextResponse.json({ napaka: "shramba ni dosegljiva" }, { status: 503 });

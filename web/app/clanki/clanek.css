@@ -1,0 +1,35 @@
+/* Postavitev članka "one pager": široka naslovna slika, ozek bralni stolpec, slike čez celo širino. */
+.cl2 { overflow-x: clip; }
+.cl2-hero { position: relative; display: flex; align-items: flex-end; min-height: 340px; height: min(58vw, 560px); color: #fff; background: var(--gozd); }
+.cl2-hero > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.cl2-hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(10, 26, 16, .88), rgba(10, 26, 16, .1) 68%); }
+.cl2-hero-in { position: relative; z-index: 1; width: 100%; max-width: 860px; margin: 0 auto; padding: 0 var(--rob) 44px; }
+.cl2-kraj { margin: 0; font-size: 12px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; }
+.cl2-kraj a { color: #EBC9A5; text-decoration: none; }
+.cl2-hero h1 { font-family: var(--serif); font-size: clamp(30px, 5.4vw, 56px); line-height: 1.05; letter-spacing: -.8px; margin: 10px 0 12px; text-wrap: balance; }
+.cl2-meta { margin: 0; font-size: 13px; color: #E6E3D6; }
+.cl2-kredit { position: absolute; z-index: 1; right: var(--rob); bottom: 12px; font-size: 11px; color: #D9D6C8; text-decoration: none; opacity: .85; }
+.cl2-kredit:hover { text-decoration: underline; }
+
+.cl2-tx { max-width: 680px; margin: 0 auto; padding: 44px var(--rob) 64px; font-size: 18px; line-height: 1.7; }
+.cl2-tx p, .cl2-tx li { font-size: 18px; line-height: 1.7; }
+.cl2-tx p { margin: 0 0 20px; }
+.cl2-tx h2 { font-family: var(--serif); font-size: clamp(26px, 3.6vw, 32px); line-height: 1.15; letter-spacing: -.3px; margin: 48px 0 14px; }
+.cl2-tx ul, .cl2-tx ol { padding-left: 22px; display: flex; flex-direction: column; gap: 8px; margin: 0 0 20px; }
+.cl2-tx .cl-uvod { font-family: var(--serif); font-size: clamp(20px, 2.6vw, 23px) !important; line-height: 1.5 !important; color: var(--gozd); border-left: 3px solid var(--rja); padding-left: 18px; margin-bottom: 30px; }
+.cl-citat { font-family: var(--serif); font-size: clamp(24px, 3.4vw, 32px) !important; line-height: 1.25 !important; color: var(--rja); margin: 40px -40px !important; padding: 26px 0; border-block: 1px solid var(--crta); text-align: center; text-wrap: balance; }
+
+/* slike in grafi */
+.cl2-tx .cl-foto { width: min(100vw, 1100px); margin: 38px calc(50% - min(50vw, 550px)); max-width: none; }
+.cl2-tx .cl-foto img { width: 100%; max-height: 540px; object-fit: cover; border-radius: 0; border-inline: 0; }
+.cl2-tx .cl-foto figcaption { max-width: 680px; margin: 8px auto 0; padding: 0 var(--rob); }
+.cl2-tx .cl-figura { margin: 30px 0; }
+
+@media (min-width: 1101px) { .cl2-tx .cl-foto img { border-radius: 16px; border: 1px solid var(--crta); } }
+@media (max-width: 760px) {
+  .cl2-hero { height: auto; min-height: 380px; }
+  .cl2-hero-in { padding-bottom: 40px; }
+  .cl2-tx { padding-top: 32px; }
+  .cl2-tx p, .cl2-tx li { font-size: 17px; }
+  .cl-citat { margin: 32px 0 !important; }
+}

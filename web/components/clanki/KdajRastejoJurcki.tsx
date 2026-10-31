@@ -26,10 +26,6 @@ const S = ({ n }: { n: number[] }) => <sup className="cl-vir">[{n.join(", ")}]</
 export default function KdajRastejoJurcki() {
   return (
     <>
-      <Fotka src="/clanki/jurcka-gozd.webp" alt="Dva jurčka med praprotjo v gozdu" w={1200} h={800} n={1}>
-        Jurčka (<em>Boletus edulis</em>) med praprotjo. Jurčki ne zrastejo čez noč, zato ni dovolj, da dežuje včeraj.
-      </Fotka>
-
       <p className="cl-uvod">
         V petek vso noč dežuje. V soboto zjutraj odhitiš v gozd in nič. V nedeljo še enkrat, spet nič. To ni smola, to je biologija:
         jurčki se ne odzovejo na dež, ki ti pada na glavo, ampak na dež izpred nekaj dni do nekaj tednov.
@@ -41,6 +37,8 @@ export default function KdajRastejoJurcki() {
         z drevesi živi v sožitju (mikoriza), kjer si izmenjujeta hranila. Med gostitelji navajajo med drugim smreko, bukev, hrast, bor in kostanj<S n={[5]} />,
         celo pritlikavo vrbo na 2440 metrih v švicarskih Alpah<S n={[3]} />. Podgobje je v tleh vedno, plodov pa ni. Zato mora nekaj sprožiti nastanek plodov, in to je pravi niz vremenskih razmer.
       </p>
+
+      <p className="cl-citat">Dež včeraj ne bo naredil gob jutri. Po analizah najdb jih največ pride 2 do 4 tedne po dežju.</p>
 
       <Fotka src="/clanki/jurcek-bukev.webp" alt="Jurček v listju ob bukvi" w={1000} h={666} n={2}>
         Jurček ob bukvi. Gostiteljsko drevo je del zgodbe: brez njega podgobje ne obstaja.

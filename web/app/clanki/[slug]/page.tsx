@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Nav, Noga } from "@/components/Nav";
 import { CLANKI } from "@/lib/clanki";
 import { JsonLd, URL_STRANI, drobtinice } from "@/lib/seo";
+import "../clanek.css";
 import KdajRastejoJurcki from "@/components/clanki/KdajRastejoJurcki";
 
 const VSEBINA: Record<string, () => React.JSX.Element> = { "kdaj-rastejo-jurcki": KdajRastejoJurcki };
@@ -38,13 +39,17 @@ export default async function ClanekStran({ params }: { params: Promise<{ slug: 
         author: { "@type": "Organization", name: "Gremo po gobe", url: URL_STRANI },
         publisher: { "@type": "Organization", name: "Gremo po gobe", url: URL_STRANI, logo: { "@type": "ImageObject", url: `${URL_STRANI}/brand/logo.png` } },
       }} />
-      <main>
-        <article className="clanek">
-          <header>
-            <p className="cl-kraj"><Link href="/clanki">Članki</Link></p>
+      <main className="cl2">
+        <header className="cl2-hero">
+          <img src={c.slika} alt={c.slikaAlt} width={1200} height={800} fetchPriority="high" />
+          <div className="cl2-hero-in">
+            <p className="cl2-kraj"><Link href="/clanki">Članki</Link></p>
             <h1>{c.naslov}</h1>
-            <p className="cl-meta">Gremo po gobe · {new Date(c.datum).toLocaleDateString("sl-SI")} · {c.branje} branja · preverjeno {c.preverjeno}</p>
-          </header>
+            <p className="cl2-meta">{new Date(c.datum).toLocaleDateString("sl-SI")} · {c.branje} branja · preverjeno {c.preverjeno}</p>
+          </div>
+          <a className="cl2-kredit" href="#slika-1">{c.slikaVir}</a>
+        </header>
+        <article className="cl2-tx">
           <Vsebina />
         </article>
       </main>

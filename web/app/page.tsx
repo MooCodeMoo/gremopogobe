@@ -8,6 +8,7 @@ import Prijava from "@/components/Prijava";
 import Obvestila from "@/components/Obvestila";
 import { DEZ_ZAMIK, dolzinaOkna } from "@/lib/indeks";
 import modelRaw from "@/data/model.json";
+import { CLANKI } from "@/lib/clanki";
 
 export const revalidate = 10800; // ISR: stran se osveži vsake 3 ure
 
@@ -57,6 +58,21 @@ export default async function Domov() {
           <div className="pravila-mreza">
             {PRAVILA.map(([a, b, c]) => (
               <div key={a} className="pravilo"><strong>{a}</strong><span>{b}</span><p>{c}</p></div>
+            ))}
+          </div>
+        </section>
+        <section className="odsek">
+          <div className="odsek-glava">
+            <h2 className="naslov">Iz gozda in iz podatkov</h2>
+            <Link href="/clanki">Vsi članki</Link>
+          </div>
+          <div className="pravila-mreza">
+            {CLANKI.slice(0, 3).map((c) => (
+              <Link key={c.slug} href={`/clanki/${c.slug}`} className="pravilo">
+                <strong>Članek</strong>
+                <span>{c.naslov}</span>
+                <p>{c.branje} branja · preverjeno {c.preverjeno}</p>
+              </Link>
             ))}
           </div>
         </section>

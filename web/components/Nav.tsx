@@ -19,6 +19,7 @@ export function Nav() {
         <Link href="/najdbe">Najdbe</Link>
         <Link href="/vrste">Vrste</Link>
         <Link href="/vodic">Vodič</Link>
+        <Link href="/clanki">Članki</Link>
         <Link href="/drustva">Društva</Link>
       </nav>
     </header>

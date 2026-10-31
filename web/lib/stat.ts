@@ -74,8 +74,8 @@ const vSlovar = (r: unknown): Slovar => {
 };
 const sestej = (a: Slovar, b: Slovar) => { for (const [k, v] of Object.entries(b)) a[k] = (a[k] ?? 0) + v; };
 
-export async function preberiStatistiko(dni: number) {
-  const datumi = Array.from({ length: dni }, (_, i) => dan(new Date(Date.now() - (dni - 1 - i) * 864e5)));
+export async function preberiStatistiko(dni: number, zamik = 0) {
+  const datumi = Array.from({ length: dni }, (_, i) => dan(new Date(Date.now() - (dni - 1 - i + zamik) * 864e5)));
   const ukazi: (string | number)[][] = [];
   for (const d of datumi) for (const s of ["pv", "u", "p", "r", "dev", "e"]) {
     ukazi.push(s === "pv" ? ["GET", `st:${d}:pv`] : s === "u" ? ["PFCOUNT", `st:${d}:u`] : ["HGETALL", `st:${d}:${s}`]);

@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { track } from "@vercel/analytics";
+import { track } from "@/lib/sledi";
 import { VRSTE, type VrstaId } from "@/lib/vrste";
 import { TOCKE } from "@/lib/napoved";
 import { gpsIzSlike, najblizjaTocka } from "@/lib/exif";

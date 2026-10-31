@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import { track } from "@/lib/sledi";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState, type PointerEvent } from "react";
 import geo from "@/data/slovenija.json";
@@ -88,11 +89,11 @@ export default function Raziskovalec({ napoved }: { napoved: Napoved }) {
   const oznacene = [...razvrsceno.slice(0, 6), ...razvrsceno.filter((t) => t.slug === fokus && !razvrsceno.slice(0, 6).includes(t))];
   const imeVrste = VRSTE.find((v) => v.id === vrsta)!.ime;
 
-  function izberiDan(i: number) { setPredvajam(false); setDIdx(i); }
+  function izberiDan(i: number) { setPredvajam(false); setDIdx(i); track("dan", { d: i - privzetiDan }); }
   function predvajaj() {
     if (predvajam) { setPredvajam(false); return; }
     if (dIdx >= n - 1) setDIdx(0);
-    setPredvajam(true);
+    setPredvajam(true); track("predvajaj");
   }
 
   // Namig nad najbližjo piko + najbližje območje
@@ -145,7 +146,7 @@ export default function Raziskovalec({ napoved }: { napoved: Napoved }) {
             <legend>Vrsta</legend>
             <div className="segment">
               {VRSTE.map((v) => (
-                <button key={v.id} type="button" aria-pressed={v.id === vrsta} onClick={() => setVrsta(v.id)}>{v.ime}</button>
+                <button key={v.id} type="button" aria-pressed={v.id === vrsta} onClick={() => { setVrsta(v.id); track("vrsta", { v: v.id }); }}>{v.ime}</button>
               ))}
             </div>
           </fieldset>

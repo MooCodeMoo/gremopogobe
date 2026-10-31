@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { track } from "@vercel/analytics";
+import { track } from "@/lib/sledi";
 import { mojaObmocja } from "@/lib/moja";
 
 export default function Prijava({ privzetoObmocje, ime }: { privzetoObmocje?: string; ime?: string }) {

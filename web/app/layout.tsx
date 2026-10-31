@@ -3,6 +3,7 @@ import "@fontsource-variable/fraunces/opsz.css";
 import "@fontsource-variable/instrument-sans";
 import "./globals.css";
 import PWA from "@/components/PWA";
+import Stat from "@/components/Stat";
 import { Analytics } from "@vercel/analytics/react";
 
 export const metadata: Metadata = {
@@ -33,7 +34,7 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="sl">
-      <body>{children}<PWA /><Analytics /></body>
+      <body>{children}<PWA /><Analytics /><Stat /></body>
     </html>
   );
 }

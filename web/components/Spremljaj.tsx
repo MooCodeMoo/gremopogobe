@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { track } from "@vercel/analytics";
+import { track } from "@/lib/sledi";
 import { mojaObmocja, poslusaj, preklopiObmocje } from "@/lib/moja";
 
 export default function Spremljaj({ slug }: { slug: string }) {

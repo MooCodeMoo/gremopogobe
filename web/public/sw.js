@@ -17,7 +17,7 @@ self.addEventListener("activate", (e) => {
 self.addEventListener("fetch", (e) => {
   const zahteva = e.request;
   if (zahteva.method !== "GET" || new URL(zahteva.url).origin !== self.location.origin) return;
-  if (new URL(zahteva.url).pathname.startsWith("/api/")) return;
+  if (/^\/(api|admin)(\/|$)/.test(new URL(zahteva.url).pathname)) return;
 
   // Strani: najprej omrežje (sveža napoved), ob izpadu zadnja shranjena različica
   if (zahteva.mode === "navigate") {

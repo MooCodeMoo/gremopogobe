@@ -3,7 +3,7 @@ import Raziskovalec from "@/components/Raziskovalec";
 import { Nav, Noga } from "@/components/Nav";
 import type { Metadata } from "next";
 import { getNapoved } from "@/lib/napoved";
-import { JsonLd, URL_STRANI } from "@/lib/seo";
+import { JsonLd, URL_STRANI, metadataStrani } from "@/lib/seo";
 import Prijava from "@/components/Prijava";
 import Obvestila from "@/components/Obvestila";
 import { DEZ_ZAMIK, dolzinaOkna } from "@/lib/indeks";
@@ -11,11 +11,11 @@ import modelRaw from "@/data/model.json";
 
 export const revalidate = 10800; // ISR: stran se osveži vsake 3 ure
 
-export const metadata: Metadata = {
-  title: "Gobarska napoved - kje rastejo gobe ta teden | Gremo po gobe",
-  description: "Kje rastejo gobe ta vikend? Tedenska napoved rasti jurčkov, lisičk, marel in štorovk za 30 gozdnih območij po Sloveniji, posodobljena večkrat na dan.",
-  alternates: { canonical: "/" },
-};
+export const metadata: Metadata = metadataStrani(
+  "/",
+  "Kje rastejo gobe danes? Gobarska napoved | Gremo po gobe",
+  "Preveri razmere za gobarjenje danes in v naslednjih 7 dneh. Napoved za jurčke, lisičke, marele in štorovke v 30 gozdnih območjih Slovenije.",
+);
 
 const PRAVILA = [
   ["2 kg", "Na osebo na dan", "Za lastne potrebe. Zavarovanih vrst ne smeš nabirati sploh."],

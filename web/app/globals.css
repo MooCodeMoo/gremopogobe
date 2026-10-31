@@ -479,3 +479,15 @@ a.seznam-vrstica:hover { background: #EFE9DC; }
 .cl-foto figcaption { margin-top: 8px; font-size: 13px; line-height: 1.45; color: var(--sivo); }
 .cl-foto figcaption a { color: inherit; }
 .cl-slike-naslov { margin: 28px 0 6px; font-size: 18px; }
+/* Napoved vrste je pred opisom tudi na telefonu, brez podvajanja vsebine. */
+.vrsta-povezave { display: flex; flex-wrap: wrap; gap: 10px 20px; margin: 20px 0 8px; font-size: 14px; font-weight: 600; }
+.vrsta-povezave a { text-decoration: underline; text-underline-offset: 3px; }
+.vrsta-napoved { background: var(--povrsina); border-block: 1px solid var(--crta); }
+.vrsta-napoved-mreza { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 8px 24px; }
+.vrsta-napoved .opomba a { text-decoration: underline; text-underline-offset: 3px; }
+.vrsta-napoved, .vrsta-besedilo h2 { scroll-margin-top: 24px; }
+.regija-vrh > div:first-child { flex: 1 1 360px; min-width: 0; }
+.regija-vrh .opomba { max-width: 65ch; line-height: 1.6; }
+@media (max-width: 480px) {
+  .vrsta-napoved-mreza { grid-template-columns: minmax(0, 1fr); }
+}

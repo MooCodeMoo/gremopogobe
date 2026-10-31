@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 function PrazenGozd() {
   const vrste = [172, 192, 212, 232, 252, 272];
   return (
-    <svg className="n404-slika" viewBox="0 0 900 330" role="img" aria-label="Številka 404, kjer je ničla prazna košara s pajkom. Nabiralec jo nejevoljno gleda in pravi: no daj, naredi kaj. Ob strani odhaja polž.">
+    <svg className="n404-slika" viewBox="0 0 900 330" role="img" aria-label="Številka 404, kjer je ničla prazna košara s pajkom. Nabiralec ob strani pravi: včeraj si pa bila. Ob strani odhaja polž.">
       <defs>
         <clipPath id="n404-skleda"><path d="M424 150 C424 232 462 284 520 284 C578 284 616 232 616 150 Z" /></clipPath>
       </defs>
@@ -25,12 +25,12 @@ function PrazenGozd() {
       <ellipse cx="400" cy="306" rx="13" ry="5" className="n404-list l2" transform="rotate(10 400 306)" />
       <ellipse cx="660" cy="300" rx="15" ry="5.5" className="n404-list" transform="rotate(-8 660 300)" />
       <ellipse cx="800" cy="312" rx="12" ry="5" className="n404-list l2" transform="rotate(16 800 312)" />
-      {[24, 205, 640, 884].map((x) => (
+      {[24, 372, 640, 884].map((x) => (
         <g key={x} className="n404-trava"><path d={`M${x} 292 q-4 -18 -9 -24`} /><path d={`M${x} 292 q1 -22 0 -30`} /><path d={`M${x} 292 q5 -16 11 -22`} /></g>
       ))}
 
       {/* 4 in 4 */}
-      <text x="120" y="268" textAnchor="middle" className="n404-st">4</text>
+      <text x="300" y="268" textAnchor="middle" className="n404-st">4</text>
       <text x="740" y="268" textAnchor="middle" className="n404-st">4</text>
 
       {/* košara = ničla */}
@@ -66,7 +66,7 @@ function PrazenGozd() {
       </g>
 
       {/* nabiralec počepne h košari in jo dregne s palico */}
-      <g className="n404-clovek">
+      <g className="n404-clovek" transform="translate(-225 0)">
         <path d="M280 234 Q326 232 340 246 L338 282" className="n404-hlace" />
         <path d="M270 236 Q312 230 322 246 L312 282" className="n404-hlace" />
         <path d="M324 282 H346 q5 0 5 4 v6 H321 v-6 q0 -4 3 -4 Z M298 282 H320 q5 0 5 4 v6 H295 v-6 q0 -4 3 -4 Z" className="n404-skornji" />
@@ -88,10 +88,10 @@ function PrazenGozd() {
           <path d="M404 228 l8 -9" className="n404-palica tanka" />
         </g>
       </g>
-      <g className="n404-mehur" transform="translate(170 0)">
+      <g className="n404-mehur" transform="translate(-10 0)">
         <path d="M24 22 H214 q12 0 12 12 v34 q0 12 -12 12 H120 l-18 22 l2 -22 H36 q-12 0 -12 -12 V34 q0 -12 12 -12 Z" />
-        <text x="125" y="44" textAnchor="middle">No daj,</text>
-        <text x="125" y="66" textAnchor="middle">naredi kaj!</text>
+        <text x="125" y="44" textAnchor="middle">Včeraj si</text>
+        <text x="125" y="66" textAnchor="middle">pa bila.</text>
       </g>
 
       {/* polž, ki odhaja */}
@@ -110,7 +110,7 @@ export default function NotFound() {
       <Nav />
       <main className="n404">
         <PrazenGozd />
-        <p className="n404-govori" aria-hidden="true">Nabiralec pravi: »No daj, naredi kaj!«</p>
+        <p className="n404-govori" aria-hidden="true">Nabiralec pravi košari: »Včeraj si pa bila.«</p>
         <h1>Tukaj ni nobene gobe. Niti jurčka.</h1>
         <p className="n404-uvod">Strani, ki jo iščeš, ni. Pogledali smo pod listjem, za štorom in v košari. Samo pajek je doma.</p>
         <p className="n404-inventura">Stanje košare: 0 jurčkov, 0 lisičk, 1 pajek.</p>

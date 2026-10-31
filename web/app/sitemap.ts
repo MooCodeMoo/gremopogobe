@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { TOCKE } from "@/lib/napoved";
 import { OPISI } from "@/lib/vrste-opisi";
 import { URL_STRANI } from "@/lib/seo";
+import { CLANKI } from "@/lib/clanki";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   // Datum izdelave sitemap-a ni datum spremembe vsebine.
@@ -18,5 +19,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${URL_STRANI}/o-projektu`, changeFrequency: "yearly", priority: 0.4 },
     { url: `${URL_STRANI}/zasebnost`, changeFrequency: "yearly", priority: 0.3 },
     { url: `${URL_STRANI}/vodic`, changeFrequency: "monthly", priority: 0.6 },
+    { url: `${URL_STRANI}/clanki`, changeFrequency: "weekly", priority: 0.7 },
+    ...CLANKI.map((c) => ({ url: `${URL_STRANI}/clanki/${c.slug}`, changeFrequency: "monthly" as const, priority: 0.7 })),
   ];
 }

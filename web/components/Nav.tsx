@@ -38,6 +38,7 @@ export function Noga() {
         <Link href="/vrste/storovka">Štorovke</Link>
         <Link href="/vodic">Pravila nabiranja</Link>
         <Link href="/drustva">Gobarska društva</Link>
+        <Link href="/clanki">Članki</Link>
         <Link href="/metodologija">Kako izračunamo</Link>
         <Link href="/o-projektu">O projektu</Link>
         <Link href="/zasebnost">Zasebnost</Link>

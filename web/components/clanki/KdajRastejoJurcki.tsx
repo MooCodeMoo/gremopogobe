@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { CasnicaZamika, HeroJurcki, TemperaturnaOkna } from "./Ilustracije";
+import { CasnicaZamika, TemperaturnaOkna } from "./Ilustracije";
 
 export const VIRI: { id: number; besedilo: React.ReactNode; vrsta: string }[] = [
   { id: 1, vrsta: "predtisk (še ni recenziran)", besedilo: <>Brejon Lamartiniere, E., Hoffman, J. I. (2025): <em>Predicting porcini: a decade of sporocarp monitoring reveals the meteorological triggers of Boletus edulis fruiting in central European beech forests</em>. bioRxiv, doi:10.64898/2025.12.12.693895. <a href="https://www.biorxiv.org/content/10.64898/2025.12.12.693895v1.full.pdf" rel="noopener">biorxiv.org</a></> },
@@ -14,15 +14,21 @@ export const VIRI: { id: number; besedilo: React.ReactNode; vrsta: string }[] = 
   { id: 10, vrsta: "lasten model", besedilo: <>Model gremopogobe.si, naučen na zapisih najdb GBIF od leta 2022 (286 najdb jurčka). Metoda in omejitve: <Link href="/metodologija">Kako izračunamo</Link>.</> },
 ];
 
+const Fotka = ({ src, alt, w, h, n, children }: { src: string; alt: string; w: number; h: number; n: number; children: React.ReactNode }) => (
+  <figure className="cl-foto">
+    <img src={src} alt={alt} width={w} height={h} loading="lazy" decoding="async" />
+    <figcaption>{children} <a href={`#slika-${n}`}>Vir slike [{n}]</a></figcaption>
+  </figure>
+);
+
 const S = ({ n }: { n: number[] }) => <sup className="cl-vir">[{n.join(", ")}]</sup>;
 
 export default function KdajRastejoJurcki() {
   return (
     <>
-      <figure className="cl-figura">
-        <HeroJurcki />
-        <figcaption>Izvirna ilustracija. Jurčki ne zrastejo čez noč, zato ni dovolj, da dežuje včeraj.</figcaption>
-      </figure>
+      <Fotka src="/clanki/jurcka-gozd.webp" alt="Dva jurčka med praprotjo v gozdu" w={1200} h={800} n={1}>
+        Jurčka (<em>Boletus edulis</em>) med praprotjo. Jurčki ne zrastejo čez noč, zato ni dovolj, da dežuje včeraj.
+      </Fotka>
 
       <p className="cl-uvod">
         V petek vso noč dežuje. V soboto zjutraj odhitiš v gozd in nič. V nedeljo še enkrat, spet nič. To ni smola, to je biologija:
@@ -35,6 +41,10 @@ export default function KdajRastejoJurcki() {
         z drevesi živi v sožitju (mikoriza), kjer si izmenjujeta hranila. Med gostitelji navajajo med drugim smreko, bukev, hrast, bor in kostanj<S n={[5]} />,
         celo pritlikavo vrbo na 2440 metrih v švicarskih Alpah<S n={[3]} />. Podgobje je v tleh vedno, plodov pa ni. Zato mora nekaj sprožiti nastanek plodov, in to je pravi niz vremenskih razmer.
       </p>
+
+      <Fotka src="/clanki/jurcek-bukev.webp" alt="Jurček v listju ob bukvi" w={1000} h={666} n={2}>
+        Jurček ob bukvi. Gostiteljsko drevo je del zgodbe: brez njega podgobje ne obstaja.
+      </Fotka>
 
       <h2>Dež je zagon, ne trenutek</h2>
       <p>
@@ -69,6 +79,10 @@ export default function KdajRastejoJurcki() {
         <TemperaturnaOkna />
         <figcaption>Temperaturna okna tal po vrstah po modelu gremopogobe.si. Svetlo: razpon, v katerem so najdbe možne. Temno: najugodnejši del.</figcaption>
       </figure>
+
+      <Fotka src="/clanki/jurcek-mah.webp" alt="Mlad jurček v mahu" w={1000} h={670} n={3}>
+        Mlad jurček v mahu.
+      </Fotka>
 
       <h2>Slovenski vzorec: jesen po deževnem poletju</h2>
       <p>
@@ -105,6 +119,13 @@ export default function KdajRastejoJurcki() {
           {VIRI.map((v) => (
             <li key={v.id} id={`vir-${v.id}`}>{v.besedilo} <span className="cl-tip">({v.vrsta})</span></li>
           ))}
+        </ol>
+        <h3 className="cl-slike-naslov">Viri slik</h3>
+        <p className="cl-opomba">Fotografije so z Wikimedia Commons. Ilustraciji grafov sta izvirni delo gremopogobe.si.</p>
+        <ol className="cl-viri-seznam">
+          <li id="slika-1">Holger Krisp, <a href="https://commons.wikimedia.org/wiki/File:(Gemeine_Steinpilz)_Boletus_edulis.jpg" rel="noopener">(Gemeine Steinpilz) Boletus edulis</a>, <a href="https://creativecommons.org/licenses/by/3.0" rel="noopener">CC BY 3.0</a>. Pomanjšano in pretvorjeno v WebP.</li>
+          <li id="slika-2">Henk Monster, <a href="https://commons.wikimedia.org/wiki/File:A_rather_big_Boletus_edulis_(eekhoorntjesbrood)_beside_a_beech_at_Velp_-_panoramio.jpg" rel="noopener">A rather big Boletus edulis (eekhoorntjesbrood) beside a beech at Velp</a>, <a href="https://creativecommons.org/licenses/by/3.0" rel="noopener">CC BY 3.0</a>. Pomanjšano in pretvorjeno v WebP.</li>
+          <li id="slika-3">Ernie, <a href="https://commons.wikimedia.org/wiki/File:AD2009Sep13_Boletus_edulis_03.jpg" rel="noopener">AD2009Sep13 Boletus edulis 03</a>, javna last. Pomanjšano in pretvorjeno v WebP.</li>
         </ol>
       </section>
     </>

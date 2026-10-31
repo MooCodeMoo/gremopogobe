@@ -473,3 +473,9 @@ a.seznam-vrstica:hover { background: #EFE9DC; }
 .cl-seznam strong { font-family: var(--serif); font-size: 22px; line-height: 1.2; }
 .cl-seznam span { color: var(--sivo); font-size: 15px; line-height: 1.5; }
 .cl-seznam small { color: var(--sivo); font-size: 12px; }
+
+.cl-foto { margin: 22px 0; }
+.cl-foto img { display: block; width: 100%; height: auto; border-radius: 16px; border: 1px solid var(--crta); }
+.cl-foto figcaption { margin-top: 8px; font-size: 13px; line-height: 1.45; color: var(--sivo); }
+.cl-foto figcaption a { color: inherit; }
+.cl-slike-naslov { margin: 28px 0 6px; font-size: 18px; }

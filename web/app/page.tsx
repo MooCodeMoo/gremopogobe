@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 const PRAVILA = [
   ["2 kg", "Na osebo na dan", "Za lastne potrebe. Zavarovanih vrst ne smeš nabirati sploh."],
   ["Nož", "In zračna košara", "Gobe odrežemo ali odvijemo pri tleh, plastične vrečke niso primerne."],
-  ["3000", "Vrst gob v Sloveniji", "Okoli 200 je strupenih. Nabiraj samo tisto, kar zanesljivo poznaš."],
+  ["3000+", "Raziskanih vrst gob v Sloveniji", "Okoli 30 jih je smrtno strupenih. Nabiraj samo tisto, kar zanesljivo poznaš."],
   ["Zavarovane", "Vrste gliv ne smeš trgati", "Za kršitve so predpisane globe. Pravila in uradne vire najdeš v vodiču."],
 ];
 

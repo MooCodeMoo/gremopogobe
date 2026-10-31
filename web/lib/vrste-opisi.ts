@@ -4,6 +4,7 @@ import type { VrstaId } from "./vrste";
 export type OpisVrste = {
   id: VrstaId;
   ime: string;
+  mnozina: string;
   latinsko: string;
   drugaImena: string[];
   kratko: string; // meta opis
@@ -19,11 +20,12 @@ export const OPISI: OpisVrste[] = [
   {
     id: "jurcek",
     ime: "Jurček",
+    mnozina: "Jurčki",
     latinsko: "Boletus edulis",
     drugaImena: ["goban", "smrekov jurček"],
     kratko: "Kdaj in kje rastejo jurčki v Sloveniji? Tedenska napoved rasti po območjih, vremenski pogoji, prepoznava in dvojnice.",
     uvod: "Jurček je najbolj iskana goba slovenskih gozdov. Pod imenom jurček gobarji nabirajo več sorodnih vrst gobanov, ki imajo vse čvrst bel bet, pod klobukom pa gobasto trosovnico namesto lističev.",
-    kjeRaste: "Jurček živi v sožitju z drevesi, zato raste le v gozdu. Najpogosteje ga najdemo v smrekovih in mešanih gozdovih ter pod bukvijo, sorodni vrste pa tudi pod hrastom in borom. Rad ima zračne, ne pregoste sestoje z mahom ali nizko podrastjo.",
+    kjeRaste: "Jurček živi v sožitju z drevesi, zato raste le v gozdu. Najpogosteje ga najdemo v smrekovih in mešanih gozdovih ter pod bukvijo, sorodne vrste pa tudi pod hrastom in borom. Rad ima zračne, ne pregoste sestoje z mahom ali nizko podrastjo.",
     kdaj: "Sezona traja od junija do oktobra, največ jih je praviloma septembra. Jurčki se množično pojavijo nekaj tednov po izdatnem dežju, ko so tla še topla, a se ponoči že hladijo.",
     prepoznava: [
       "Klobuk rjav, od svetlo lešnikovega do temno kostanjevega, na otip suh ali rahlo mastan.",
@@ -40,6 +42,7 @@ export const OPISI: OpisVrste[] = [
   {
     id: "lisicka",
     ime: "Lisička",
+    mnozina: "Lisičke",
     latinsko: "Cantharellus cibarius",
     drugaImena: ["navadna lisička"],
     kratko: "Kdaj rastejo lisičke v Sloveniji? Napoved rasti po območjih, kje jih iskati, prepoznava in nevarne dvojnice.",
@@ -61,6 +64,7 @@ export const OPISI: OpisVrste[] = [
   {
     id: "marela",
     ime: "Marela",
+    mnozina: "Marele",
     latinsko: "Macrolepiota procera",
     drugaImena: ["orjaški dežnik"],
     kratko: "Kdaj rastejo marele (orjaški dežnik) v Sloveniji? Napoved rasti, kje jih iskati, prepoznava in nevarne zamenjave.",
@@ -82,6 +86,7 @@ export const OPISI: OpisVrste[] = [
   {
     id: "storovka",
     ime: "Štorovka",
+    mnozina: "Štorovke",
     latinsko: "Armillaria mellea",
     drugaImena: ["medena štorovka"],
     kratko: "Kdaj rastejo štorovke v Sloveniji? Jesenska napoved rasti po območjih, prepoznava, priprava in strupene dvojnice.",

@@ -369,11 +369,35 @@ a.seznam-vrstica:hover { background: #EFE9DC; }
 .drustvo-leto { margin-left: auto; color: var(--sivo); font-size: 12px; }
 
 /* 404 */
-.stran-404 { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
-.stevilka-404 { font-family: var(--serif); font-size: 96px; font-weight: 600; line-height: 1; color: var(--rja); opacity: .35; }
-.stran-404 h1 { margin-top: -6px; }
-.povezave-404 { display: flex; flex-wrap: wrap; gap: 10px 20px; margin-top: 8px; }
-.povezave-404 a { font-weight: 600; }
+.n404 { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px; padding: 24px var(--rob) 8px; max-width: 760px; margin: 0 auto; }
+.n404-slika { -webkit-mask-image: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent); mask-image: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent); width: 100%; height: auto; max-width: 640px; overflow: visible; }
+.n404 h1 { font-family: var(--serif); font-size: clamp(28px, 5vw, 44px); font-weight: 600; letter-spacing: -.5px; line-height: 1.1; margin: 8px 0 0; text-wrap: balance; }
+.n404-uvod { color: var(--sivo); font-size: 17px; line-height: 1.5; max-width: 520px; margin: 0; }
+.n404-inventura { font-size: 13px; font-weight: 600; letter-spacing: .3px; color: var(--rja); background: var(--pesek); padding: 6px 14px; border-radius: 999px; margin: 4px 0 0; }
+.n404-gumbi { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 14px; }
+.n404-gumb { display: inline-flex; align-items: center; height: 46px; padding: 0 20px; border-radius: 999px; border: 1px solid #C9BFA9; background: var(--povrsina); color: var(--crnilo); font-weight: 600; font-size: 15px; text-decoration: none; transition: transform .15s, background .2s; }
+.n404-gumb:hover { transform: translateY(-1px); background: #fff; }
+.n404-gumb.prvi { background: var(--gozd); color: #fff; border-color: var(--gozd); }
+.n404-gumb.prvi:hover { background: #0b2817; }
+.n404-tla { fill: #CFD8BF; } .n404-tla2 { fill: #B9C7A6; }
+.n404-list { fill: #B5763A; } .n404-list.l2 { fill: #9A5A2A; }
+.n404-trava path { fill: none; stroke: #7D9468; stroke-width: 3; stroke-linecap: round; }
+.n404-st { font-family: var(--serif); font-size: 250px; font-weight: 600; fill: var(--gozd); }
+.n404-rocaj { fill: none; stroke: #8A5E2E; stroke-width: 11; stroke-linecap: round; }
+.n404-telo { fill: #D2A263; stroke: #8A5E2E; stroke-width: 3; stroke-linejoin: round; }
+.n404-pletenje path { fill: none; stroke: #B58443; stroke-width: 3; opacity: .85; }
+.n404-odprtina { fill: #4B341C; stroke: #8A5E2E; stroke-width: 3; }
+.n404-mreza path { fill: none; stroke: #F3EFE6; stroke-width: 1.1; opacity: .75; }
+.n404-nit { stroke: #5A5E51; stroke-width: 1.4; fill: none; }
+.n404-telo-pajka { fill: #1D2118; } .n404-oko { fill: #F3EFE6; }
+.n404-noge { fill: none; stroke: #1D2118; stroke-width: 1.5; stroke-linecap: round; }
+.n404-pajek { transform-box: view-box; transform-origin: 360px 84px; animation: n404-nihaj 3.6s ease-in-out infinite; }
+.n404-polz-telo { fill: none; stroke: #C9B79C; stroke-width: 8; stroke-linecap: round; stroke-linejoin: round; }
+.n404-hisa { fill: #B5763A; } .n404-spirala { fill: none; stroke: #6B2A15; stroke-width: 2.2; stroke-linecap: round; }
+.n404-polz { animation: n404-polz 18s linear infinite alternate; }
+@keyframes n404-nihaj { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg); } }
+@keyframes n404-polz { from { transform: translate(664px, 282px); } to { transform: translate(640px, 282px); } }
+@media (prefers-reduced-motion: reduce) { .n404-pajek, .n404-polz { animation: none; } }
 
 /* Fotografija ob poročilu */
 .najdbe-slika { display: flex; flex-direction: column; gap: 8px; }

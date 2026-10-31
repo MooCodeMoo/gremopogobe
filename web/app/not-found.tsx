@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 function PrazenGozd() {
   const vrste = [172, 192, 212, 232, 252, 272];
   return (
-    <svg className="n404-slika" viewBox="0 0 900 330" role="img" aria-label="Številka 404, kjer je ničla prazna košara s pajkom. Nabiralec ob strani pravi: včeraj si pa bila. Ob strani odhaja polž.">
+    <svg className="n404-slika" viewBox="0 -44 900 374" role="img" aria-label="Številka 404, kjer je ničla prazna košara s pajkom. Nabiralec ob strani pravi: včeraj si pa bila. Ob strani odhaja polž.">
       <defs>
         <clipPath id="n404-skleda"><path d="M424 150 C424 232 462 284 520 284 C578 284 616 232 616 150 Z" /></clipPath>
       </defs>
@@ -66,7 +66,7 @@ function PrazenGozd() {
       </g>
 
       {/* nabiralec počepne h košari in jo dregne s palico */}
-      <g className="n404-clovek" transform="translate(-225 0)">
+      <g className="n404-clovek" transform="translate(40 290) scale(1.3) translate(-265 -290)">
         <path d="M280 234 Q326 232 340 246 L338 282" className="n404-hlace" />
         <path d="M270 236 Q312 230 322 246 L312 282" className="n404-hlace" />
         <path d="M324 282 H346 q5 0 5 4 v6 H321 v-6 q0 -4 3 -4 Z M298 282 H320 q5 0 5 4 v6 H295 v-6 q0 -4 3 -4 Z" className="n404-skornji" />
@@ -75,8 +75,10 @@ function PrazenGozd() {
         <path d="M286 192 Q304 224 330 240" className="n404-roka" />
         <circle cx="332" cy="241" r="7" className="n404-dlan" />
         <circle cx="314" cy="152" r="21" className="n404-obraz" />
-        <path d="M292 148 Q292 120 316 120 Q338 120 336 146 Q314 136 292 148 Z" className="n404-klobuk" />
-        <path d="M330 138 q18 -3 26 5 q-12 3 -26 -1 Z" className="n404-klobuk" />
+        <path d="M287 150 Q285 110 316 110 Q345 110 343 148 Q314 136 287 150 Z" className="n404-klobuk" />
+        <path d="M336 138 q20 -3 28 6 q-14 3 -28 -2 Z" className="n404-klobuk" />
+        <rect x="292" y="119" width="46" height="15" rx="4" className="n404-kapa-plosca" />
+        <text x="315" y="130" textAnchor="middle" textLength="40" lengthAdjust="spacingAndGlyphs" className="n404-kapa-napis">gremopogobe.si</text>
         <circle cx="320" cy="157" r="3" className="n404-oko" /><circle cx="334" cy="157" r="3" className="n404-oko" />
         <circle cx="321.5" cy="158" r="1.6" className="n404-pika" /><circle cx="335.5" cy="158" r="1.6" className="n404-pika" />
         <path d="M313 148 l10 3 M341 148 l-10 3" className="n404-obrv" />
@@ -84,11 +86,11 @@ function PrazenGozd() {
         <g className="n404-dreg">
           <path d="M314 190 Q348 196 374 214" className="n404-roka" />
           <circle cx="376" cy="215" r="7" className="n404-dlan" />
-          <path d="M368 211 L440 244" className="n404-palica" />
-          <path d="M404 228 l8 -9" className="n404-palica tanka" />
+          <path d="M368 211 L412 233" className="n404-palica" />
+          <path d="M394 223 l7 -8" className="n404-palica tanka" />
         </g>
       </g>
-      <g className="n404-mehur" transform="translate(-10 0)">
+      <g className="n404-mehur" transform="translate(2 -40)">
         <path d="M24 22 H214 q12 0 12 12 v34 q0 12 -12 12 H120 l-18 22 l2 -22 H36 q-12 0 -12 -12 V34 q0 -12 12 -12 Z" />
         <text x="125" y="44" textAnchor="middle">Včeraj si</text>
         <text x="125" y="66" textAnchor="middle">pa bila.</text>

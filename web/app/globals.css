@@ -369,8 +369,8 @@ a.seznam-vrstica:hover { background: #EFE9DC; }
 .drustvo-leto { margin-left: auto; color: var(--sivo); font-size: 12px; }
 
 /* 404 */
-.n404 { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px; padding: 24px var(--rob) 8px; max-width: 760px; margin: 0 auto; }
-.n404-slika { -webkit-mask-image: linear-gradient(to right, transparent, #000 4%, #000 96%, transparent); mask-image: linear-gradient(to right, transparent, #000 4%, #000 96%, transparent); width: 100%; height: auto; max-width: 760px; overflow: visible; }
+.n404 { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px; padding: 24px var(--rob) 8px; max-width: 860px; margin: 0 auto; }
+.n404-slika { -webkit-mask-image: linear-gradient(to right, transparent, #000 4%, #000 96%, transparent); mask-image: linear-gradient(to right, transparent, #000 4%, #000 96%, transparent); width: 100%; height: auto; max-width: 820px; overflow: visible; }
 .n404 h1 { font-family: var(--serif); font-size: clamp(28px, 5vw, 44px); font-weight: 600; letter-spacing: -.5px; line-height: 1.1; margin: 8px 0 0; text-wrap: balance; }
 .n404-uvod { color: var(--sivo); font-size: 17px; line-height: 1.5; max-width: 520px; margin: 0; }
 .n404-inventura { font-size: 13px; font-weight: 600; letter-spacing: .3px; color: var(--rja); background: var(--pesek); padding: 6px 14px; border-radius: 999px; margin: 4px 0 0; }
@@ -407,6 +407,8 @@ a.seznam-vrstica:hover { background: #EFE9DC; }
 .n404-pika { fill: #1D2118; } .n404-obrv { stroke: #1D2118; stroke-width: 2.2; stroke-linecap: round; }
 .n404-usta { stroke: #1D2118; stroke-width: 2.2; stroke-linecap: round; fill: none; }
 .n404-roka-vihra { transform-box: view-box; transform-origin: 72px 178px; animation: n404-vihra 1.8s ease-in-out infinite; }
+.n404-kapa-plosca { fill: #F3EFE6; }
+.n404-kapa-napis { font-family: var(--sans); font-size: 7.6px; font-weight: 700; fill: #1F3A2B; }
 .n404-palica { fill: none; stroke: #6B4A25; stroke-width: 4.5; stroke-linecap: round; } .n404-palica.tanka { stroke-width: 2.5; }
 .n404-dreg { animation: n404-dreg 1.3s ease-in-out infinite; }
 @keyframes n404-dreg { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(-7px, -3px); } }

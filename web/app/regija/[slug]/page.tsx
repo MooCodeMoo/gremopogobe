@@ -7,8 +7,9 @@ import { VRSTE, OZNAKE, barva, besediloNa, stopnja } from "@/lib/vrste";
 import { DEZ_ZAMIK, EKV_DNI } from "@/lib/indeks";
 import modelRaw from "@/data/model.json";
 import model from "@/data/model.json";
-import { JsonLd, drobtinice } from "@/lib/seo";
+import { JsonLd, drobtinice, metadataStrani } from "@/lib/seo";
 import { SKUPINE, gozdTocke } from "@/lib/gozd";
+import { lokacijaRegije } from "@/lib/lokacije-regij";
 import { opisRegije } from "@/lib/opisi-regij";
 import { VISINSKA_OKNA } from "@/lib/visina";
 import Najdbe from "@/components/Najdbe";
@@ -24,14 +25,12 @@ export async function generateMetadata({ params }: P): Promise<Metadata> {
   const { slug } = await params;
   const t = TOCKE.find((x) => x.slug === slug);
   if (!t) return {};
-  const opis = opisRegije(t.slug);
-  return {
-    title: `Gobe ${t.ime} - napoved rasti | Gremo po gobe`,
-    description: opis
-      ? `${opis.split(". ")[0]}. 7-dnevna napoved rasti za jurčke, lisičke, marele in štorovke.`
-      : `Kdaj bodo rasle gobe na območju ${t.ime} (${t.regija})? 7-dnevna napoved za jurčke, lisičke, marele in štorovke.`,
-    alternates: { canonical: `/regija/${t.slug}` },
-  };
+  const lokacija = lokacijaRegije(t.slug, t.ime);
+  return metadataStrani(
+    `/regija/${t.slug}`,
+    `Gobe ${lokacija} – napoved za 7 dni | Gremo po gobe`,
+    `Rastejo gobe ${lokacija}? Preveri 7-dnevno napoved za jurčke, lisičke, marele in štorovke ter podatke o dežju, temperaturi in vlagi tal.`,
+  );
 }
 
 export default async function Regija({ params }: P) {
@@ -67,8 +66,9 @@ export default async function Regija({ params }: P) {
           <nav aria-label="Drobtinice" className="drobtinice"><Link href="/">Napoved</Link><span>/</span><Link href="/regije">Regije</Link><span>/</span><span>{osnova.regija}</span></nav>
           <div className="regija-vrh">
             <div>
-              <h1>{osnova.ime}</h1>
+              <h1>Gobe {lokacijaRegije(slug, osnova.ime)}</h1>
               <p>{osnova.regija}{t?.visina ? `, merilna točka na ${Math.round(t.visina)} m` : ""}</p>
+              <p className="opomba">Napoved za jurčke, lisičke, marele in štorovke. Indeks ocenjuje ugodnost razmer, ne verjetnosti najdbe. <Link href="/metodologija">Kako izračunamo napoved</Link>.</p>
               <Spremljaj slug={osnova.slug} />
             </div>
             {t && napoved && (
@@ -93,7 +93,7 @@ export default async function Regija({ params }: P) {
                 </div>
                 {VRSTE.map((vr) => (
                   <div role="row" className="vrstica" key={vr.id}>
-                    <span role="rowheader" className="ime-vrste">{vr.ime}</span>
+                    <span role="rowheader" className="ime-vrste"><Link href={`/vrste/${vr.id}`}>{vr.ime}</Link></span>
                     {t.indeks[vr.id].map((v, i) => (
                       <span role="cell" key={i} className="celica" style={{ background: barva(v), color: besediloNa(v) }}>{v}</span>
                     ))}
@@ -113,7 +113,7 @@ export default async function Regija({ params }: P) {
             {opis && (
               <section className="odsek odsek-opis">
                 <div className="opis-regije">
-                  <h2>O območju</h2>
+                  <h2>Gobarjenje {lokacijaRegije(slug, osnova.ime)}</h2>
                   <p>{opis}</p>
                   {gz && prevladujoca && (
                     <p className="opomba">

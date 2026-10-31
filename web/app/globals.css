@@ -447,3 +447,16 @@ a.seznam-vrstica:hover { background: #EFE9DC; }
 .tabela-metodologija th, .tabela-metodologija td { padding: 10px 14px; text-align: left; border-top: 1px solid var(--crta); }
 .tabela-metodologija thead th { font-size: 12px; text-transform: uppercase; letter-spacing: .8px; color: var(--sivo); border-top: 0; }
 .tabela-metodologija .desno { text-align: right; }
+
+/* Napoved vrste je pred opisom tudi na telefonu, brez podvajanja vsebine. */
+.vrsta-povezave { display: flex; flex-wrap: wrap; gap: 10px 20px; margin: 20px 0 8px; font-size: 14px; font-weight: 600; }
+.vrsta-povezave a { text-decoration: underline; text-underline-offset: 3px; }
+.vrsta-napoved { background: var(--povrsina); border-block: 1px solid var(--crta); }
+.vrsta-napoved-mreza { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 8px 24px; }
+.vrsta-napoved .opomba a { text-decoration: underline; text-underline-offset: 3px; }
+.vrsta-napoved, .vrsta-besedilo h2 { scroll-margin-top: 24px; }
+.regija-vrh > div:first-child { flex: 1 1 360px; min-width: 0; }
+.regija-vrh .opomba { max-width: 65ch; line-height: 1.6; }
+@media (max-width: 480px) {
+  .vrsta-napoved-mreza { grid-template-columns: minmax(0, 1fr); }
+}

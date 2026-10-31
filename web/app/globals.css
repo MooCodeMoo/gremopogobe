@@ -407,8 +407,7 @@ a.seznam-vrstica:hover { background: #EFE9DC; }
 .n404-pika { fill: #1D2118; } .n404-obrv { stroke: #1D2118; stroke-width: 2.2; stroke-linecap: round; }
 .n404-usta { stroke: #1D2118; stroke-width: 2.2; stroke-linecap: round; fill: none; }
 .n404-roka-vihra { transform-box: view-box; transform-origin: 72px 178px; animation: n404-vihra 1.8s ease-in-out infinite; }
-.n404-kapa-plosca { fill: #F3EFE6; }
-.n404-kapa-napis { font-family: var(--sans); font-size: 7.6px; font-weight: 700; fill: #1F3A2B; }
+.n404-kapa-napis { font-family: var(--sans); font-size: 8px; font-weight: 700; fill: #fff; }
 .n404-palica { fill: none; stroke: #6B4A25; stroke-width: 4.5; stroke-linecap: round; } .n404-palica.tanka { stroke-width: 2.5; }
 .n404-dreg { animation: n404-dreg 1.3s ease-in-out infinite; }
 @keyframes n404-dreg { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(-7px, -3px); } }

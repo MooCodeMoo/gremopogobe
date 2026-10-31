@@ -77,8 +77,7 @@ function PrazenGozd() {
         <circle cx="314" cy="152" r="21" className="n404-obraz" />
         <path d="M287 150 Q285 110 316 110 Q345 110 343 148 Q314 136 287 150 Z" className="n404-klobuk" />
         <path d="M336 138 q20 -3 28 6 q-14 3 -28 -2 Z" className="n404-klobuk" />
-        <rect x="292" y="119" width="46" height="15" rx="4" className="n404-kapa-plosca" />
-        <text x="315" y="130" textAnchor="middle" textLength="40" lengthAdjust="spacingAndGlyphs" className="n404-kapa-napis">gremopogobe.si</text>
+        <text x="315" y="131" textAnchor="middle" textLength="42" lengthAdjust="spacingAndGlyphs" className="n404-kapa-napis">gremopogobe.si</text>
         <circle cx="320" cy="157" r="3" className="n404-oko" /><circle cx="334" cy="157" r="3" className="n404-oko" />
         <circle cx="321.5" cy="158" r="1.6" className="n404-pika" /><circle cx="335.5" cy="158" r="1.6" className="n404-pika" />
         <path d="M313 148 l10 3 M341 148 l-10 3" className="n404-obrv" />

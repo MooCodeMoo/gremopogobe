@@ -38,6 +38,10 @@ export function Noga() {
         <Link href="/vrste/storovka">Štorovke</Link>
         <Link href="/vodic">Pravila nabiranja</Link>
         <Link href="/drustva">Gobarska društva</Link>
+        <Link href="/metodologija">Kako izračunamo</Link>
+        <Link href="/o-projektu">O projektu</Link>
+        <Link href="/zasebnost">Zasebnost</Link>
+        <Link href="/o-projektu#kontakt">Kontakt</Link>
       </nav>
       <span>gremopogobe.si. Vremenski podatki: <a href="https://open-meteo.com/">Open-Meteo.com</a> (CC BY 4.0)</span>
       <span>Indeks je ocena razmer, ne zagotovilo najdbe in ne pomoč pri določanju užitnosti.</span>

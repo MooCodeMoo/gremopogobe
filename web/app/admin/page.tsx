@@ -9,7 +9,7 @@ export const metadata: Metadata = { title: "Nadzorna plošča", robots: { index:
 const VRSTE: Record<string, string> = { jurcek: "Jurček", lisicka: "Lisička", marela: "Marela", storovka: "Štorovka" };
 const IME_DOGODKA: Record<string, string> = {
   vrsta: "Izbira vrste", dan: "Izbira dneva", predvajaj: "Predvajaj teden", najdba: "Prijava najdbe",
-  spremljaj_dodaj: "Območje dodano med moja", spremljaj_odstrani: "Območje odstranjeno", prijava_bilten: "Prijava na bilten", obvestila_vklop: "Obvestila vklopljena", obvestila_izklop: "Obvestila izklopljena",
+  kosara: "404: klik na košaro", spremljaj_dodaj: "Območje dodano med moja", spremljaj_odstrani: "Območje odstranjeno", prijava_bilten: "Prijava na bilten", obvestila_vklop: "Obvestila vklopljena", obvestila_izklop: "Obvestila izklopljena",
 };
 const CSS = `
 .ad{max-width:1100px;margin:0 auto;padding:28px var(--rob,20px) 80px;font-family:var(--sans)}

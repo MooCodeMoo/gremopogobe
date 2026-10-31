@@ -15,6 +15,9 @@ type Stat = { dni: number; skupaj: { da: number; ne: number }; po_vrstah: Record
 
 export default function Najdbe({ slug, ime }: { slug: string; ime: string }) {
   const [vrsta, setVrsta] = useState<VrstaId>("jurcek");
+  useEffect(() => {
+    try { const v = localStorage.getItem("gpg-vrsta"); if (VRSTE.some((x) => x.id === v)) setVrsta(v as VrstaId); } catch {}
+  }, []);
   const [stat, setStat] = useState<Stat | null>(null);
   const [stanje, setStanje] = useState<"" | "poslano" | "ze" | "napaka">("");
   const [sporocilo, setSporocilo] = useState("");
@@ -114,7 +117,7 @@ export default function Najdbe({ slug, ime }: { slug: string; ime: string }) {
     <section className="najdbe">
       <div className="najdbe-besedilo">
         <h2>Si bil te dni na območju {ime}?</h2>
-        <p>Tvoj odgovor izboljša napoved za vse. Ne beležimo, kje točno si bil, ampak samo območje, vrsto in dan.</p>
+        <p>Tvoj odgovor se prikaže na zemljevidu najdb za vse. Ne beležimo, kje točno si bil, ampak samo območje, vrsto in dan.</p>
       </div>
       <div className="najdbe-vnos">
         <div className="segment" role="group" aria-label="Vrsta">

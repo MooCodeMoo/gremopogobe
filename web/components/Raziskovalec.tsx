@@ -88,6 +88,13 @@ export default function Raziskovalec({ napoved }: { napoved: Napoved }) {
   const top3 = razvrsceno.slice(0, 3);
   const oznacene = [...razvrsceno.slice(0, 6), ...razvrsceno.filter((t) => t.slug === fokus && !razvrsceno.slice(0, 6).includes(t))];
   const imeVrste = VRSTE.find((v) => v.id === vrsta)!.ime;
+  // Povzetek dejanskega stanja po vrstah za izbrani dan (najboljše območje za vsako vrsto)
+  const stanjeVrst = VRSTE.map((v) => ({ ime: v.ime, m: Math.max(...napoved.tocke.map((t) => t.indeks[v.id][dIdx])) })).sort((a, b) => b.m - a.m);
+  const najboljsi = stanjeVrst[0].m;
+  const jeVikend = [0, 6].includes(new Date(napoved.dnevi[dIdx]).getDay());
+  const obdobje = jeVikend ? "ta vikend" : "te dni";
+  const naslov = najboljsi >= 60 ? `Kje bo ${obdobje} polna košara?` : najboljsi >= 40 ? `Kje bo ${obdobje} vsaj nekaj gob?` : "Gobe za zdaj počivajo.";
+  const datumStanja = `Najboljše razmere, ${dan(napoved.dnevi[dIdx]).toLowerCase()}, ${new Date(napoved.dnevi[dIdx]).toLocaleDateString("sl-SI", { day: "numeric", month: "numeric" })}`;
 
   function izberiDan(i: number) { setPredvajam(false); setDIdx(i); track("dan", { d: i - privzetiDan }); }
   function predvajaj() {
@@ -139,14 +146,15 @@ export default function Raziskovalec({ napoved }: { napoved: Napoved }) {
       <section className="hero">
         <div className="hero-levo">
           <p className="svez"><span className={`pika${napoved.zastarelo ? " stara" : ""}`} aria-hidden="true" />{napoved.zastarelo ? "Zadnji razpoložljivi podatki, " : "Posodobljeno "}{new Date(napoved.posodobljeno).toLocaleString("sl-SI", { timeZone: "Europe/Ljubljana", day: "numeric", month: "numeric", hour: "2-digit", minute: "2-digit" })}</p>
-          <h1><span className="nadnaslov">Gobarska napoved za Slovenijo</span>Kje bo ta vikend polna košara?</h1>
-          <p className="uvod">Indeks rasti za {napoved.tocke.length} gozdnih območij iz padavin zadnjih {dolzinaOkna} dni, temperature in vlage tal ter sestave gozda.</p>
+          <h1><span className="nadnaslov">Gobarska napoved za Slovenijo</span>{naslov}</h1>
+          <p className="stanje-vrst"><strong>{datumStanja}:</strong> {stanjeVrst.map((s, i) => <span key={s.ime}>{i ? ", " : " "}{s.ime.toLowerCase()} {OZNAKE[stopnja(s.m)].toLowerCase()}</span>)}.</p>
+          <p className="uvod">Indeks ugodnosti razmer za {napoved.tocke.length} gozdnih območij iz padavin zadnjih {dolzinaOkna} dni, temperature in vlage tal ter sestave gozda. To je ocena vremenskih razmer, ne zagotovilo najdbe. <Link href="/metodologija">Kako izračunamo</Link></p>
 
           <fieldset className="skupina">
             <legend>Vrsta</legend>
             <div className="segment">
               {VRSTE.map((v) => (
-                <button key={v.id} type="button" aria-pressed={v.id === vrsta} onClick={() => { setVrsta(v.id); track("vrsta", { v: v.id }); }}>{v.ime}</button>
+                <button key={v.id} type="button" aria-pressed={v.id === vrsta} onClick={() => { setVrsta(v.id); track("vrsta", { v: v.id }); try { localStorage.setItem("gpg-vrsta", v.id); } catch {} }}>{v.ime}</button>
               ))}
             </div>
           </fieldset>
@@ -179,7 +187,7 @@ export default function Raziskovalec({ napoved }: { napoved: Napoved }) {
           <div className="karta-glava">
             <div>
               <h2>{imeVrste}, {dan(napoved.dnevi[dIdx]).toLowerCase()} {new Date(napoved.dnevi[dIdx]).toLocaleDateString("sl-SI")}</h2>
-              <p>Verjetnost rasti, 0-100</p>
+              <p>Indeks ugodnosti razmer, 0-100 (ni verjetnost najdbe)</p>
             </div>
             <button type="button" className="predvajaj" onClick={predvajaj} aria-pressed={predvajam}>
               {predvajam ? (
@@ -193,7 +201,7 @@ export default function Raziskovalec({ napoved }: { napoved: Napoved }) {
 
           <div className="karta-platno">
             <div className="karta-okvir">
-              <svg viewBox={`0 0 ${geo.W} ${geo.H}`} role="img" aria-label={`Zemljevid indeksa rasti za vrsto ${imeVrste}`}
+              <svg viewBox={`0 0 ${geo.W} ${geo.H}`} role="img" aria-label={`Zemljevid indeksa ugodnosti razmer za vrsto ${imeVrste}`}
                 onPointerMove={premik} onPointerLeave={zapustiKarto}
                 onPointerDown={(e) => { tipKazalca.current = e.pointerType; premik(e); }}
                 onClick={klik} style={{ cursor: namig ? "pointer" : "default" }}>
@@ -241,7 +249,7 @@ export default function Raziskovalec({ napoved }: { napoved: Napoved }) {
         </div>
       </section>
 
-      <section className="odsek odsek-hitra"><NajdbeHitro tocke={napoved.tocke} /></section>
+      <section className="odsek odsek-hitra"><NajdbeHitro tocke={napoved.tocke} vrstaPrivzeta={vrsta} /></section>
 
       <MojaObmocja tocke={napoved.tocke} vrsta={vrsta} dIdx={dIdx} />
 

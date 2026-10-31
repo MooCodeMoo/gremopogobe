@@ -18,10 +18,10 @@ export const metadata: Metadata = {
 };
 
 const PRAVILA = [
-  ["2 kg", "Na osebo na dan", "Za lastne potrebe. Nekaterih vrst ne smeš nabirati sploh."],
-  ["Nož", "In zračna košara", "Plastične vrečke za prenašanje gob niso dovoljene."],
+  ["2 kg", "Na osebo na dan", "Za lastne potrebe. Zavarovanih vrst ne smeš nabirati sploh."],
+  ["Nož", "In zračna košara", "Gobe odrežemo ali odvijemo pri tleh, plastične vrečke niso primerne."],
   ["3000", "Vrst gob v Sloveniji", "Okoli 200 je strupenih. Nabiraj samo tisto, kar zanesljivo poznaš."],
-  ["2.500 €", "Najvišja globa za posameznika", "Za pravne osebe in s.p. do 4.000 €."],
+  ["Zavarovane", "Vrste gliv ne smeš trgati", "Za kršitve so predpisane globe. Pravila in uradne vire najdeš v vodiču."],
 ];
 
 export default async function Domov() {

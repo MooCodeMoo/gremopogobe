@@ -16,7 +16,7 @@ export default function Najdbe() {
       <main>
         <section className="regije-vrh">
           <h1>Zemljevid najdb</h1>
-          <p className="uvod">Kaj poročajo gobarji zadnjih 14 dni. Vsak odgovor izboljša tudi napoved, ker model primerja poročila z vremenom.</p>
+          <p className="uvod">Kaj poročajo gobarji zadnjih 14 dni. Poročila prikazujemo tu, na napoved zaenkrat ne vplivajo. Služijo preverjanju modela (<a href="/metodologija">več</a>).</p>
         </section>
         <section className="odsek">
           <ZemljevidNajdb tocke={TOCKE} />

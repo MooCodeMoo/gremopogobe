@@ -5,7 +5,7 @@ import { JsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Pravila nabiranja gob in sezonski koledar | Gremo po gobe",
-  description: "Koliko gob smeš nabrati, kakšne so kazni in kdaj raste katera vrsta v Sloveniji.",
+  description: "Koliko gob smeš nabrati, katera pravila veljajo in kdaj raste katera vrsta v Sloveniji. Z uradnimi viri in datumom preverjanja.",
   alternates: { canonical: "/vodic" },
 };
 
@@ -19,10 +19,10 @@ const KOLEDAR: [string, string, number[]][] = [
   ["Bukov ostrigar", "Pleurotus ostreatus", [10, 11, 12, 1, 2]],
 ];
 const PRAVILA = [
-  ["Količina", "Za lastne potrebe največ 2 kg gob na osebo na dan. Nabiranje nekaterih vrst je prepovedano."],
-  ["Oprema", "Gobe odrežemo z nožem in jih nosimo v zračni posodi, na primer v pleteni košari. Plastične vrečke niso dovoljene."],
-  ["Kazni", "Po uredbi o varstvu samoniklih gliv od 250 do 2.500 € za posameznike in od 400 do 4.000 € za pravne osebe in s.p."],
-  ["Kje", "Na zavarovanih območjih je nabiranje lahko omejeno ali prepovedano. Gozd ima lastnika, bodi gost."],
+  ["Količina", "Za lastne potrebe največ 2 kg gob na osebo na dan. Zavarovanih vrst gliv ni dovoljeno nabirati."],
+  ["Oprema", "Gobe nežno odvijemo ali odrežemo pri tleh, da ne poškodujemo podgobja, in jih nosimo v zračni posodi, na primer v pleteni košari. Brez plastičnih vrečk."],
+  ["Kazni", "Za kršitve so predpisane globe, višino določajo veljavni predpisi (Zakon o ohranjanju narave, Zakon o gozdovih in uredbi o gobah). Inšpektorji lahko izdajo tudi plačilni nalog in zasežejo nabrano."],
+  ["Kje", "V gozdnih rezervatih in ostankih pragozdov nabiranje ni dovoljeno, na zavarovanih območjih je lahko omejeno. Gozd ima lastnika, bodi gost."],
 ];
 
 export default function Vodic() {
@@ -33,9 +33,9 @@ export default function Vodic() {
       <JsonLd data={{
         "@context": "https://schema.org", "@type": "FAQPage",
         mainEntity: [
-          ["Koliko gob lahko naberem na dan?", "Za lastne potrebe največ 2 kg gob na osebo na dan. Nabiranje nekaterih vrst je prepovedano."],
-          ["V kaj lahko nabiram gobe?", "Gobe odrežemo z nožem in jih nosimo v zračni posodi, na primer v pleteni košari. Plastične vrečke niso dovoljene."],
-          ["Kakšne so kazni za nedovoljeno nabiranje gob?", "Po uredbi o varstvu samoniklih gliv od 250 do 2.500 € za posameznike in od 400 do 4.000 € za pravne osebe in s.p."],
+          ["Koliko gob lahko naberem na dan?", "Za lastne potrebe največ 2 kg gob na osebo na dan. Zavarovanih vrst gliv ni dovoljeno nabirati."],
+          ["V kaj lahko nabiram gobe?", "Gobe nežno odvijemo ali odrežemo pri tleh, da ne poškodujemo podgobja, in jih nosimo v zračni posodi, na primer v pleteni košari. Brez plastičnih vrečk."],
+          ["Kakšne so kazni za nedovoljeno nabiranje gob?", "Za kršitve so predpisane globe, višino določajo veljavni predpisi (Zakon o ohranjanju narave, Zakon o gozdovih in uredbi o gobah). Inšpektorji lahko izdajo tudi plačilni nalog in zasežejo nabrano."],
           ["Koliko vrst gob raste v Sloveniji?", "V Sloveniji raste okoli 3000 vrst gob, od tega približno 200 strupenih."],
         ].map(([q, a]) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: a } })),
       }} />
@@ -52,6 +52,17 @@ export default function Vodic() {
               {PRAVILA.map(([k, v]) => (<div key={k}><dt>{k}</dt><dd>{v}</dd></div>))}
             </dl>
           </div>
+        </section>
+
+        <section className="odsek viri">
+          <h2 className="naslov">Uradni viri</h2>
+          <p className="uvod">Pravila smo preverili 31. 10. 2026. Predpisi se spreminjajo, zato pred nabiranjem preveri tudi veljavno besedilo.</p>
+          <ul className="viri-seznam">
+            <li><a href="https://www.gov.si/novice/2026-09-29-nadzor-nad-nabiranjem-gob/" rel="noopener">Ministrstvo za naravne vire in prostor: Nadzor nad nabiranjem gob</a> (29. 9. 2026) - omejitev 2 kg na osebo na dan, prepoved uničevanja zavarovanih vrst gliv</li>
+            <li><a href="https://www.gov.si/novice/2022-09-21-pri-nabiranju-gob-in-gozdnih-plodov-upostevajmo-gozdni-bonton/" rel="noopener">Ministrstvo za kmetijstvo, gozdarstvo in prehrano: Gozdni bonton</a> (21. 9. 2022) - način nabiranja, prepovedan vstop v gozdne rezervate</li>
+            <li><a href="https://www.uradni-list.si/glasilo-uradni-list-rs/vsebina/1998-01-2689/uredba-o-varstvu-samoniklih-gliv" rel="noopener">Uredba o varstvu samoniklih gliv</a> (Uradni list RS, št. 57/1998), 5. člen</li>
+            <li>Uredba o zavarovanih prosto živečih vrstah gliv (Uradni list RS, št. 58/2011): seznam zavarovanih vrst</li>
+          </ul>
         </section>
 
         <section className="odsek">

@@ -5,7 +5,7 @@ import { kv } from "@/lib/kv";
 
 export const DOLZINA_HRANJENJA = 60 * 60 * 24 * 120; // 120 dni
 export const DOVOLJENI_DOGODKI = new Set([
-  "vrsta", "dan", "predvajaj", "najdba", "prijava_bilten", "obvestila_vklop", "obvestila_izklop", "spremljaj_dodaj", "spremljaj_odstrani",
+  "vrsta", "dan", "predvajaj", "najdba", "prijava_bilten", "obvestila_vklop", "obvestila_izklop", "spremljaj_dodaj", "spremljaj_odstrani", "kosara",
 ]);
 const BOT = /bot|crawl|spider|slurp|preview|headless|lighthouse|pagespeed|curl|wget|python|node-fetch|axios|monitor|uptime|facebookexternalhit|whatsapp|telegram|discord/i;
 

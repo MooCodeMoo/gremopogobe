@@ -369,35 +369,46 @@ a.seznam-vrstica:hover { background: #EFE9DC; }
 .drustvo-leto { margin-left: auto; color: var(--sivo); font-size: 12px; }
 
 /* 404 */
-.n404 { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px; padding: 24px var(--rob) 8px; max-width: 760px; margin: 0 auto; }
-.n404-slika { -webkit-mask-image: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent); mask-image: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent); width: 100%; height: auto; max-width: 640px; overflow: visible; }
-.n404 h1 { font-family: var(--serif); font-size: clamp(28px, 5vw, 44px); font-weight: 600; letter-spacing: -.5px; line-height: 1.1; margin: 8px 0 0; text-wrap: balance; }
-.n404-uvod { color: var(--sivo); font-size: 17px; line-height: 1.5; max-width: 520px; margin: 0; }
-.n404-inventura { font-size: 13px; font-weight: 600; letter-spacing: .3px; color: var(--rja); background: var(--pesek); padding: 6px 14px; border-radius: 999px; margin: 4px 0 0; }
-.n404-gumbi { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 14px; }
-.n404-gumb { display: inline-flex; align-items: center; height: 46px; padding: 0 20px; border-radius: 999px; border: 1px solid #C9BFA9; background: var(--povrsina); color: var(--crnilo); font-weight: 600; font-size: 15px; text-decoration: none; transition: transform .15s, background .2s; }
-.n404-gumb:hover { transform: translateY(-1px); background: #fff; }
-.n404-gumb.prvi { background: var(--gozd); color: #fff; border-color: var(--gozd); }
-.n404-gumb.prvi:hover { background: #0b2817; }
-.n404-tla { fill: #CFD8BF; } .n404-tla2 { fill: #B9C7A6; }
-.n404-list { fill: #B5763A; } .n404-list.l2 { fill: #9A5A2A; }
-.n404-trava path { fill: none; stroke: #7D9468; stroke-width: 3; stroke-linecap: round; }
-.n404-st { font-family: var(--serif); font-size: 250px; font-weight: 600; fill: var(--gozd); }
-.n404-rocaj { fill: none; stroke: #8A5E2E; stroke-width: 11; stroke-linecap: round; }
-.n404-telo { fill: #D2A263; stroke: #8A5E2E; stroke-width: 3; stroke-linejoin: round; }
-.n404-pletenje path { fill: none; stroke: #B58443; stroke-width: 3; opacity: .85; }
-.n404-odprtina { fill: #4B341C; stroke: #8A5E2E; stroke-width: 3; }
-.n404-mreza path { fill: none; stroke: #F3EFE6; stroke-width: 1.1; opacity: .75; }
-.n404-nit { stroke: #5A5E51; stroke-width: 1.4; fill: none; }
-.n404-telo-pajka { fill: #1D2118; } .n404-oko { fill: #F3EFE6; }
-.n404-noge { fill: none; stroke: #1D2118; stroke-width: 1.5; stroke-linecap: round; }
-.n404-pajek { transform-box: view-box; transform-origin: 360px 84px; animation: n404-nihaj 3.6s ease-in-out infinite; }
-.n404-polz-telo { fill: none; stroke: #C9B79C; stroke-width: 8; stroke-linecap: round; stroke-linejoin: round; }
-.n404-hisa { fill: #B5763A; } .n404-spirala { fill: none; stroke: #6B2A15; stroke-width: 2.2; stroke-linecap: round; }
-.n404-polz { animation: n404-polz 18s linear infinite alternate; }
-@keyframes n404-nihaj { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg); } }
-@keyframes n404-polz { from { transform: translate(664px, 282px); } to { transform: translate(640px, 282px); } }
-@media (prefers-reduced-motion: reduce) { .n404-pajek, .n404-polz { animation: none; } }
+.n4 { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px; padding: 20px var(--rob) 8px; max-width: 940px; margin: 0 auto; }
+.n4-scena { position: relative; width: 100%; max-width: 900px; container-type: inline-size; }
+.n4-slika { width: 100%; height: auto; display: block; user-select: none; }
+.n4-sled { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+.n4-nit { stroke: #E5D6C4; stroke-width: 2.2; transform-box: view-box; transform-origin: 1047px 319px; animation: n4-nit 1.9s .5s cubic-bezier(.3,.7,.3,1) both; }
+.n4-pajek { transform-box: view-box; animation: n4-spust 1.9s .5s cubic-bezier(.3,.7,.3,1) both; }
+.n4-pajek.mah { animation: n4-mah .7s ease-in-out; }
+@keyframes n4-spust { from { transform: translateY(-87px); } to { transform: translateY(0); } }
+@keyframes n4-nit { from { transform: scaleY(0.02); } to { transform: scaleY(1); } }
+@keyframes n4-mah { 0%, 100% { transform: translateY(0) rotate(0); } 25% { transform: translateY(-10px) rotate(-4deg); } 60% { transform: translateY(3px) rotate(3deg); } }
+.n4-kosara { position: absolute; left: 47%; top: 32.5%; width: 25%; height: 54%; border: 0; background: transparent; cursor: pointer; border-radius: 40%; }
+.n4-kosara:focus-visible { outline: 3px solid var(--gozd); outline-offset: 2px; }
+.n4-mehur { position: absolute; left: 31.3%; bottom: 76%; margin: 0; width: max-content; max-width: 21cqw; padding: 1.6cqw 2.2cqw; border: .45cqw solid #1F3A2B; border-radius: 3cqw; background: #F8E8D0; color: #1F3A2B; font-family: var(--serif); font-weight: 700; font-size: 3.3cqw; line-height: 1.12; text-align: center; text-wrap: balance; animation: n4-pop .25s ease-out; }
+.n4-mehur::before, .n4-mehur::after { content: ""; position: absolute; left: 3.4cqw; border-style: solid; border-color: transparent; }
+.n4-mehur::before { bottom: -3.2cqw; border-width: 2.9cqw 1.2cqw 0 1.9cqw; border-top-color: #1F3A2B; }
+.n4-mehur::after { bottom: -2.2cqw; left: 3.9cqw; border-width: 2cqw .7cqw 0 1.2cqw; border-top-color: #F8E8D0; }
+
+.n4-mehur.siroko { max-width: 33cqw; }
+@keyframes n4-pop { from { opacity: 0; transform: translateY(4px) scale(.96); } to { opacity: 1; transform: none; } }
+.n4-pill { display: none; margin: 0; padding: 6px 14px; border: 1.5px solid #1F3A2B; border-radius: 14px; background: #F8E8D0; color: #1F3A2B; font-family: var(--serif); font-weight: 700; font-size: 15px; }
+.n4-koda { margin: 8px 0 0; font-size: 12px; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase; color: var(--rja); }
+.n4 h1 { font-family: var(--serif); font-size: clamp(30px, 5vw, 46px); font-weight: 600; letter-spacing: -.5px; line-height: 1.1; margin: 0; text-wrap: balance; }
+.n4-uvod { color: var(--sivo); font-size: 17px; line-height: 1.5; max-width: 520px; margin: 0; text-wrap: balance; }
+.n4-gumbi { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 10px; }
+.n4-gumb { display: inline-flex; align-items: center; justify-content: center; height: 48px; padding: 0 22px; border-radius: 999px; border: 1px solid #C9BFA9; background: var(--povrsina); color: var(--crnilo); font: inherit; font-weight: 600; font-size: 15px; text-decoration: none; cursor: pointer; transition: transform .15s, background .2s; }
+.n4-gumb:hover { transform: translateY(-1px); background: #fff; }
+.n4-gumb.prvi { background: var(--gozd); color: #fff; border-color: var(--gozd); }
+.n4-gumb.prvi:hover { background: #0b2817; }
+.n4-inventura { font-size: 13px; font-weight: 600; letter-spacing: .3px; color: var(--rja); background: var(--pesek); padding: 6px 14px; border-radius: 999px; margin: 8px 0 0; }
+@media (max-width: 560px) {
+  .n4 { gap: 8px; padding-top: 8px; }
+  .n4-mehur { display: none; }
+  .n4-pill { display: block; }
+  .n4-scena { max-width: 340px; }
+  .n4-nit, .n4-pajek { animation: none; }
+  .n4-koda { margin-top: 2px; }
+  .n4-gumbi { flex-direction: column; width: 100%; max-width: 320px; }
+  .n4-gumb { width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) { .n4-nit, .n4-pajek, .n4-mehur { animation: none; } }
 
 /* Fotografija ob poročilu */
 .najdbe-slika { display: flex; flex-direction: column; gap: 8px; }
@@ -418,3 +429,21 @@ a.seznam-vrstica:hover { background: #EFE9DC; }
 .galerija-info strong { font-size: 14px; }
 .galerija-info span { font-size: 12px; opacity: .85; }
 .galerija-info em { font-size: 11px; font-style: normal; opacity: .75; }
+
+/* Povzetek stanja pod naslovom */
+.stanje-vrst { margin: 6px 0 0; font-size: 15px; color: var(--sivo); }
+.stanje-vrst strong { color: var(--crnilo); }
+
+/* Viri v vodiču */
+.viri-seznam { margin: 10px 0 0; padding-left: 20px; display: flex; flex-direction: column; gap: 8px; font-size: 15px; line-height: 1.45; }
+.viri-seznam a { font-weight: 600; }
+
+/* Besedilne strani (metodologija, zasebnost, o projektu) */
+.besedilo { max-width: 760px; }
+.besedilo h2.naslov { margin-top: 28px; }
+.besedilo p, .besedilo li { font-size: 16px; line-height: 1.6; }
+.besedilo ul { padding-left: 20px; display: flex; flex-direction: column; gap: 8px; }
+.tabela-metodologija { width: 100%; border-collapse: collapse; font-size: 15px; margin: 14px 0; background: var(--povrsina); border: 1px solid var(--crta); border-radius: 12px; overflow: hidden; }
+.tabela-metodologija th, .tabela-metodologija td { padding: 10px 14px; text-align: left; border-top: 1px solid var(--crta); }
+.tabela-metodologija thead th { font-size: 12px; text-transform: uppercase; letter-spacing: .8px; color: var(--sivo); border-top: 0; }
+.tabela-metodologija .desno { text-align: right; }

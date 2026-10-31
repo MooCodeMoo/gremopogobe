@@ -5,11 +5,13 @@ import { VRSTE, type VrstaId } from "@/lib/vrste";
 import { mojaObmocja } from "@/lib/moja";
 import type { TockaNapoved } from "@/lib/napoved";
 
-export default function NajdbeHitro({ tocke }: { tocke: TockaNapoved[] }) {
+export default function NajdbeHitro({ tocke, vrstaPrivzeta = "jurcek" }: { tocke: TockaNapoved[]; vrstaPrivzeta?: VrstaId }) {
   const [slug, setSlug] = useState(tocke[0]?.slug ?? "");
-  const [vrsta, setVrsta] = useState<VrstaId>("jurcek");
+  const [vrsta, setVrsta] = useState<VrstaId>(vrstaPrivzeta);
   const [stanje, setStanje] = useState<"" | "poslano" | "ze" | "napaka">("");
   const [posiljam, setPosiljam] = useState(false);
+
+  useEffect(() => { setVrsta(vrstaPrivzeta); }, [vrstaPrivzeta]);
 
   useEffect(() => {
     const moja = mojaObmocja();
@@ -36,7 +38,7 @@ export default function NajdbeHitro({ tocke }: { tocke: TockaNapoved[] }) {
     <section className="hitra-najdba">
       <div>
         <h2>Si bil v gozdu?</h2>
-        <p>Povej, ali si gobe našel. Odgovori izboljšujejo napoved za vse, beležimo pa samo območje, vrsto in dan. <a href="/najdbe">Poglej zemljevid najdb</a></p>
+        <p>Povej, ali si gobe našel. Odgovori se prikažejo na zemljevidu najdb, beležimo pa samo območje, vrsto in dan. <a href="/najdbe">Poglej zemljevid najdb</a></p>
       </div>
       <div className="hitra-vnos">
         <label className="sr" htmlFor="hitra-obmocje">Območje</label>

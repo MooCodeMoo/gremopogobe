@@ -5,6 +5,8 @@ import geo from "@/data/slovenija.json";
 import { VRSTE, type VrstaId } from "@/lib/vrste";
 import type { Tocka } from "@/lib/napoved";
 
+const MIN_POROCIL = 5; // pod tem pragom uspešnosti ne ocenjujemo
+
 type Podatki = { dni: number; regije: Record<string, Record<string, { da: number; ne: number }>> };
 
 const projekcija = (lon: number, lat: number) => ({
@@ -59,6 +61,9 @@ export default function ZemljevidNajdb({ tocke }: { tocke: Tocka[] }) {
             {vrstice.filter((v) => v.skupaj > 0).map((v) => {
               const r = 8 + (v.skupaj / najvec) * 22;
               const delez = v.da / v.skupaj;
+              if (v.skupaj < MIN_POROCIL) {
+                return <circle key={v.slug} cx={v.x} cy={v.y} r={8} fill="#9BA48E" fillOpacity={0.3} stroke="#9BA48E" strokeDasharray="3 3" />;
+              }
               return (
                 <g key={v.slug}>
                   <circle cx={v.x} cy={v.y} r={r} fill={delez >= 0.5 ? "#B85E2A" : "#9BA48E"} fillOpacity={0.25} />
@@ -70,12 +75,12 @@ export default function ZemljevidNajdb({ tocke }: { tocke: Tocka[] }) {
           {vrstice.filter((v) => v.skupaj > 0).slice(0, 8).map((v) => (
             <Link key={v.slug} href={`/regija/${v.slug}`} className="oznaka"
               style={{ left: `${(v.x / geo.W) * 100}%`, top: `${(v.y / geo.H) * 100}%` }}>
-              <span className="znacka mala" style={{ background: v.da >= v.ne ? "#8A3A1C" : "#5A5E51", color: "#fff" }}>{v.da}</span>
+              <span className="znacka mala" style={{ background: v.skupaj < MIN_POROCIL ? "#9BA48E" : v.da >= v.ne ? "#8A3A1C" : "#5A5E51", color: "#fff" }}>{v.da}</span>
               {v.ime}
             </Link>
           ))}
         </div>
-        <p className="najdbe-opomba">Velikost kroga pomeni število poročil, temen del pa delež tistih, ki so gobe našli. Poročila so vezana na območje, ne na točno lokacijo.</p>
+        <p className="najdbe-opomba">Velikost kroga pomeni število poročil, temen del pa delež tistih, ki so gobe našli. Poročila so vezana na območje, ne na točno lokacijo. Črtkani sivi krogi imajo manj kot {MIN_POROCIL} poročil: za oceno uspešnosti je premalo podatkov.</p>
       </div>
 
       {zPorocili.length > 0 ? (
@@ -88,7 +93,7 @@ export default function ZemljevidNajdb({ tocke }: { tocke: Tocka[] }) {
               <span className="seznam-ime"><strong>{v.ime}</strong><small>{v.regija}</small></span>
               <span className="desno num">{v.da}</span>
               <span className="desno num">{v.ne}</span>
-              <span className="desno num">{Math.round((v.da / v.skupaj) * 100)} %</span>
+              <span className="desno num">{v.skupaj < MIN_POROCIL ? <small title="Premalo poročil za zanesljivo oceno">premalo podatkov</small> : `${Math.round((v.da / v.skupaj) * 100)} %`}</span>
             </Link>
           ))}
         </div>

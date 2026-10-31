@@ -8,7 +8,7 @@ import { Analytics } from "@vercel/analytics/react";
 
 export const metadata: Metadata = {
   title: "Gremo po gobe - gobarska napoved za Slovenijo",
-  description: "Kje rastejo gobe ta teden? Indeks rasti za jurčke, lisičke, marele in štorovke po gozdnih območjih Slovenije.",
+  description: "Kje rastejo gobe ta teden? Indeks ugodnosti razmer za jurčke, lisičke, marele in štorovke po gozdnih območjih Slovenije.",
   metadataBase: new URL("https://gremopogobe.si"),
   applicationName: "Gremo po gobe",
   appleWebApp: { capable: true, title: "Gremo po gobe", statusBarStyle: "default" },

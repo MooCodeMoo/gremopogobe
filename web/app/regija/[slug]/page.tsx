@@ -86,7 +86,7 @@ export default async function Regija({ params }: P) {
           <>
             <section className="odsek">
               <h2 className="naslov">Napoved za 7 dni</h2>
-              <div className="tabela-napovedi" role="table" aria-label="Indeks rasti po vrstah in dnevih">
+              <div className="tabela-napovedi" role="table" aria-label="Indeks ugodnosti razmer po vrstah in dnevih">
                 <div role="row" className="vrstica">
                   <span role="columnheader" />
                   {napoved.dnevi.map((d) => <span role="columnheader" key={d} className="glava-dan">{kratekDan(d)}<b>{datumKratko(d)}</b></span>)}

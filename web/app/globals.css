@@ -407,6 +407,9 @@ a.seznam-vrstica:hover { background: #EFE9DC; }
 .n404-pika { fill: #1D2118; } .n404-obrv { stroke: #1D2118; stroke-width: 2.2; stroke-linecap: round; }
 .n404-usta { stroke: #1D2118; stroke-width: 2.2; stroke-linecap: round; fill: none; }
 .n404-roka-vihra { transform-box: view-box; transform-origin: 72px 178px; animation: n404-vihra 1.8s ease-in-out infinite; }
+.n404-palica { fill: none; stroke: #6B4A25; stroke-width: 4.5; stroke-linecap: round; } .n404-palica.tanka { stroke-width: 2.5; }
+.n404-dreg { animation: n404-dreg 1.3s ease-in-out infinite; }
+@keyframes n404-dreg { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(-7px, -3px); } }
 .n404-mehur path { fill: #FBF9F4; stroke: #1D2118; stroke-width: 2.5; stroke-linejoin: round; }
 .n404-mehur text { font-family: var(--sans); font-size: 19px; font-weight: 600; fill: #1D2118; }
 .n404-polz-telo { fill: none; stroke: #C9B79C; stroke-width: 8; stroke-linecap: round; stroke-linejoin: round; }
@@ -417,7 +420,7 @@ a.seznam-vrstica:hover { background: #EFE9DC; }
 @keyframes n404-polz { from { transform: translate(850px, 284px); } to { transform: translate(822px, 284px); } }
 .n404-govori { display: none; font-size: 14px; font-weight: 600; margin: 0; padding: 6px 14px; border-radius: 14px; background: var(--povrsina); border: 1.5px solid var(--crnilo); }
 @media (max-width: 560px) { .n404-mehur { display: none; } .n404-govori { display: block; } }
-@media (prefers-reduced-motion: reduce) { .n404-pajek, .n404-polz, .n404-roka-vihra { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .n404-pajek, .n404-polz, .n404-dreg { animation: none; } }
 
 /* Fotografija ob poročilu */
 .najdbe-slika { display: flex; flex-direction: column; gap: 8px; }

@@ -25,12 +25,12 @@ function PrazenGozd() {
       <ellipse cx="400" cy="306" rx="13" ry="5" className="n404-list l2" transform="rotate(10 400 306)" />
       <ellipse cx="660" cy="300" rx="15" ry="5.5" className="n404-list" transform="rotate(-8 660 300)" />
       <ellipse cx="800" cy="312" rx="12" ry="5" className="n404-list l2" transform="rotate(16 800 312)" />
-      {[24, 372, 640, 884].map((x) => (
+      {[24, 205, 640, 884].map((x) => (
         <g key={x} className="n404-trava"><path d={`M${x} 292 q-4 -18 -9 -24`} /><path d={`M${x} 292 q1 -22 0 -30`} /><path d={`M${x} 292 q5 -16 11 -22`} /></g>
       ))}
 
       {/* 4 in 4 */}
-      <text x="300" y="268" textAnchor="middle" className="n404-st">4</text>
+      <text x="120" y="268" textAnchor="middle" className="n404-st">4</text>
       <text x="740" y="268" textAnchor="middle" className="n404-st">4</text>
 
       {/* košara = ničla */}
@@ -65,32 +65,30 @@ function PrazenGozd() {
         <path d="M514 127 l-9 -4 M514 131 l-10 1 M515 135 l-8 6 M526 127 l9 -4 M526 131 l10 1 M525 135 l8 6" className="n404-noge" />
       </g>
 
-      {/* nabiralec, ki nejevoljno pogleduje v prazno košaro */}
+      {/* nabiralec počepne h košari in jo dregne s palico */}
       <g className="n404-clovek">
-        {/* noge in škornji */}
-        <path d="M86 244 V284 M108 244 V284" className="n404-hlace" />
-        <path d="M76 284 H94 q4 0 4 4 v4 H72 v-4 q0 -4 4 -4 Z M100 284 H118 q4 0 4 4 v4 H96 v-4 q0 -4 4 -4 Z" className="n404-skornji" />
-        {/* telo in jopič */}
-        <path d="M70 176 Q70 164 82 164 H112 Q124 164 124 176 V246 H70 Z" className="n404-jopic" />
-        <path d="M97 164 V246" className="n404-zadrga" />
-        <rect x="76" y="212" width="16" height="14" rx="3" className="n404-zep" />
-        {/* desna roka na boku */}
-        <path d="M122 176 Q142 200 120 228" className="n404-roka" />
-        {/* leva roka dvignjena: "no daj!" */}
-        <g className="n404-roka-vihra">
-          <path d="M72 178 Q44 176 36 150" className="n404-roka" />
-          <circle cx="34" cy="144" r="8" className="n404-dlan" />
+        <path d="M280 234 Q326 232 340 246 L338 282" className="n404-hlace" />
+        <path d="M270 236 Q312 230 322 246 L312 282" className="n404-hlace" />
+        <path d="M324 282 H346 q5 0 5 4 v6 H321 v-6 q0 -4 3 -4 Z M298 282 H320 q5 0 5 4 v6 H295 v-6 q0 -4 3 -4 Z" className="n404-skornji" />
+        <path d="M262 244 Q252 198 274 180 Q296 164 318 178 Q334 194 326 240 Z" className="n404-jopic" />
+        <path d="M296 172 Q290 206 292 240" className="n404-zadrga" />
+        <path d="M286 192 Q304 224 330 240" className="n404-roka" />
+        <circle cx="332" cy="241" r="7" className="n404-dlan" />
+        <circle cx="314" cy="152" r="21" className="n404-obraz" />
+        <path d="M292 148 Q292 120 316 120 Q338 120 336 146 Q314 136 292 148 Z" className="n404-klobuk" />
+        <path d="M330 138 q18 -3 26 5 q-12 3 -26 -1 Z" className="n404-klobuk" />
+        <circle cx="320" cy="157" r="3" className="n404-oko" /><circle cx="334" cy="157" r="3" className="n404-oko" />
+        <circle cx="321.5" cy="158" r="1.6" className="n404-pika" /><circle cx="335.5" cy="158" r="1.6" className="n404-pika" />
+        <path d="M313 148 l10 3 M341 148 l-10 3" className="n404-obrv" />
+        <path d="M322 169 H334" className="n404-usta" />
+        <g className="n404-dreg">
+          <path d="M314 190 Q348 196 374 214" className="n404-roka" />
+          <circle cx="376" cy="215" r="7" className="n404-dlan" />
+          <path d="M368 211 L440 244" className="n404-palica" />
+          <path d="M404 228 l8 -9" className="n404-palica tanka" />
         </g>
-        {/* glava */}
-        <circle cx="97" cy="140" r="21" className="n404-obraz" />
-        <path d="M74 136 Q74 108 98 108 Q122 108 121 136 Q98 124 74 136 Z" className="n404-klobuk" />
-        <path d="M118 128 q16 -2 22 6 q-10 2 -22 -2 Z" className="n404-klobuk" />
-        <circle cx="90" cy="144" r="2.4" className="n404-pika" /><circle cx="106" cy="144" r="2.4" className="n404-pika" />
-        <path d="M84 137 l10 3 M110 137 l-10 3" className="n404-obrv" />
-        <path d="M90 156 H105" className="n404-usta" />
       </g>
-      {/* govorni mehurček */}
-      <g className="n404-mehur">
+      <g className="n404-mehur" transform="translate(170 0)">
         <path d="M24 22 H214 q12 0 12 12 v34 q0 12 -12 12 H120 l-18 22 l2 -22 H36 q-12 0 -12 -12 V34 q0 -12 12 -12 Z" />
         <text x="125" y="44" textAnchor="middle">No daj,</text>
         <text x="125" y="66" textAnchor="middle">naredi kaj!</text>

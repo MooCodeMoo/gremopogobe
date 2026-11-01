@@ -1,0 +1,6 @@
+/* Med predvajanjem tedna pike spreminjamo vsak okvir, zato izklopimo CSS prehode. */
+svg.igra .kpika { transition: none; animation: none; }
+.casovnica { height: 4px; border-radius: 999px; background: var(--pesek); margin-top: 10px; overflow: hidden; }
+.casovnica span { display: block; height: 100%; background: var(--gozd); border-radius: 999px; }
+svg.igra ~ * .casovnica span, .dnevi.predvaja ~ .casovnica span { transition: none; }
+.casovnica span { transition: width .4s cubic-bezier(.2,.7,.2,1); }

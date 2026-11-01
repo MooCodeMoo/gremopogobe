@@ -9,6 +9,7 @@ import type { Napoved } from "@/lib/napoved";
 import { dolzinaOkna } from "@/lib/indeks";
 import { faktorPike } from "@/lib/gozd";
 import { faktorVisinePike } from "@/lib/visina";
+import "./raziskovalec-igra.css";
 import MojaObmocja from "./MojaObmocja";
 import NajdbeHitro from "./NajdbeHitro";
 
@@ -34,6 +35,19 @@ function idw(pike: number[][], tocke: { x: number; y: number; v: number }[]) {
     return s / w;
   });
 }
+
+const SREDINE = [10, 30, 50, 70, 90]; // sredine stopenj lestvice, med njimi barvo gladko mešamo (samo med predvajanjem)
+const RGB = LESTVICA.map((c) => [1, 3, 5].map((i) => parseInt(c.slice(i, i + 2), 16)));
+function gladkaBarva(v: number) {
+  if (v <= SREDINE[0]) return LESTVICA[0];
+  if (v >= SREDINE[4]) return LESTVICA[4];
+  const k = Math.min(3, Math.floor((v - 10) / 20));
+  const f = (v - SREDINE[k]) / 20;
+  const [a, b] = [RGB[k], RGB[k + 1]];
+  return `rgb(${Math.round(a[0] + (b[0] - a[0]) * f)},${Math.round(a[1] + (b[1] - a[1]) * f)},${Math.round(a[2] + (b[2] - a[2]) * f)})`;
+}
+const polmer = (v: number) => ((3.4 + (v / 100) * 6.2) * 0.95) / R_MAX;
+const mehko = (f: number) => f * f * (3 - 2 * f); // zadržimo se pri celem dnevu, med dnevi pa gladek prehod
 
 const manjGibanja = () => typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -68,22 +82,63 @@ export default function Raziskovalec({ napoved }: { napoved: Napoved }) {
   const [namig, setNamig] = useState<{ i: number; slug: string; ime: string; v: number } | null>(null);
   const n = napoved.dnevi.length;
 
-  // Predvajanje tedna: vsak dan ~1 s, na koncu se ustavi
+  const pikeRef = useRef<(SVGCircleElement | null)[]>([]);
+  const casRef = useRef<HTMLSpanElement | null>(null);
+  const dIdxRef = useRef(dIdx);
+  dIdxRef.current = dIdx;
+
+  // Polja pik za vse dni naenkrat, da lahko med dnevi gladko prehajamo
+  const poljaDni = useMemo(() => {
+    const tk = napoved.tocke.map((t) => ({ ...projekcija(t.lon, t.lat), t }));
+    return napoved.dnevi.map((_, d) =>
+      idw(geo.dots, tk.map(({ x, y, t }) => ({ x, y, v: t.indeksVreme[vrsta][d] }))).map((v, i) => v * faktorPike(vrsta, i) * faktorVisinePike(vrsta, i))
+    );
+  }, [napoved, vrsta]);
+
+  // Predvajanje tedna: gladka animacija med dnevi (pike se mehko spreminjajo), na koncu se ustavi
   useEffect(() => {
     if (!predvajam) return;
-    const t = setTimeout(() => (dIdx >= n - 1 ? setPredvajam(false) : setDIdx((d) => d + 1)), KORAK_PREDVAJANJA);
-    return () => clearTimeout(t);
-  }, [predvajam, dIdx, n]);
+    if (manjGibanja()) {
+      const t = setTimeout(() => (dIdxRef.current >= n - 1 ? setPredvajam(false) : setDIdx((d) => d + 1)), KORAK_PREDVAJANJA);
+      return () => clearTimeout(t);
+    }
+    let t = dIdxRef.current, zadnji = performance.now(), raf = 0;
+    const narisi = (cas: number) => {
+      const i0 = Math.min(n - 1, Math.floor(cas)), i1 = Math.min(n - 1, i0 + 1), f = mehko(cas - i0);
+      const A = poljaDni[i0], B = poljaDni[i1];
+      for (let i = 0; i < A.length; i++) {
+        const el = pikeRef.current[i]; if (!el) continue;
+        const v = A[i] + (B[i] - A[i]) * f;
+        el.style.fill = gladkaBarva(v); el.style.transform = `scale(${polmer(v)})`;
+      }
+      if (casRef.current) casRef.current.style.width = `${(cas / (n - 1)) * 100}%`;
+    };
+    const korak = (zdaj: number) => {
+      t = Math.min(n - 1, t + (Math.min(100, zdaj - zadnji) / KORAK_PREDVAJANJA)); // dolg premor (npr. zavihek v ozadju) ne preskoči dni
+      zadnji = zdaj;
+      narisi(t);
+      const r = Math.round(t);
+      if (r !== dIdxRef.current) setDIdx(r);
+      if (t >= n - 1) { setPredvajam(false); return; }
+      raf = requestAnimationFrame(korak);
+    };
+    raf = requestAnimationFrame(korak);
+    return () => {
+      cancelAnimationFrame(raf);
+      const r = Math.round(t);
+      setDIdx(r);
+      // ob koncu zapišemo točne vrednosti dneva (enake tistim, ki jih izračuna React), prehod jih gladko doseže
+      poljaDni[r].forEach((v, i) => { const el = pikeRef.current[i]; if (el) { el.style.fill = barva(v); el.style.transform = `scale(${polmer(v)})`; } });
+      if (casRef.current) casRef.current.style.width = `${(r / (n - 1)) * 100}%`;
+    };
+  }, [predvajam, n, poljaDni]);
 
   const tocke = useMemo(
     () => napoved.tocke.map((t) => ({ ...t, ...projekcija(t.lon, t.lat), v: t.indeks[vrsta][dIdx], vv: t.indeksVreme[vrsta][dIdx] })),
     [napoved, vrsta, dIdx]
   );
   // Vreme razmažemo med točkami, nato vsako piko utežimo s tipom gozda na njej
-  const vrednostiPik = useMemo(
-    () => idw(geo.dots, tocke.map((t) => ({ x: t.x, y: t.y, v: t.vv }))).map((v, i) => v * faktorPike(vrsta, i) * faktorVisinePike(vrsta, i)),
-    [tocke, vrsta]
-  );
+  const vrednostiPik = poljaDni[dIdx];
   const razvrsceno = [...tocke].sort((a, b) => b.v - a.v);
   const top3 = razvrsceno.slice(0, 3);
   const oznacene = [...razvrsceno.slice(0, 6), ...razvrsceno.filter((t) => t.slug === fokus && !razvrsceno.slice(0, 6).includes(t))];
@@ -168,6 +223,7 @@ export default function Raziskovalec({ napoved }: { napoved: Napoved }) {
                 </button>
               ))}
             </div>
+            <div className="casovnica" aria-hidden="true"><span ref={casRef} style={{ width: `${(dIdx / (n - 1)) * 100}%` }} /></div>
           </fieldset>
 
         </div>
@@ -201,16 +257,16 @@ export default function Raziskovalec({ napoved }: { napoved: Napoved }) {
 
           <div className="karta-platno">
             <div className="karta-okvir">
-              <svg viewBox={`0 0 ${geo.W} ${geo.H}`} role="img" aria-label={`Zemljevid indeksa ugodnosti razmer za vrsto ${imeVrste}`}
+              <svg className={predvajam ? "igra" : undefined} viewBox={`0 0 ${geo.W} ${geo.H}`} role="img" aria-label={`Zemljevid indeksa ugodnosti razmer za vrsto ${imeVrste}`}
                 onPointerMove={premik} onPointerLeave={zapustiKarto}
                 onPointerDown={(e) => { tipKazalca.current = e.pointerType; premik(e); }}
                 onClick={klik} style={{ cursor: namig ? "pointer" : "default" }}>
                 <path d={geo.path} className="obris" />
                 {geo.dots.map(([x, y], i) => {
                   const v = vrednostiPik[i];
-                  const s = ((3.4 + (v / 100) * 6.2) * 0.95) / R_MAX;
+                  const s = polmer(v);
                   return (
-                    <circle key={i} className="kpika" cx={x} cy={y} r={R_MAX}
+                    <circle key={i} ref={(el) => { pikeRef.current[i] = el; }} className="kpika" cx={x} cy={y} r={R_MAX}
                       style={{ fill: barva(v), transform: `scale(${s})`, animationDelay: `${(x / geo.W) * 0.9 + ((i * 37) % 10) * 0.012}s` }} />
                   );
                 })}

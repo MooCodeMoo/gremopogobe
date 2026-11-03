@@ -33,3 +33,15 @@
   .cl2-tx p, .cl2-tx li { font-size: 17px; }
   .cl-citat { margin: 32px 0 !important; }
 }
+
+/* Vodič po napovedi: formula, kartice sestave, tabela primerov */
+.cl2-tx .cl-formula { font-family: var(--serif); font-size: clamp(17px, 2.4vw, 21px) !important; text-align: center; background: var(--pesek); border-radius: 14px; padding: 16px 18px; color: var(--gozd); }
+.cl-sestava { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin: 20px 0 26px; }
+.cl-sestava > div { border: 1px solid var(--crta); border-radius: 14px; padding: 14px 16px; background: #fff; }
+.cl-sestava b { display: block; font-size: 15px; color: var(--gozd); margin-bottom: 4px; }
+.cl-sestava span { font-size: 15px; line-height: 1.5; color: var(--sivo); }
+.cl-tabela { overflow-x: auto; margin: 16px 0; }
+.cl-tabela table { width: 100%; border-collapse: collapse; font-size: 16px; }
+.cl-tabela th, .cl-tabela td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--crta); }
+.cl-tabela th { font-size: 13px; text-transform: uppercase; letter-spacing: .6px; color: var(--sivo); }
+.cl-tabela td:last-child, .cl-tabela th:last-child { text-align: right; font-weight: 700; width: 90px; }

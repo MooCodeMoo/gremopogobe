@@ -36,14 +36,14 @@ export default function Vodic() {
           ["Koliko gob lahko naberem na dan?", "Za lastne potrebe največ 2 kg gob na osebo na dan. Zavarovanih vrst gliv ni dovoljeno nabirati."],
           ["V kaj lahko nabiram gobe?", "Gobe nežno odvijemo ali odrežemo pri tleh, da ne poškodujemo podgobja, in jih nosimo v zračni posodi, na primer v pleteni košari. Brez plastičnih vrečk."],
           ["Kakšne so kazni za nedovoljeno nabiranje gob?", "Za kršitve so predpisane globe, višino določajo veljavni predpisi (Zakon o ohranjanju narave, Zakon o gozdovih in uredbi o gobah). Inšpektorji lahko izdajo tudi plačilni nalog in zasežejo nabrano."],
-          ["Koliko vrst gob raste v Sloveniji?", "V Sloveniji raste okoli 3000 vrst gob, od tega približno 200 strupenih."],
+          ["Koliko vrst gob raste v Sloveniji?", "V Sloveniji je raziskanih in določenih več kot 3000 vrst gob. Po navedbah Mikološke zveze Slovenije je okoli 30 vrst smrtno strupenih."],
         ].map(([q, a]) => ({ "@type": "Question", name: q, acceptedAnswer: { "@type": "Answer", text: a } })),
       }} />
       <main>
         <section className="vodic-vrh">
           <div>
             <h1>Kaj moraš vedeti, preden greš v gozd</h1>
-            <p className="uvod">V Sloveniji raste okoli 3000 vrst gob, od tega približno 200 strupenih. Nabiraj samo tisto, kar zanesljivo poznaš.</p>
+            <p className="uvod">V Sloveniji je raziskanih in določenih več kot 3000 vrst gob, okoli 30 jih je smrtno strupenih. Nabiraj samo tisto, kar zanesljivo poznaš.</p>
             <p className="opozorilo">Ta stran ni pomoč pri določanju užitnosti. Za določanje obišči gobarsko razstavo ali determinatorja v najbližjem <Link href="/drustva">gobarskem društvu</Link>.</p>
           </div>
           <div id="pravila">

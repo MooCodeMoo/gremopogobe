@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "@fontsource-variable/fraunces/opsz.css";
 import "@fontsource-variable/instrument-sans";
+import "./dostopnost.css";
 import "./globals.css";
 import PWA from "@/components/PWA";
 import Stat from "@/components/Stat";

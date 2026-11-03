@@ -6,8 +6,9 @@ import { CLANKI } from "@/lib/clanki";
 import { JsonLd, URL_STRANI, drobtinice } from "@/lib/seo";
 import "../clanek.css";
 import KdajRastejoJurcki from "@/components/clanki/KdajRastejoJurcki";
+import KakoBratiNapoved from "@/components/clanki/KakoBratiNapoved";
 
-const VSEBINA: Record<string, () => React.JSX.Element> = { "kdaj-rastejo-jurcki": KdajRastejoJurcki };
+const VSEBINA: Record<string, () => React.JSX.Element> = { "kdaj-rastejo-jurcki": KdajRastejoJurcki, "kako-brati-napoved": KakoBratiNapoved };
 
 export const dynamicParams = false;
 export function generateStaticParams() { return CLANKI.map((c) => ({ slug: c.slug })); }
@@ -17,10 +18,11 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const c = CLANKI.find((x) => x.slug === slug);
   if (!c) return {};
   return {
-    title: `${c.naslov} | Gremo po gobe`,
+    title: `${c.naslovSeo} | Gremo po gobe`,
     description: c.opis,
     alternates: { canonical: `/clanki/${c.slug}` },
-    openGraph: { title: c.naslov, description: c.opis, url: `${URL_STRANI}/clanki/${c.slug}`, type: "article", locale: "sl_SI", publishedTime: c.datum },
+    openGraph: { title: c.naslov, description: c.opis, url: `${URL_STRANI}/clanki/${c.slug}`, type: "article", locale: "sl_SI", publishedTime: c.datum, images: [{ url: c.og, width: 1200, height: 630, alt: c.slikaAlt }] },
+    twitter: { card: "summary_large_image", title: c.naslov, description: c.opis, images: [c.og] },
   };
 }
 

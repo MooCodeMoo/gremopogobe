@@ -1,0 +1,4 @@
+/* Večje ciljne površine za povezave na telefonu (min. 32 px visoko). */
+@media (max-width: 640px) {
+  .odsek-glava a, .noga-povezave a, .noga a, .hero a.povezava { display: inline-flex; align-items: center; min-height: 32px; }
+}
